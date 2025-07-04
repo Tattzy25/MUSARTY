@@ -54,7 +54,7 @@ export function createServer() {
   app.get("/api/subscription/:userId", handleGetSubscription);
 
   // Shot Caller routes (main AI generation system)
-  app.post("/api/generate", handleGeneration);
+  app.post("/api/shot-caller/generate", handleGeneration);
   app.get("/api/models", handleGetModels);
   app.get("/api/models/:modelId", handleGetModel);
   app.get("/api/users/:userId/usage", handleGetUserUsage);
