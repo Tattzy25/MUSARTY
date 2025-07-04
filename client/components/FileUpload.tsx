@@ -57,7 +57,7 @@ export default function FileUpload({
 
       {/* Cyber scan line effect */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-fire-orange to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-cyber-scan" />
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-cyber-scan" />
       </div>
 
       <div className="relative z-10 text-center space-y-6">
