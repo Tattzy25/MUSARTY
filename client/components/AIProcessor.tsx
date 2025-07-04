@@ -62,13 +62,13 @@ export default function AIProcessor({
       {/* Header */}
       <div className="text-center">
         <div className="relative mx-auto w-16 h-16 mb-4">
-          <div className="absolute inset-0 bg-neon-blue/20 rounded-full blur-xl animate-pulse-glow" />
+          <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl animate-pulse-glow" />
           <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
             <currentStage.icon
               className={cn(
-                "w-8 h-8 text-neon-blue",
+                "w-8 h-8 text-fire-orange",
                 isProcessing && "animate-spin",
-                stage === "completed" && "text-neon-green",
+                stage === "completed" && "text-fire-orange",
               )}
             />
           </div>
@@ -91,7 +91,7 @@ export default function AIProcessor({
         </div>
         <div className="h-2 glass rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-neon-blue via-neon-purple to-neon-green transition-all duration-500 ease-out relative"
+            className="h-full bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow transition-all duration-500 ease-out relative"
             style={{ width: `${progress}%` }}
           >
             {/* Animated glow effect */}
@@ -119,9 +119,9 @@ export default function AIProcessor({
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300",
                   isCompleted &&
-                    "bg-neon-green/20 border-neon-green text-neon-green",
+                    "bg-fire-orange/20 border-fire-orange text-fire-orange",
                   isCurrent &&
-                    "bg-neon-blue/20 border-neon-blue text-neon-blue pulse-glow",
+                    "bg-fire-orange/20 border-fire-orange text-fire-orange pulse-glow",
                   isUpcoming && "bg-muted border-muted-foreground/30",
                 )}
               >
@@ -136,8 +136,8 @@ export default function AIProcessor({
               <span
                 className={cn(
                   "text-xs font-medium transition-colors duration-300",
-                  isCompleted && "text-neon-green",
-                  isCurrent && "text-neon-blue",
+                  isCompleted && "text-fire-orange",
+                  isCurrent && "text-fire-orange",
                   isUpcoming && "text-muted-foreground",
                 )}
               >
@@ -154,7 +154,7 @@ export default function AIProcessor({
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="w-1 h-8 bg-gradient-to-t from-neon-blue to-neon-purple rounded-full animate-data-flow"
+              className="w-1 h-8 bg-gradient-to-t from-fire-orange to-fire-red rounded-full animate-data-flow"
               style={{ animationDelay: `${i * 0.1}s` }}
             />
           ))}
