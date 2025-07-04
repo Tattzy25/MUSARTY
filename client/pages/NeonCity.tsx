@@ -112,6 +112,21 @@ interface GeneratedCode {
 export default function NeonCity() {
   const [activeMode, setActiveMode] = useState<ContentMode | null>(null);
   const [prompt, setPrompt] = useState("");
+
+  // Handle URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get("mode") as ContentMode;
+    const urlPrompt = urlParams.get("prompt");
+
+    if (mode && CONTENT_ZONES.find((z) => z.id === mode)) {
+      setActiveMode(mode);
+    }
+
+    if (urlPrompt) {
+      setPrompt(decodeURIComponent(urlPrompt));
+    }
+  }, []);
   const [isGenerating, setIsGenerating] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
