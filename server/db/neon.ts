@@ -1,6 +1,20 @@
 import { neon } from "@neondatabase/serverless";
 
-const sql = neon(process.env.DATABASE_URL!);
+let sql: any = null;
+
+function getSql() {
+  if (!sql) {
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+      console.warn(
+        "⚠️  DATABASE_URL not found. Database functionality will be disabled.",
+      );
+      return null;
+    }
+    sql = neon(dbUrl);
+  }
+  return sql;
+}
 
 export interface User {
   id: string;
@@ -44,6 +58,14 @@ export interface PasswordResetToken {
 
 export class Database {
   static async init() {
+    const sql = getSql();
+    if (!sql) {
+      console.warn(
+        "⚠️  Skipping database initialization - no connection available",
+      );
+      return;
+    }
+
     // Create users table with proper auth fields
     await sql`
       CREATE TABLE IF NOT EXISTS users (
@@ -138,6 +160,9 @@ export class Database {
     password_hash: string,
     name?: string,
   ): Promise<User> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     const [user] = await sql`
       INSERT INTO users (email, password_hash, name)
       VALUES (${email}, ${password_hash}, ${name})
@@ -147,6 +172,9 @@ export class Database {
   }
 
   static async getUserByEmail(email: string): Promise<User | null> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     const [user] = await sql`
       SELECT * FROM users WHERE email = ${email}
     `;
@@ -162,7 +190,7 @@ export class Database {
 
   static async updateUserTier(userId: string, tier: string): Promise<void> {
     await sql`
-      UPDATE users 
+      UPDATE users
       SET tier = ${tier}, updated_at = NOW()
       WHERE id = ${userId}
     `;
@@ -173,7 +201,7 @@ export class Database {
     password_hash: string,
   ): Promise<void> {
     await sql`
-      UPDATE users 
+      UPDATE users
       SET password_hash = ${password_hash}, updated_at = NOW()
       WHERE id = ${userId}
     `;
@@ -181,7 +209,7 @@ export class Database {
 
   static async incrementGenerations(userId: string): Promise<void> {
     await sql`
-      UPDATE users 
+      UPDATE users
       SET generations_used = generations_used + 1, updated_at = NOW()
       WHERE id = ${userId}
     `;
@@ -217,13 +245,13 @@ export class Database {
 
   static async getUserUsageStats(userId: string): Promise<any> {
     const [stats] = await sql`
-      SELECT 
+      SELECT
         COUNT(*) as total_requests,
         SUM(chars_used) as total_chars,
         SUM(blocks_deducted) as total_blocks_used,
         COUNT(CASE WHEN byok_used = true THEN 1 END) as byok_requests,
         COUNT(CASE WHEN byok_used = false THEN 1 END) as vault_requests
-      FROM usage_logs 
+      FROM usage_logs
       WHERE user_id = ${userId}
     `;
 
@@ -255,7 +283,7 @@ export class Database {
     status: string,
   ): Promise<void> {
     await sql`
-      UPDATE payments 
+      UPDATE payments
       SET status = ${status}
       WHERE paypal_payment_id = ${paypalPaymentId}
     `;
@@ -268,8 +296,8 @@ export class Database {
   ): Promise<void> {
     // Invalidate any existing tokens first
     await sql`
-      UPDATE password_reset_tokens 
-      SET used = TRUE 
+      UPDATE password_reset_tokens
+      SET used = TRUE
       WHERE user_id = ${userId} AND used = FALSE
     `;
 
@@ -285,10 +313,10 @@ export class Database {
     token: string,
   ): Promise<boolean> {
     const [tokenRow] = await sql`
-      SELECT * FROM password_reset_tokens 
-      WHERE user_id = ${userId} 
-        AND token = ${token} 
-        AND used = FALSE 
+      SELECT * FROM password_reset_tokens
+      WHERE user_id = ${userId}
+        AND token = ${token}
+        AND used = FALSE
         AND expires_at > NOW()
     `;
     return !!tokenRow;
@@ -296,8 +324,8 @@ export class Database {
 
   static async invalidatePasswordResetToken(userId: string): Promise<void> {
     await sql`
-      UPDATE password_reset_tokens 
-      SET used = TRUE 
+      UPDATE password_reset_tokens
+      SET used = TRUE
       WHERE user_id = ${userId} AND used = FALSE
     `;
   }
@@ -318,7 +346,7 @@ export class Database {
   static async getUserApiKeys(userId: string): Promise<any[]> {
     return await sql`
       SELECT provider, key_name, is_active, created_at
-      FROM user_api_keys 
+      FROM user_api_keys
       WHERE user_id = ${userId} AND is_active = TRUE
     `;
   }
@@ -328,8 +356,8 @@ export class Database {
     provider: string,
   ): Promise<string | null> {
     const [key] = await sql`
-      SELECT encrypted_key 
-      FROM user_api_keys 
+      SELECT encrypted_key
+      FROM user_api_keys
       WHERE user_id = ${userId} AND provider = ${provider} AND is_active = TRUE
       ORDER BY created_at DESC
       LIMIT 1
@@ -342,7 +370,7 @@ export class Database {
     provider: string,
   ): Promise<void> {
     await sql`
-      UPDATE user_api_keys 
+      UPDATE user_api_keys
       SET is_active = FALSE, updated_at = NOW()
       WHERE user_id = ${userId} AND provider = ${provider}
     `;
