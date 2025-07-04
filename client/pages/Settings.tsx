@@ -221,13 +221,13 @@ export default function Settings() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="relative mx-auto w-20 h-20">
-            <div className="absolute inset-0 bg-neon-purple/20 rounded-full blur-xl" />
+            <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl" />
             <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
-              <SettingsIcon className="w-10 h-10 text-neon-purple" />
+              <SettingsIcon className="w-10 h-10 text-fire-orange" />
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-neon-purple via-neon-blue to-neon-green bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
               Settings & Configuration
             </h1>
             <p className="text-muted-foreground mt-2">
@@ -236,100 +236,198 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* OpenAI API Key Configuration */}
+        {/* AI Provider Configuration */}
         <Card className="glass-strong neon-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Key className="w-5 h-5 text-neon-pink" />
-              <span>OpenAI API Configuration</span>
-              {apiKeyStatus === "valid" && (
-                <CheckCircle2 className="w-5 h-5 text-neon-green" />
-              )}
-              {apiKeyStatus === "invalid" && (
-                <XCircle className="w-5 h-5 text-red-500" />
-              )}
+              <Key className="w-5 h-5 text-fire-orange" />
+              <span>AI Provider Configuration</span>
             </CardTitle>
             <CardDescription>
-              Configure your OpenAI API key to enable AI-powered image to code
-              conversion. Get your API key from{" "}
-              <a
-                href="https://platform.openai.com/api-keys"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neon-blue hover:underline"
-              >
-                OpenAI Platform
-              </a>
+              Configure API keys for different AI providers. Only enter keys you
+              want to add or update.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
+            {/* Provider Selection */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">OpenAI API Key</label>
-              <div className="relative">
-                <Input
-                  type={showApiKey ? "text" : "password"}
-                  placeholder={
-                    settings.openaiApiKey === "***configured***"
-                      ? "API key is configured"
-                      : "sk-..."
-                  }
-                  value={apiKey}
-                  onChange={(e) => {
-                    setApiKey(e.target.value);
-                    setApiKeyStatus(null);
-                  }}
-                  className="glass pr-20"
-                />
-                <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-3">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setShowApiKey(!showApiKey)}
-                    className="h-6 w-6 p-0"
-                  >
-                    {showApiKey ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </Button>
-                  {apiKey.trim() && (
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => testApiKey(apiKey)}
-                      disabled={isTestingApiKey}
-                      className="h-6 w-6 p-0"
-                    >
-                      {isTestingApiKey ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <CheckCircle2 className="w-4 h-4" />
+              <label className="text-sm font-medium">AI Provider</label>
+              <Select
+                value={settings.aiProvider}
+                onValueChange={(value) => updateSetting("aiProvider", value)}
+              >
+                <SelectTrigger className="glass w-full max-w-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="glass-strong">
+                  <SelectItem value="groq">
+                    <div className="flex items-center space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="text-fire-orange border-fire-orange"
+                      >
+                        Fast
+                      </Badge>
+                      <span>Groq (Recommended)</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="anthropic">
+                    <div className="flex items-center space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="text-fire-red border-fire-red"
+                      >
+                        Premium
+                      </Badge>
+                      <span>Anthropic Claude</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="gemini">
+                    <div className="flex items-center space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="text-fire-yellow border-fire-yellow"
+                      >
+                        Standard
+                      </Badge>
+                      <span>Google Gemini</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Compact API Key Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  key: "groq",
+                  name: "Groq",
+                  placeholder: "gsk_...",
+                  url: "https://console.groq.com/keys",
+                },
+                {
+                  key: "anthropic",
+                  name: "Anthropic",
+                  placeholder: "sk-ant-...",
+                  url: "https://console.anthropic.com/",
+                },
+                {
+                  key: "gemini",
+                  name: "Gemini",
+                  placeholder: "AIza...",
+                  url: "https://aistudio.google.com/app/apikey",
+                },
+              ].map((provider) => {
+                const status = apiKeyStatuses[provider.key];
+                const isConfigured =
+                  settings[`${provider.key}ApiKey` as keyof AppSettings] ===
+                  "***configured***";
+                const isTesting = isTestingApiKey === provider.key;
+
+                return (
+                  <div key={provider.key} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">
+                        {provider.name}
+                      </label>
+                      <div className="flex items-center space-x-1">
+                        {isConfigured && !apiKeys[provider.key] && (
+                          <CheckCircle2 className="w-4 h-4 text-fire-orange" />
+                        )}
+                        {status === "valid" && (
+                          <CheckCircle2 className="w-4 h-4 text-fire-orange" />
+                        )}
+                        {status === "invalid" && (
+                          <XCircle className="w-4 h-4 text-red-500" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <Input
+                        type={showApiKeys[provider.key] ? "text" : "password"}
+                        placeholder={
+                          isConfigured && !apiKeys[provider.key]
+                            ? "Configured"
+                            : provider.placeholder
+                        }
+                        value={apiKeys[provider.key]}
+                        onChange={(e) => {
+                          setApiKeys((prev) => ({
+                            ...prev,
+                            [provider.key]: e.target.value,
+                          }));
+                          setApiKeyStatuses((prev) => ({
+                            ...prev,
+                            [provider.key]: null,
+                          }));
+                        }}
+                        className="glass pr-16 text-sm"
+                        disabled={isConfigured && !apiKeys[provider.key]}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() =>
+                            setShowApiKeys((prev) => ({
+                              ...prev,
+                              [provider.key]: !prev[provider.key],
+                            }))
+                          }
+                          className="h-6 w-6 p-0"
+                        >
+                          {showApiKeys[provider.key] ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
+                        </Button>
+                        {apiKeys[provider.key].trim() && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() =>
+                              testApiKey(provider.key, apiKeys[provider.key])
+                            }
+                            disabled={isTesting}
+                            className="h-6 w-6 p-0"
+                          >
+                            {isTesting ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <CheckCircle2 className="w-3 h-3" />
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <a
+                        href={provider.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-fire-orange hover:underline"
+                      >
+                        Get API Key
+                      </a>
+                      {status === "valid" && (
+                        <span className="text-xs text-fire-orange">Valid</span>
                       )}
-                    </Button>
-                  )}
-                </div>
-              </div>
-              {apiKeyStatus === "valid" && (
-                <p className="text-xs text-neon-green flex items-center space-x-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>API key is valid</span>
-                </p>
-              )}
-              {apiKeyStatus === "invalid" && (
-                <p className="text-xs text-red-500 flex items-center space-x-1">
-                  <XCircle className="w-3 h-3" />
-                  <span>API key is invalid</span>
-                </p>
-              )}
-              {settings.openaiApiKey === "***configured***" && !apiKey && (
-                <p className="text-xs text-neon-green flex items-center space-x-1">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>API key is configured and ready to use</span>
-                </p>
-              )}
+                      {status === "invalid" && (
+                        <span className="text-xs text-red-500">Invalid</span>
+                      )}
+                      {isConfigured && !apiKeys[provider.key] && (
+                        <span className="text-xs text-fire-orange">
+                          Configured
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
