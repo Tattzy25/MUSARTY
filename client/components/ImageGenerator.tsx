@@ -86,7 +86,7 @@ Example: A futuristic city at sunset with neon lights reflecting on wet streets,
                   <SelectValue placeholder="Choose style (optional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No specific style</SelectItem>
+                  <SelectItem value="none">No specific style</SelectItem>
                   <SelectItem value="photorealistic">Photorealistic</SelectItem>
                   <SelectItem value="digital art">Digital Art</SelectItem>
                   <SelectItem value="oil painting">Oil Painting</SelectItem>
