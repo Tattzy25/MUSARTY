@@ -91,8 +91,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Fast",
     quality: "Exceptional",
     placeholder: "val_...",
-    color: "from-cyan-500 to-blue-600",
-    bgGradient: "bg-gradient-to-br from-cyan-500/10 to-blue-600/10",
+    color: "from-cyan-400 to-blue-500",
+    bgGradient: "bg-gradient-to-br from-cyan-400/25 to-blue-500/25",
     icon: Code,
     models: ["val-town-1", "val-town-pro"],
     stats: {
