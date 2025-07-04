@@ -25,6 +25,16 @@ import {
   handleGetVaultStats,
   handleHealthCheck,
 } from "./routes/shot-caller";
+import {
+  handleLogin,
+  handleSignup,
+  handleVerifyToken,
+  handleGetMe,
+  handleLogout,
+  handleForgotPassword,
+  handleResetPassword,
+  verifyToken,
+} from "./routes/auth";
 
 export function createServer() {
   const app = express();
@@ -47,6 +57,15 @@ export function createServer() {
 
   // Neon City generation route
   app.post("/api/generate", generateContent);
+
+  // Authentication routes
+  app.post("/api/auth/login", handleLogin);
+  app.post("/api/auth/signup", handleSignup);
+  app.get("/api/auth/verify", verifyToken, handleVerifyToken);
+  app.get("/api/auth/me", verifyToken, handleGetMe);
+  app.post("/api/auth/logout", verifyToken, handleLogout);
+  app.post("/api/auth/forgot-password", handleForgotPassword);
+  app.post("/api/auth/reset-password", handleResetPassword);
 
   // Settings routes
   app.get("/api/settings", handleGetSettings);
