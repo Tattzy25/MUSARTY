@@ -1,21 +1,22 @@
-# CodeForge AI - Image to Code Converter 🚀
+# CodeForge AI - Image to Code Converter 🔥
 
 A production-ready, futuristic AI-powered tool that converts PNG, JPG, and SVG images into clean, optimized React components, HTML, and CSS code.
 
-![CodeForge AI](https://img.shields.io/badge/AI%20Powered-OpenAI%20GPT--4%20Vision-blue)
+![CodeForge AI](https://img.shields.io/badge/AI%20Powered-Groq%20%7C%20Anthropic%20%7C%20Gemini-orange)
 ![Production Ready](https://img.shields.io/badge/Production-Ready-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-orange)
 
 ## ✨ Features
 
-- **🎯 AI-Powered Conversion**: Uses OpenAI GPT-4 Vision to analyze images and generate pixel-perfect code
+- **🎯 Multi-Provider AI**: Supports Groq, Anthropic Claude, and Google Gemini for maximum flexibility
 - **🔄 Multiple File Support**: Process up to 5 images simultaneously
 - **💎 Production-Ready Code**: Generates clean, optimized, and well-structured code
-- **🎨 Modern UI**: Futuristic design with glassmorphism effects and neon accents
-- **⚙️ Customizable Settings**: Full control over code generation preferences
+- **🔥 Fire Orange UI**: Modern design with glassmorphism effects and vibrant fire-themed colors
+- **⚙️ Customizable Settings**: Full control over AI providers and code generation preferences
 - **📱 Responsive Design**: Works perfectly on all devices
 - **♿ Accessibility**: Includes ARIA labels and semantic HTML
 - **🚀 Performance Optimized**: Fast processing with real-time progress tracking
+- **🔐 Secure API Management**: Compact, secure API key configuration
 
 ## 🛠️ Tech Stack
 
@@ -31,9 +32,10 @@ A production-ready, futuristic AI-powered tool that converts PNG, JPG, and SVG i
 ### Backend
 
 - **Express.js** server
-- **OpenAI GPT-4 Vision API** integration
+- **Multi-Provider AI Integration**: Groq, Anthropic, Google Gemini
 - **Multer** for file handling
 - **Zod** for validation
+- **Secure API Key Management**
 
 ## 🚀 Quick Start
 
@@ -48,19 +50,35 @@ cd codeforge-ai
 npm install
 ```
 
-### 2. OpenAI API Setup
+### 2. AI Provider Setup
 
-1. **Get your OpenAI API key**:
+Choose your preferred AI provider and get an API key:
 
-   - Go to [OpenAI Platform](https://platform.openai.com/api-keys)
-   - Create a new API key
-   - Copy the key (starts with `sk-...`)
+**Groq (Recommended - Fast & Free Tier)**:
 
-2. **Configure the API key**:
-   - Start the application: `npm run dev`
-   - Go to Settings in the app
-   - Paste your API key in the "OpenAI API Configuration" section
-   - Click "Save Settings"
+- Go to [Groq Console](https://console.groq.com/keys)
+- Create a new API key
+- Copy the key (starts with `gsk_...`)
+
+**Anthropic Claude**:
+
+- Go to [Anthropic Console](https://console.anthropic.com/)
+- Create a new API key
+- Copy the key (starts with `sk-ant-...`)
+
+**Google Gemini**:
+
+- Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
+- Create a new API key
+- Copy the key (starts with `AIza...`)
+
+**Configure your API key**:
+
+- Start the application: `npm run dev`
+- Go to Settings in the app
+- Select your AI provider
+- Enter your API key in the compact configuration section
+- Test and save your settings
 
 ### 3. Start Development
 
@@ -75,11 +93,20 @@ npm run dev
 
 ### AI Model Options
 
-The app supports multiple OpenAI models:
+**Groq Models** (Recommended):
 
-- **GPT-4 Vision Preview** (Recommended) - Best quality, slower processing
-- **GPT-4 Turbo** - Good balance of speed and quality
-- **GPT-4** - Standard quality, faster processing
+- **Llama 3.2 90B Vision** - Best quality, excellent for complex designs
+- **Llama 3.2 11B Vision** - Faster processing, good for simple designs
+
+**Anthropic Models**:
+
+- **Claude 3.5 Sonnet** - Premium quality, excellent reasoning
+- **Claude 3 Haiku** - Fast and efficient
+
+**Google Gemini Models**:
+
+- **Gemini 1.5 Pro** - High quality, good for detailed analysis
+- **Gemini 1.5 Flash** - Fast processing, cost-effective
 
 ### Code Generation Settings
 
@@ -155,13 +182,14 @@ POST /api/settings/test-api-key  # Test API key validity
 
 ## 🎨 UI Features
 
-### Futuristic Design Elements
+### Fire Orange Design Elements
 
 - **Glassmorphism Effects**: Translucent components with backdrop blur
-- **Neon Glow Effects**: Dynamic glowing borders and animations
-- **Holographic Backgrounds**: Animated gradient backgrounds
+- **Fire Orange Accents**: Dynamic glowing borders with fire-themed colors
+- **Holographic Backgrounds**: Animated gradient backgrounds in orange/red/yellow
 - **Cyber Grid Patterns**: Subtle grid overlays for tech aesthetic
 - **Pulse Animations**: Breathing light effects on interactive elements
+- **Compact UI**: Clean, space-efficient interface design
 
 ### Interactive Components
 
@@ -266,8 +294,8 @@ client/                   # React frontend
 │   ├── FileUpload.tsx  # File upload interface
 │   ├── CodeViewer.tsx  # Code display component
 │   ├── AIProcessor.tsx # Processing status
-│   ��── Navigation.tsx  # App navigation
-├── pages/              # Route pages
+│   └── Navigation.tsx  # App navigation
+├─�� pages/              # Route pages
 │   ├── Index.tsx       # Main converter
 │   └── Settings.tsx    # Settings panel
 └── App.tsx             # App router
@@ -342,6 +370,6 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ using OpenAI GPT-4 Vision API**
+**Built with 🔥 using Multi-Provider AI (Groq, Anthropic, Gemini)**
 
 _Transform your designs into code with the power of AI!_
