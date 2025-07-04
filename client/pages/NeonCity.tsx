@@ -13,6 +13,7 @@ import {
   Download,
   Zap,
   Sparkles,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MusicGenerator from "@/components/MusicGenerator";
