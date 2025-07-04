@@ -203,13 +203,17 @@
     }
   }
 
-  /* Cyber Cards Styles */
+  /* CYBER SECURITY LOCKED CARDS - DO NOT MODIFY */
   .cyber-card-container .container {
     position: relative;
     width: 160px;
     height: 220px;
     transition: 200ms;
     cursor: pointer;
+    /* SECURITY LOCK - CARDS CANNOT MOVE */
+    transform-origin: center center;
+    will-change: transform;
+    contain: layout style paint;
   }
 
   .cyber-card-container .container:active {
