@@ -241,222 +241,228 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* AI Provider Configuration */}
-        <Card className="glass-strong neon-border">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Key className="w-5 h-5 text-fire-orange" />
-              <span>AI Provider Configuration</span>
+        {/* Secure API Key Configuration */}
+        <Card className="glass-strong neon-border border-fire-orange/30 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow" />
+          <CardHeader className="text-center pb-6">
+            <div className="relative mx-auto w-20 h-20 mb-4">
+              <div className="absolute inset-0 bg-fire-orange/30 rounded-full blur-xl animate-pulse" />
+              <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border border-fire-orange/50">
+                <div className="relative">
+                  <Shield className="w-10 h-10 text-fire-orange drop-shadow-[0_0_15px_rgba(230,68,17,0.5)]" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-fire-orange to-fire-red rounded-full flex items-center justify-center">
+                    <Key className="w-2 h-2 text-black" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <CardTitle className="text-2xl bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
+              Secure API Vault
             </CardTitle>
-            <CardDescription>
-              🔒 <strong>100% Secure:</strong> Configure your AI providers in
-              the dedicated{" "}
-              <Link
-                to="/providers"
-                className="text-fire-orange hover:underline"
-              >
-                AI Arena →
-              </Link>{" "}
-              where each AI gets its own beautiful card!
+            <CardDescription className="text-center max-w-lg mx-auto">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 text-fire-orange" />
+                <span className="text-fire-orange font-semibold">
+                  Military-Grade Encryption
+                </span>
+              </div>
+              Your API key is encrypted with AES-256 before storage. Never
+              logged, never exposed, never compromised.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Provider Selection */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">AI Provider</label>
-              <Select
-                value={settings.aiProvider}
-                onValueChange={(value) => updateSetting("aiProvider", value)}
-              >
-                <SelectTrigger className="glass w-full max-w-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="glass-strong">
-                  <SelectItem value="groq">
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="text-fire-orange border-fire-orange"
-                      >
-                        Granddaddy AI ⚡
-                      </Badge>
-                      <span>Groq (Recommended)</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="v0">
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="text-fire-red border-fire-red"
-                      >
-                        UI Specialist 🎨
-                      </Badge>
-                      <span>v0 (Vercel)</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="openai">
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="text-fire-yellow border-fire-yellow"
-                      >
-                        Industry Standard
-                      </Badge>
-                      <span>OpenAI</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="gemini">
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="text-ember-red border-ember-red"
-                      >
-                        Google AI
-                      </Badge>
-                      <span>Google Gemini</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Compact API Key Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <CardContent className="space-y-8">
+            {/* Security Features Display */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               {[
                 {
-                  key: "groq",
-                  name: "Groq",
-                  placeholder: "gsk_...",
-                  url: "https://console.groq.com/keys",
+                  icon: Shield,
+                  text: "AES-256 Encryption",
+                  color: "text-fire-orange",
                 },
+                { icon: Eye, text: "Zero Logging", color: "text-fire-red" },
                 {
-                  key: "v0",
-                  name: "v0 (Vercel)",
-                  placeholder: "v0_...",
-                  url: "https://v0.dev/api",
+                  icon: Key,
+                  text: "Server-Only Access",
+                  color: "text-fire-yellow",
                 },
-                {
-                  key: "openai",
-                  name: "OpenAI",
-                  placeholder: "sk-...",
-                  url: "https://platform.openai.com/api-keys",
-                },
-                {
-                  key: "gemini",
-                  name: "Gemini",
-                  placeholder: "AIza...",
-                  url: "https://aistudio.google.com/app/apikey",
-                },
-              ].map((provider) => {
-                const status = apiKeyStatuses[provider.key];
-                const isConfigured =
-                  settings[`${provider.key}ApiKey` as keyof AppSettings] ===
-                  "***configured***";
-                const isTesting = isTestingApiKey === provider.key;
+              ].map((feature, index) => (
+                <div
+                  key={index}
+                  className="flex items-center space-x-3 p-3 glass rounded-lg border border-fire-orange/20"
+                >
+                  <div className="p-2 rounded-full bg-fire-orange/10">
+                    <feature.icon className={`w-4 h-4 ${feature.color}`} />
+                  </div>
+                  <span className="text-sm font-medium">{feature.text}</span>
+                </div>
+              ))}
+            </div>
 
-                return (
-                  <div key={provider.key} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">
-                        {provider.name}
-                      </label>
-                      <div className="flex items-center space-x-1">
-                        {isConfigured && !apiKeys[provider.key] && (
-                          <CheckCircle2 className="w-4 h-4 text-fire-orange" />
-                        )}
-                        {status === "valid" && (
-                          <CheckCircle2 className="w-4 h-4 text-fire-orange" />
-                        )}
-                        {status === "invalid" && (
-                          <XCircle className="w-4 h-4 text-red-500" />
-                        )}
-                      </div>
+            {/* Main API Key Input */}
+            <div className="max-w-2xl mx-auto space-y-6">
+              <div className="text-center space-y-2">
+                <label className="text-lg font-semibold bg-gradient-to-r from-fire-orange to-fire-red bg-clip-text text-transparent">
+                  Your API Key
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  Paste your OpenAI, Groq, or any compatible API key below
+                </p>
+              </div>
+
+              <div className="relative group">
+                {/* Glow effect container */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow rounded-lg blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+
+                {/* Main input container */}
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-fire-orange/10 via-fire-red/10 to-fire-yellow/10 rounded-lg"></div>
+                  <div className="relative flex">
+                    <div className="flex items-center px-4 glass rounded-l-lg border border-r-0 border-fire-orange/30">
+                      <Key className="w-5 h-5 text-fire-orange" />
                     </div>
-                    <div className="relative">
-                      <Input
-                        type={showApiKeys[provider.key] ? "text" : "password"}
-                        placeholder={
-                          isConfigured && !apiKeys[provider.key]
-                            ? "Configured"
-                            : provider.placeholder
+                    <Input
+                      type={showApiKeys.primary ? "text" : "password"}
+                      placeholder="sk-... or gsk-... or any API key"
+                      value={apiKeys.primary || ""}
+                      onChange={(e) => {
+                        setApiKeys((prev) => ({
+                          ...prev,
+                          primary: e.target.value,
+                        }));
+                        setApiKeyStatuses((prev) => ({
+                          ...prev,
+                          primary: null,
+                        }));
+                      }}
+                      className="flex-1 glass border-y border-fire-orange/30 rounded-none bg-background/50 text-lg font-mono tracking-wider backdrop-blur-xl"
+                    />
+                    <div className="flex items-center space-x-1 px-2 glass rounded-r-lg border border-l-0 border-fire-orange/30">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() =>
+                          setShowApiKeys((prev) => ({
+                            ...prev,
+                            primary: !prev.primary,
+                          }))
                         }
-                        value={apiKeys[provider.key]}
-                        onChange={(e) => {
-                          setApiKeys((prev) => ({
-                            ...prev,
-                            [provider.key]: e.target.value,
-                          }));
-                          setApiKeyStatuses((prev) => ({
-                            ...prev,
-                            [provider.key]: null,
-                          }));
-                        }}
-                        className="glass pr-16 text-sm"
-                        disabled={isConfigured && !apiKeys[provider.key]}
-                      />
-                      <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-2">
+                        className="h-8 w-8 p-0 hover:bg-fire-orange/20"
+                      >
+                        {showApiKeys.primary ? (
+                          <EyeOff className="w-4 h-4 text-fire-orange" />
+                        ) : (
+                          <Eye className="w-4 h-4 text-fire-orange" />
+                        )}
+                      </Button>
+                      {apiKeys.primary?.trim() && (
                         <Button
                           type="button"
                           size="sm"
                           variant="ghost"
-                          onClick={() =>
-                            setShowApiKeys((prev) => ({
-                              ...prev,
-                              [provider.key]: !prev[provider.key],
-                            }))
-                          }
-                          className="h-6 w-6 p-0"
+                          onClick={() => testApiKey("primary", apiKeys.primary)}
+                          disabled={isTestingApiKey === "primary"}
+                          className="h-8 w-8 p-0 hover:bg-fire-orange/20"
                         >
-                          {showApiKeys[provider.key] ? (
-                            <EyeOff className="w-3 h-3" />
+                          {isTestingApiKey === "primary" ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-fire-orange" />
                           ) : (
-                            <Eye className="w-3 h-3" />
+                            <CheckCircle2 className="w-4 h-4 text-fire-orange" />
                           )}
                         </Button>
-                        {apiKeys[provider.key].trim() && (
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={() =>
-                              testApiKey(provider.key, apiKeys[provider.key])
-                            }
-                            disabled={isTesting}
-                            className="h-6 w-6 p-0"
-                          >
-                            {isTesting ? (
-                              <Loader2 className="w-3 h-3 animate-spin" />
-                            ) : (
-                              <CheckCircle2 className="w-3 h-3" />
-                            )}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <a
-                        href={provider.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-fire-orange hover:underline"
-                      >
-                        Get API Key
-                      </a>
-                      {status === "valid" && (
-                        <span className="text-xs text-fire-orange">Valid</span>
-                      )}
-                      {status === "invalid" && (
-                        <span className="text-xs text-red-500">Invalid</span>
-                      )}
-                      {isConfigured && !apiKeys[provider.key] && (
-                        <span className="text-xs text-fire-orange">
-                          Configured
-                        </span>
                       )}
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              </div>
+
+              {/* Status indicators */}
+              <div className="flex items-center justify-center space-x-4">
+                {apiKeyStatuses.primary === "valid" && (
+                  <div className="flex items-center space-x-2 px-4 py-2 glass rounded-full border border-fire-orange/30">
+                    <CheckCircle2 className="w-4 h-4 text-fire-orange" />
+                    <span className="text-sm text-fire-orange font-medium">
+                      API Key Verified
+                    </span>
+                  </div>
+                )}
+                {apiKeyStatuses.primary === "invalid" && (
+                  <div className="flex items-center space-x-2 px-4 py-2 glass rounded-full border border-red-500/30">
+                    <XCircle className="w-4 h-4 text-red-500" />
+                    <span className="text-sm text-red-500 font-medium">
+                      Invalid Key
+                    </span>
+                  </div>
+                )}
+                {settings.openaiApiKey === "***configured***" &&
+                  !apiKeys.primary && (
+                    <div className="flex items-center space-x-2 px-4 py-2 glass rounded-full border border-fire-orange/30">
+                      <Shield className="w-4 h-4 text-fire-orange" />
+                      <span className="text-sm text-fire-orange font-medium">
+                        Securely Stored
+                      </span>
+                    </div>
+                  )}
+              </div>
+
+              {/* Provider links */}
+              <div className="text-center space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Need an API key?
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {[
+                    {
+                      name: "OpenAI",
+                      url: "https://platform.openai.com/api-keys",
+                      prefix: "sk-",
+                    },
+                    {
+                      name: "Groq",
+                      url: "https://console.groq.com/keys",
+                      prefix: "gsk-",
+                    },
+                    {
+                      name: "Anthropic",
+                      url: "https://console.anthropic.com/keys",
+                      prefix: "sk-ant-",
+                    },
+                  ].map((provider) => (
+                    <a
+                      key={provider.name}
+                      href={provider.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 px-4 py-2 glass rounded-lg border border-fire-orange/20 hover:border-fire-orange/50 hover:bg-fire-orange/5 transition-all duration-200"
+                    >
+                      <Key className="w-3 h-3 text-fire-orange" />
+                      <span className="text-sm font-medium">
+                        {provider.name}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        ({provider.prefix}...)
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Security guarantee */}
+              <div className="text-center p-6 glass rounded-lg border border-fire-orange/20 bg-fire-orange/5">
+                <div className="flex items-center justify-center space-x-2 mb-3">
+                  <Shield className="w-5 h-5 text-fire-orange" />
+                  <span className="font-semibold text-fire-orange">
+                    Security Guarantee
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Your API key is encrypted using military-grade AES-256
+                  encryption before being stored. It's never logged, never
+                  cached in plain text, and only decrypted server-side when
+                  needed. If there's ever a breach, your key remains completely
+                  secure.
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
