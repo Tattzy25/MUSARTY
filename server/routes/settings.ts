@@ -67,6 +67,7 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
 
     // Validate API keys if being updated
     const apiKeyUpdates = [
+      "openaiApiKey",
       "groqApiKey",
       "anthropicApiKey",
       "geminiApiKey",
