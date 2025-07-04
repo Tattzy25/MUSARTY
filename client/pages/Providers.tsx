@@ -107,7 +107,7 @@ const AI_PROVIDERS: AIProvider[] = [
     name: "Suno AI",
     category: "Creative Master",
     description:
-      "��� YOUR FAVORITE! The creative genius that generates music, audio, and creative content. When you need that artistic touch!",
+      "🎵 YOUR FAVORITE! The creative genius that generates music, audio, and creative content. When you need that artistic touch!",
     features: [
       "Music Generation",
       "Audio Creation",
@@ -210,7 +210,7 @@ const AI_PROVIDERS: AIProvider[] = [
       totalUses: 2841,
       successRate: 94,
       avgResponseTime: "0.8s",
-      rank: 2,
+      rank: 6,
     },
   },
   {
