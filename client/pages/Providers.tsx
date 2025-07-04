@@ -224,8 +224,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Standard",
     quality: "Exceptional",
     placeholder: "sk-...",
-    color: "from-green-500 to-emerald-400",
-    bgGradient: "bg-gradient-to-br from-green-500/10 to-emerald-400/10",
+    color: "from-green-400 to-emerald-300",
+    bgGradient: "bg-gradient-to-br from-green-400/25 to-emerald-300/25",
     icon: Crown,
     models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
     stats: {
