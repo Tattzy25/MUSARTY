@@ -420,9 +420,16 @@ export async function validateApiKey(
   apiKey: string,
 ): Promise<boolean> {
   try {
+    console.log(
+      `🔑 Testing ${provider} API key: ${apiKey.substring(0, 10)}...`,
+    );
+
     if (provider === "groq") {
       const testClient = new Groq({ apiKey });
-      await testClient.models.list();
+      const result = await testClient.models.list();
+      console.log(
+        `✅ GROQ key validation successful, found ${result.data.length} models`,
+      );
       return true;
     } else if (provider === "v0") {
       // Test v0 API key by making a simple request
