@@ -134,11 +134,11 @@
 
 @layer components {
   .glass {
-    @apply bg-glass-bg/10 backdrop-blur-xl border border-glass-border/20;
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
   }
 
   .glass-strong {
-    @apply bg-glass-bg/20 backdrop-blur-2xl border border-glass-border/30;
+    @apply bg-card/90 backdrop-blur-2xl border border-border/70;
   }
 
   .neon-glow {
