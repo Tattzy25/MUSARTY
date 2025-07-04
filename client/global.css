@@ -38,7 +38,13 @@
 
     --radius: 0.75rem;
 
-    /* Fire orange and black color palette */
+    /* Vibrant tattoo site color palette */
+    --electric-orange: 25 100% 65%; /* #FF8833 */
+    --blazing-red: 15 100% 55%; /* #FF4000 */
+    --electric-pink: 320 100% 60%; /* #FF1A9F */
+    --neon-purple: 258 100% 70%; /* #8B5CF6 */
+    --cyber-blue: 217 100% 65%; /* #3B82F6 */
+    --electric-yellow: 45 100% 60%; /* #FFAA1A */
     --fire-orange: 25 100% 60%;
     --fire-red: 15 100% 50%;
     --fire-yellow: 35 100% 55%;
@@ -47,9 +53,9 @@
     --coal-black: 0 0% 10%;
     --ash-gray: 0 0% 25%;
 
-    /* Glass effect */
-    --glass-bg: 0 0% 15%;
-    --glass-border: 25 50% 25%;
+    /* Enhanced glass effect */
+    --glass-bg: 0 0% 5%;
+    --glass-border: 25 50% 35%;
   }
 
   .light {
