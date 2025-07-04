@@ -176,12 +176,12 @@ export default function Index() {
             <div className="space-y-4">
               <Badge
                 variant="outline"
-                className="px-4 py-2 text-sm font-medium neon-border text-neon-blue"
+                className="px-4 py-2 text-sm font-medium neon-border text-fire-orange"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Powered by Advanced AI
               </Badge>
-              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-green bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
                 Transform Images
               </h1>
               <h2 className="text-4xl md:text-5xl font-bold text-foreground">
@@ -200,9 +200,9 @@ export default function Index() {
                 <Card key={index} className="glass-strong neon-border">
                   <CardContent className="p-6 text-center space-y-4">
                     <div className="relative mx-auto w-12 h-12">
-                      <div className="absolute inset-0 bg-neon-blue/20 rounded-lg blur-xl" />
+                      <div className="absolute inset-0 bg-fire-orange/20 rounded-lg blur-xl" />
                       <div className="relative flex items-center justify-center w-full h-full glass rounded-lg neon-border">
-                        <feature.icon className="w-6 h-6 text-neon-blue" />
+                        <feature.icon className="w-6 h-6 text-fire-orange" />
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold">{feature.title}</h3>
@@ -274,12 +274,12 @@ export default function Index() {
             {/* Success Header */}
             <div className="text-center space-y-4">
               <div className="relative mx-auto w-16 h-16">
-                <div className="absolute inset-0 bg-neon-green/20 rounded-full blur-xl" />
+                <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl" />
                 <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
-                  <Code className="w-8 h-8 text-neon-green" />
+                  <Code className="w-8 h-8 text-fire-orange" />
                 </div>
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-neon-green via-neon-blue to-neon-purple bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
                 Code Generated Successfully!
               </h2>
               <p className="text-muted-foreground">
@@ -312,7 +312,7 @@ export default function Index() {
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
                     <div className="p-2 glass rounded-lg">
-                      <ImageIcon className="w-5 h-5 text-neon-blue" />
+                      <ImageIcon className="w-5 h-5 text-fire-orange" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">
@@ -325,9 +325,9 @@ export default function Index() {
                         KB
                       </p>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-neon-green" />
+                    <ChevronRight className="w-4 h-4 text-fire-orange" />
                     <div className="p-2 glass rounded-lg">
-                      <FileText className="w-5 h-5 text-neon-green" />
+                      <FileText className="w-5 h-5 text-fire-orange" />
                     </div>
                   </div>
                 </CardContent>
@@ -356,7 +356,7 @@ export default function Index() {
               </Button>
               <Button
                 onClick={downloadAllFiles}
-                className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow"
+                className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 neon-glow"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download All Files ({generatedCodes.length * 3} files)
