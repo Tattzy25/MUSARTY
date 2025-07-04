@@ -74,7 +74,7 @@ export default function CodeViewer({
     <div className="glass-strong rounded-2xl p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-bold bg-gradient-to-r from-neon-green via-neon-blue to-neon-purple bg-clip-text text-transparent">
+          <h3 className="text-xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
             Generated Code
           </h3>
           <p className="text-sm text-muted-foreground">
