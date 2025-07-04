@@ -19,7 +19,7 @@ import MusicGenerator from "@/components/MusicGenerator";
 import CodeGenerator from "@/components/CodeGenerator";
 import ImageGenerator from "@/components/ImageGenerator";
 
-type ContentMode = "text" | "image" | "video" | "music" | "code";
+type ContentMode = "text" | "image" | "video" | "music" | "code" | "convert";
 
 interface ContentZone {
   id: ContentMode;
