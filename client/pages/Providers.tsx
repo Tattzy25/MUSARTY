@@ -199,8 +199,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Lightning",
     quality: "Excellent",
     placeholder: "gsk_...",
-    color: "from-orange-500 to-red-500",
-    bgGradient: "bg-gradient-to-br from-orange-500/10 to-red-500/10",
+    color: "from-orange-400 to-red-400",
+    bgGradient: "bg-gradient-to-br from-orange-400/25 to-red-400/25",
     icon: Zap,
     models: [
       "meta-llama/llama-4-scout-17b-16e-instruct",
