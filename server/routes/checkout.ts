@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { CheckoutRequest, CheckoutResponse, PricingPlan } from "@shared/api";
 import { PaymentService } from "../services/payment.js";
 import { Database } from "../db/neon.js";
+import { verifyToken } from "./auth.js";
 
 // Production pricing plans
 const PRICING_PLANS: PricingPlan[] = [
@@ -57,12 +58,20 @@ export const handleGetPricing: RequestHandler = (req, res) => {
 export const handleCheckout: RequestHandler = async (req, res) => {
   try {
     const checkoutData: CheckoutRequest = req.body;
+    const user = req.user; // Get user from auth middleware
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Authentication required",
+      } as CheckoutResponse);
+    }
 
     // Basic validation
-    if (!checkoutData.planId || !checkoutData.customerInfo?.email) {
+    if (!checkoutData.planId) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: planId and email",
+        error: "Missing required field: planId",
       } as CheckoutResponse);
     }
 
@@ -73,12 +82,6 @@ export const handleCheckout: RequestHandler = async (req, res) => {
         success: false,
         error: "Invalid plan ID",
       } as CheckoutResponse);
-    }
-
-    // Get or create user in database
-    let user = await Database.getUserByEmail(checkoutData.customerInfo.email);
-    if (!user) {
-      user = await Database.createUser(checkoutData.customerInfo.email);
     }
 
     // For free plan, no payment needed
@@ -93,13 +96,21 @@ export const handleCheckout: RequestHandler = async (req, res) => {
       } as CheckoutResponse);
     }
 
+    // Check if PayPal is configured
+    if (!PaymentService.isConfigured()) {
+      return res.status(500).json({
+        success: false,
+        error: "Payment service not configured. Please contact administrator.",
+      } as CheckoutResponse);
+    }
+
     // Create PayPal payment
     const payment = await PaymentService.createPayment({
       amount: plan.price,
       currency: plan.currency,
       description: plan.name,
-      returnUrl: `${process.env.FRONTEND_URL || "http://localhost:3000"}/checkout/success`,
-      cancelUrl: `${process.env.FRONTEND_URL || "http://localhost:3000"}/checkout/cancel`,
+      returnUrl: `${process.env.FRONTEND_URL || "http://localhost:8080"}/checkout/success`,
+      cancelUrl: `${process.env.FRONTEND_URL || "http://localhost:8080"}/checkout/cancel`,
     });
 
     // Store payment in database
