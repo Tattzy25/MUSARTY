@@ -739,8 +739,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Fast",
     quality: "Excellent",
     placeholder: "r8_...",
-    color: "from-green-400 to-blue-500",
-    bgGradient: "bg-gradient-to-br from-green-400/20 to-blue-500/20",
+    color: "from-green-400 to-emerald-500",
+    bgGradient: "bg-gradient-to-br from-green-400/20 to-emerald-500/20",
     icon: Star,
     models: ["flux-dev", "llama-3.3-70b-instruct"],
     stats: {
