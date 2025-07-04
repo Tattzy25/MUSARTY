@@ -145,8 +145,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Standard",
     quality: "Exceptional",
     placeholder: "sk-ant-...",
-    color: "from-violet-500 to-purple-600",
-    bgGradient: "bg-gradient-to-br from-violet-500/10 to-purple-600/10",
+    color: "from-violet-400 to-purple-500",
+    bgGradient: "bg-gradient-to-br from-violet-400/25 to-purple-500/25",
     icon: Brain,
     models: ["claude-3-5-sonnet-20241022"],
     stats: {
