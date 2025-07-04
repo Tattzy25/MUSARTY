@@ -53,5 +53,15 @@ export function createServer() {
   app.post("/api/checkout", handleCheckout);
   app.get("/api/subscription/:userId", handleGetSubscription);
 
+  // Shot Caller routes (main AI generation system)
+  app.post("/api/generate", handleGeneration);
+  app.get("/api/models", handleGetModels);
+  app.get("/api/models/:modelId", handleGetModel);
+  app.get("/api/users/:userId/usage", handleGetUserUsage);
+  app.post("/api/users/:userId/blocks", handleAddUserBlocks);
+  app.post("/api/users/initialize", handleInitializeUser);
+  app.get("/api/vault/stats", handleGetVaultStats);
+  app.get("/api/health", handleHealthCheck);
+
   return app;
 }
