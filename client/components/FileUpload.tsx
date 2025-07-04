@@ -93,15 +93,15 @@ export default function FileUpload({
         {!isProcessing && (
           <div className="flex justify-center space-x-8">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Image className="w-4 h-4 text-fire-orange" />
+              <Image className="w-4 h-4 text-primary" />
               <span>PNG</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Image className="w-4 h-4 text-fire-red" />
+              <Image className="w-4 h-4 text-primary" />
               <span>JPG</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <FileText className="w-4 h-4 text-fire-yellow" />
+              <FileText className="w-4 h-4 text-primary" />
               <span>SVG</span>
             </div>
           </div>
