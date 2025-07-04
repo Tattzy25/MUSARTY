@@ -1076,96 +1076,21 @@ export default function Providers() {
                     ))}
                   </div>
 
-                  {/* API Key Input */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">API Key</label>
-                      <span className="text-xs text-muted-foreground">
-                        {provider.pricing}
-                      </span>
-                    </div>
+                  {/* Pricing Info */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-primary">
+                      Pricing
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {provider.pricing}
+                    </span>
+                  </div>
 
-                    <div className="relative">
-                      <Input
-                        type={showApiKeys[provider.id] ? "text" : "password"}
-                        placeholder={
-                          status === "valid"
-                            ? "Configured ✓"
-                            : provider.placeholder
-                        }
-                        value={apiKeys[provider.id] || ""}
-                        onChange={(e) => {
-                          setApiKeys((prev) => ({
-                            ...prev,
-                            [provider.id]: e.target.value,
-                          }));
-                          setApiKeyStatuses((prev) => ({
-                            ...prev,
-                            [provider.id]: null,
-                          }));
-                        }}
-                        className="glass pr-20 text-sm"
-                        disabled={status === "valid"}
-                      />
-                      <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          onClick={() =>
-                            setShowApiKeys((prev) => ({
-                              ...prev,
-                              [provider.id]: !prev[provider.id],
-                            }))
-                          }
-                          className="h-8 w-8 p-0"
-                        >
-                          {showApiKeys[provider.id] ? (
-                            <EyeOff className="w-3 h-3" />
-                          ) : (
-                            <Eye className="w-3 h-3" />
-                          )}
-                        </Button>
-                        {apiKeys[provider.id]?.trim() && (
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={() =>
-                              testApiKey(provider.id, apiKeys[provider.id])
-                            }
-                            disabled={isTesting}
-                            className="h-8 w-8 p-0"
-                          >
-                            {isTesting ? (
-                              <Loader2 className="w-3 h-3 animate-spin" />
-                            ) : status === "valid" ? (
-                              <CheckCircle2 className="w-3 h-3 text-fire-orange" />
-                            ) : (
-                              <Rocket className="w-3 h-3" />
-                            )}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Status */}
-                    <div className="flex justify-between items-center">
-                      <a
-                        href={`https://console.${provider.id}.com/keys`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-fire-orange hover:underline"
-                      >
-                        Get API Key →
-                      </a>
-                      {status === "valid" && (
-                        <span className="text-xs text-fire-orange flex items-center">
-                          <CheckCircle2 className="w-3 h-3 mr-1" />
-                          Ready to Fight!
-                        </span>
-                      )}
-                    </div>
+                  {/* Security Notice */}
+                  <div className="text-center p-3 bg-primary/10 rounded-lg border border-primary/20">
+                    <p className="text-xs text-muted-foreground">
+                      🔒 API Keys managed securely in Settings
+                    </p>
                   </div>
                 </CardContent>
 
