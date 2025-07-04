@@ -146,7 +146,7 @@ async function generateImagePrompt(
 Return only the enhanced prompt, nothing else.`;
 
   if (provider === "groq") {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
@@ -194,7 +194,7 @@ async function generateVideoPrompt(
 Return only the enhanced video prompt.`;
 
   if (provider === "groq") {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
@@ -242,7 +242,7 @@ async function generateMusicPrompt(
 Return only the enhanced music prompt.`;
 
   if (provider === "groq") {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
@@ -286,7 +286,7 @@ async function generateCode(prompt: string, provider: string): Promise<string> {
 Return only the code, properly formatted.`;
 
   if (provider === "groq") {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: prompt },
