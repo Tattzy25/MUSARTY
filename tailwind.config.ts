@@ -57,21 +57,23 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Futuristic neon colors
-        neon: {
-          blue: "hsl(var(--neon-blue))",
-          purple: "hsl(var(--neon-purple))",
-          green: "hsl(var(--neon-green))",
-          pink: "hsl(var(--neon-pink))",
+        // Fire orange color palette
+        fire: {
+          orange: "hsl(var(--fire-orange))",
+          red: "hsl(var(--fire-red))",
+          yellow: "hsl(var(--fire-yellow))",
         },
-        electric: {
-          blue: "hsl(var(--electric-blue))",
+        flame: {
+          orange: "hsl(var(--flame-orange))",
         },
-        cyber: {
-          purple: "hsl(var(--cyber-purple))",
+        ember: {
+          red: "hsl(var(--ember-red))",
         },
-        matrix: {
-          green: "hsl(var(--matrix-green))",
+        coal: {
+          black: "hsl(var(--coal-black))",
+        },
+        ash: {
+          gray: "hsl(var(--ash-gray))",
         },
         glass: {
           bg: "hsl(var(--glass-bg))",

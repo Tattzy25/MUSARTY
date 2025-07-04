@@ -25,6 +25,7 @@
     "@types/prismjs": "^1.26.5",
     "@types/react-syntax-highlighter": "^15.5.13",
     "express": "^4.18.2",
+    "groq-sdk": "^0.26.0",
     "multer": "^2.0.1",
     "openai": "^5.8.2",
     "prismjs": "^1.30.0",
