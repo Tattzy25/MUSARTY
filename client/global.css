@@ -143,7 +143,7 @@
 
   .glass-strong {
     @apply bg-card/80 backdrop-blur-2xl border border-primary/50;
-    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+    box-shadow: 0 12px 40px 0 rgba(230, 68, 17, 0.5);
   }
 
   .neon-glow {
