@@ -54,6 +54,7 @@ export interface ConvertResponse {
  */
 export interface SettingsRequest {
   groqApiKey?: string;
+  v0ApiKey?: string;
   openaiApiKey?: string;
   geminiApiKey?: string;
   aiProvider?: string;
@@ -75,6 +76,7 @@ export interface SettingsResponse {
   success: boolean;
   data?: SettingsRequest & {
     groqApiKey?: string; // will be "***configured***" if set
+    v0ApiKey?: string; // will be "***configured***" if set
     openaiApiKey?: string; // will be "***configured***" if set
     geminiApiKey?: string; // will be "***configured***" if set
     availableProviders?: any;
