@@ -116,26 +116,16 @@ export default function NeonCity() {
       <Navigation />
 
       <div className="max-w-6xl mx-auto p-6 space-y-8">
-        {/* Compact Header */}
-        <div className="text-center space-y-6 py-8">
-          <div>
-            <h1
-              className="text-6xl md:text-8xl font-black tracking-[0.2em] bg-gradient-to-r from-primary via-orange-400 via-red-500 via-pink-400 via-purple-500 to-primary bg-clip-text text-transparent animate-pulse drop-shadow-[0_0_30px_rgba(212,172,53,0.8)]"
-              style={{
-                fontFamily:
-                  'Impact, "Franklin Gothic Bold", "Helvetica Inserat", "Bitstream Vera Sans Bold", sans-serif',
-                letterSpacing: "0.15em",
-                fontStretch: "ultra-expanded",
-              }}
-            >
-              NEON CITY
-            </h1>
-            <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-              🌃 **Your AI Content Generation Hub** 🌃
-              <br />
-              Powered by GROQ orchestration for lightning speed! ⚡
-            </p>
-          </div>
+        {/* Hero Image Header */}
+        <div className="relative">
+          <section className="flex flex-col relative min-h-[100px] p-5 w-full max-w-[1200px] mx-auto">
+            <img
+              loading="lazy"
+              srcSet="https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=100 100w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=200 200w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=400 400w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=800 800w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=1200 1200w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=1600 1600w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1?width=2000 2000w, https://cdn.builder.io/api/v1/image/assets%2Ff211fb8c7c124ed3b265fee7bf5c0654%2Fde0a066d92be421ca3c4c26c3289f2c1"
+              className="aspect-[1.77] object-cover object-center w-full mt-5 min-h-[20px] min-w-[20px] overflow-hidden rounded-3xl"
+              alt="Musarty AI Content Generation Hub"
+            />
+          </section>
         </div>
 
         {/* 5 Cyber Cards in One Row */}
