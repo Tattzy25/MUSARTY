@@ -13,6 +13,12 @@ export default function Navigation() {
       isActive: location.pathname === "/",
     },
     {
+      name: "Neon City",
+      href: "/neon-city",
+      icon: Sparkles,
+      isActive: location.pathname === "/neon-city",
+    },
+    {
       name: "AI Arena",
       href: "/providers",
       icon: Trophy,
