@@ -116,17 +116,17 @@
     background-image:
       radial-gradient(
         circle at 20% 50%,
-        hsl(var(--fire-orange) / 0.1) 0%,
+        hsl(var(--electric-orange) / 0.15) 0%,
         transparent 50%
       ),
       radial-gradient(
         circle at 80% 20%,
-        hsl(var(--fire-red) / 0.1) 0%,
+        hsl(var(--electric-pink) / 0.15) 0%,
         transparent 50%
       ),
       radial-gradient(
         circle at 40% 80%,
-        hsl(var(--fire-yellow) / 0.05) 0%,
+        hsl(var(--neon-purple) / 0.1) 0%,
         transparent 50%
       );
   }
