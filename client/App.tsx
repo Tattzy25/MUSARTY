@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import Settings from "./pages/Settings";
 import Providers from "./pages/Providers";
 import NeonCity from "./pages/NeonCity";
+import Pricing from "./pages/Pricing";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
