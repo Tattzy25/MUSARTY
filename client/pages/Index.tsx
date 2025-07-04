@@ -33,6 +33,7 @@ export default function Index() {
   const handleBuildSubmit = async () => {
     if (!buildPrompt.trim()) return;
 
+<<<<<<< HEAD
     // Check if user is logged in
     if (!user.isSignedIn) {
       // Redirect to auth with the prompt stored
@@ -53,6 +54,20 @@ export default function Index() {
       return;
     }
     window.location.href = `/neon-city?mode=${feature}`;
+=======
+    // ALWAYS require authentication and payment
+    localStorage.setItem("pending_build_prompt", buildPrompt);
+    localStorage.setItem("redirect_after_auth", "/pricing");
+    window.location.href = "/auth";
+    return;
+  };
+
+  const handleFeatureClick = (feature: string) => {
+    // ALWAYS require authentication and payment
+    localStorage.setItem("redirect_after_auth", "/pricing");
+    window.location.href = "/auth";
+    return;
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   };
 
   const features = [
@@ -204,7 +219,11 @@ export default function Index() {
                 asChild
               >
                 <Link to={user.isSignedIn ? "/neon-city" : "/auth"}>
+<<<<<<< HEAD
                   {user.isSignedIn ? "Dashboard" : "Get Started"}
+=======
+                  {user.isSignedIn ? "Neon City" : "Get Started"}
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                 </Link>
               </Button>
             </div>
@@ -244,19 +263,35 @@ export default function Index() {
 
           {/* Main CTA Input */}
           <div className="max-w-4xl mx-auto mb-16">
+<<<<<<< HEAD
             <Card className="glass-strong neon-border p-2">
+=======
+            <Card
+              className="glass-strong neon-border"
+              style={{ padding: "8px 90px 8px 8px" }}
+            >
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
               <div className="flex flex-col md:flex-row gap-4">
                 <Input
                   placeholder="What should we build today? Describe your idea..."
                   value={buildPrompt}
                   onChange={(e) => setBuildPrompt(e.target.value)}
+<<<<<<< HEAD
                   className="flex-1 bg-transparent border-none text-lg px-6 py-4 placeholder:text-muted-foreground/60"
+=======
+                  className="flex-1 bg-transparent border-none placeholder:text-muted-foreground/60"
+                  style={{ fontSize: "22px", padding: "65px 1px 65px 11px" }}
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                   onKeyDown={(e) => e.key === "Enter" && handleBuildSubmit()}
                 />
                 <Button
                   onClick={handleBuildSubmit}
                   disabled={!buildPrompt.trim()}
                   className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold px-8 py-4 text-lg neon-glow"
+<<<<<<< HEAD
+=======
+                  style={{ margin: "auto 0 auto auto" }}
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Build with AI
@@ -264,10 +299,17 @@ export default function Index() {
                 </Button>
               </div>
             </Card>
+<<<<<<< HEAD
             <p className="text-sm text-muted-foreground mt-3">
               ✨ Powered by v0 • 3 free generations • No credit card required
             </p>
           </div>
+=======
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            ✨ Powered by v0 • 3 free generations • No credit card required
+          </p>
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
           {/* Social Proof */}
           <div className="flex items-center justify-center space-x-8 mb-16">
@@ -573,6 +615,7 @@ export default function Index() {
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <Button
                   size="lg"
+<<<<<<< HEAD
                   onClick={() =>
                     !user.isSignedIn
                       ? (window.location.href = "/auth")
@@ -582,6 +625,16 @@ export default function Index() {
                 >
                   <Sparkles className="w-6 h-6 mr-2" />
                   Start Creating Free
+=======
+                  onClick={() => {
+                    localStorage.setItem("redirect_after_auth", "/pricing");
+                    window.location.href = "/auth";
+                  }}
+                  className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold px-8 py-4 text-lg neon-glow"
+                >
+                  <Sparkles className="w-6 h-6 mr-2" />
+                  Sign Up & Get Started
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                 </Button>
                 <Button
                   variant="outline"

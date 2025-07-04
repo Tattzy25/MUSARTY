@@ -13,6 +13,10 @@ import {
 } from "@/components/ui/select";
 import { Music, Play, Pause, Download, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
+=======
+import FileUpload from "./FileUpload";
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
 interface MusicGeneratorProps {
   prompt: string;
@@ -39,7 +43,11 @@ export default function MusicGenerator({
   const handleGenerate = () => {
     const musicPrompt = `Generate music with the following specifications:
 Style: ${style || "Not specified"}
+<<<<<<< HEAD
 Genre: ${genre || "Not specified"}  
+=======
+Genre: ${genre || "Not specified"}
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 Mood: ${mood || "Not specified"}
 Duration: ${duration} seconds
 Lyrics: ${lyrics || "Instrumental"}
@@ -155,6 +163,31 @@ Additional details: ${prompt}`;
               />
             </div>
 
+<<<<<<< HEAD
+=======
+            {/* Image Upload for Music Inspiration */}
+            <div className="space-y-2">
+              <Label className="text-white">
+                Upload Inspiration Image (Optional)
+              </Label>
+              <FileUpload
+                onFileSelect={(files) => {
+                  if (files.length > 0) {
+                    const fileName = files[0].name;
+                    setPrompt(
+                      (prev) =>
+                        prev +
+                        (prev ? "\n\n" : "") +
+                        `[Inspiration image uploaded: ${fileName}] Create music that captures the mood and essence of this image.`,
+                    );
+                  }
+                }}
+                maxFiles={1}
+                isProcessing={false}
+              />
+            </div>
+
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
             <Button
               onClick={handleGenerate}
               disabled={isGenerating}

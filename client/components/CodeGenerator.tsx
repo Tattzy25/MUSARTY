@@ -6,6 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Eye, Download, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
+=======
+import FileUpload from "./FileUpload";
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
 interface CodeGeneratorProps {
   prompt: string;
@@ -127,11 +131,40 @@ export default function CodeGenerator({
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Describe the React component you want to generate...
 Example: Create a modern contact form with name, email, and message fields. Use Tailwind CSS for styling with a dark theme and orange accents."
+<<<<<<< HEAD
                 className="bg-black/60 border-primary/30 text-white h-48 text-lg"
+=======
+                className="bg-black/60 border-primary/30 text-white h-32 text-lg"
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                 disabled={isGenerating}
               />
             </div>
 
+<<<<<<< HEAD
+=======
+            {/* Image Upload for Design Reference */}
+            <div className="space-y-2">
+              <Label className="text-white">
+                Upload Design Reference (Optional)
+              </Label>
+              <FileUpload
+                onFileSelect={(files) => {
+                  if (files.length > 0) {
+                    const fileName = files[0].name;
+                    setPrompt(
+                      (prev) =>
+                        prev +
+                        (prev ? "\n\n" : "") +
+                        `[Design reference uploaded: ${fileName}] Create a React component that matches the design and layout shown in this image.`,
+                    );
+                  }
+                }}
+                maxFiles={1}
+                isProcessing={false}
+              />
+            </div>
+
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
             <Button
               onClick={onGenerate}
               disabled={!prompt.trim() || isGenerating}

@@ -172,7 +172,11 @@ function generateFallbackReactCode(fileName: string): string {
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
 
+<<<<<<< HEAD
   return generateMockReactCode(capitalizedName, {
+=======
+  return generateReactCode(capitalizedName, {
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
     generateTypeScript: true,
     includeTailwind: true,
     includeComments: true,
@@ -185,7 +189,11 @@ function generateFallbackHtmlCode(fileName: string): string {
     .replace(/[^a-zA-Z0-9]/g, "");
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
+<<<<<<< HEAD
   return generateMockHtmlCode(capitalizedName);
+=======
+  return generateHtmlCode(capitalizedName);
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 function generateFallbackCssCode(fileName: string): string {
@@ -194,10 +202,17 @@ function generateFallbackCssCode(fileName: string): string {
     .replace(/[^a-zA-Z0-9]/g, "");
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
+<<<<<<< HEAD
   return generateMockCssCode(capitalizedName);
 }
 
 function generateMockReactCode(componentName: string, settings?: any): string {
+=======
+  return generateCssCode(capitalizedName);
+}
+
+function generateReactCode(componentName: string, settings?: any): string {
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   const useTypeScript = settings?.generateTypeScript !== false;
   const useTailwind = settings?.includeTailwind !== false;
   const includeComments = settings?.includeComments !== false;
@@ -241,7 +256,11 @@ ${propsType}export const ${componentName}: React.FC${useTypeScript ? `<${compone
 export default ${componentName};`;
 }
 
+<<<<<<< HEAD
 function generateMockHtmlCode(componentName: string): string {
+=======
+function generateHtmlCode(componentName: string): string {
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -274,7 +293,11 @@ function generateMockHtmlCode(componentName: string): string {
 </html>`;
 }
 
+<<<<<<< HEAD
 function generateMockCssCode(componentName: string): string {
+=======
+function generateCssCode(componentName: string): string {
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   const className = componentName.toLowerCase();
 
   return `/* AI Generated CSS for ${componentName} Component */

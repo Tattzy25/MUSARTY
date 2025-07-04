@@ -339,6 +339,18 @@ async function executeAiRequest(
       case "gemini":
         result = await callGemini(request, apiKey);
         break;
+<<<<<<< HEAD
+=======
+      case "stability":
+        result = await callStability(request, apiKey);
+        break;
+      case "runway":
+        result = await callRunway(request, apiKey);
+        break;
+      case "suno":
+        result = await callSuno(request, apiKey);
+        break;
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       default:
         throw new Error(`Unsupported provider: ${provider}`);
     }
@@ -450,7 +462,11 @@ export function initializeUser(
 ): void {
   if (!USER_BALANCES.has(userId)) {
     USER_BALANCES.set(userId, startingBlocks);
+<<<<<<< HEAD
     console.log(`👤 Initialized user ${userId} with ${startingBlocks} blocks`);
+=======
+    console.log(`��� Initialized user ${userId} with ${startingBlocks} blocks`);
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   }
 }
 
@@ -481,38 +497,274 @@ function checkRateLimit(userId: string): {
 }
 
 /**
+<<<<<<< HEAD
  * Provider-specific API calls (placeholder implementations)
+=======
+ * Provider-specific API calls (REAL IMPLEMENTATIONS)
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
  */
 async function callOpenAI(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
+<<<<<<< HEAD
   // Implement OpenAI API call
   return `OpenAI response for: ${request.input}`;
+=======
+  const OpenAI = (await import("openai")).default;
+  const openai = new OpenAI({ apiKey });
+
+  try {
+    if (request.content_type === "image") {
+      // Image generation with DALL-E
+      const response = await openai.images.generate({
+        model: "dall-e-3",
+        prompt: request.input.toString(),
+        n: 1,
+        size: "1024x1024",
+        quality: "standard",
+      });
+      return response.data[0]?.url || "Image generation failed";
+    } else {
+      // Text generation
+      const completion = await openai.chat.completions.create({
+        model: request.model_id,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a helpful AI assistant. Provide clear, accurate, and helpful responses.",
+          },
+          {
+            role: "user",
+            content: request.input.toString(),
+          },
+        ],
+        max_tokens: 2000,
+        temperature: 0.7,
+      });
+      return completion.choices[0]?.message?.content || "No response generated";
+    }
+  } catch (error: any) {
+    console.error("OpenAI API error:", error);
+    throw new Error(`OpenAI API error: ${error.message}`);
+  }
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 async function callGroq(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
+<<<<<<< HEAD
   // Implement Groq API call
   return `Groq response for: ${request.input}`;
+=======
+  const Groq = (await import("groq-sdk")).default;
+  const groq = new Groq({ apiKey });
+
+  try {
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful AI assistant powered by GROQ's lightning-fast inference. Provide clear, accurate responses.",
+        },
+        {
+          role: "user",
+          content: request.input.toString(),
+        },
+      ],
+      model: request.model_id,
+      temperature: 0.7,
+      max_tokens: 2000,
+    });
+    return completion.choices[0]?.message?.content || "No response generated";
+  } catch (error: any) {
+    console.error("Groq API error:", error);
+    throw new Error(`Groq API error: ${error.message}`);
+  }
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 async function callAnthropic(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
+<<<<<<< HEAD
   // Implement Anthropic API call
   return `Anthropic response for: ${request.input}`;
+=======
+  try {
+    // Use fetch for Anthropic API since we don't have the SDK in dependencies
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: request.model_id,
+        max_tokens: 2000,
+        messages: [
+          {
+            role: "user",
+            content: request.input.toString(),
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Anthropic API error: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return data.content[0]?.text || "No response generated";
+  } catch (error: any) {
+    console.error("Anthropic API error:", error);
+    throw new Error(`Anthropic API error: ${error.message}`);
+  }
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 async function callGemini(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
+<<<<<<< HEAD
   // Implement Gemini API call
   return `Gemini response for: ${request.input}`;
+=======
+  try {
+    // Use Google Gemini REST API
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${request.model_id}:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: request.input.toString(),
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2000,
+          },
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Gemini API error: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    return (
+      data.candidates[0]?.content?.parts[0]?.text || "No response generated"
+    );
+  } catch (error: any) {
+    console.error("Gemini API error:", error);
+    throw new Error(`Gemini API error: ${error.message}`);
+  }
+}
+
+async function callStability(
+  request: GenerationRequest,
+  apiKey: string,
+): Promise<string> {
+  try {
+    if (request.content_type === "image") {
+      // Stability AI image generation
+      const response = await fetch(
+        "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            text_prompts: [
+              {
+                text: request.input.toString(),
+                weight: 1,
+              },
+            ],
+            cfg_scale: 7,
+            height: 1024,
+            width: 1024,
+            samples: 1,
+            steps: 30,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Stability API error: ${response.status} ${response.statusText}`,
+        );
+      }
+
+      const data = await response.json();
+      // Return base64 image data URL
+      const imageBase64 = data.artifacts[0]?.base64;
+      return imageBase64
+        ? `data:image/png;base64,${imageBase64}`
+        : "Image generation failed";
+    } else if (request.content_type === "music") {
+      // For music, return a prompt (Stability doesn't do music)
+      return `Enhanced music prompt: ${request.input}`;
+    }
+
+    return "Content type not supported by Stability AI";
+  } catch (error: any) {
+    console.error("Stability API error:", error);
+    throw new Error(`Stability API error: ${error.message}`);
+  }
+}
+
+async function callRunway(
+  request: GenerationRequest,
+  apiKey: string,
+): Promise<string> {
+  try {
+    // Runway ML video generation (placeholder - they don't have public API yet)
+    // Return enhanced prompt for now
+    return `Enhanced video prompt for Runway ML: ${request.input}`;
+  } catch (error: any) {
+    console.error("Runway API error:", error);
+    throw new Error(`Runway API error: ${error.message}`);
+  }
+}
+
+async function callSuno(
+  request: GenerationRequest,
+  apiKey: string,
+): Promise<string> {
+  try {
+    // Suno AI music generation (placeholder - they don't have public API yet)
+    // Return enhanced prompt for now
+    return `Enhanced music prompt for Suno AI: ${request.input}`;
+  } catch (error: any) {
+    console.error("Suno API error:", error);
+    throw new Error(`Suno API error: ${error.message}`);
+  }
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 /**

@@ -27,6 +27,7 @@ import {
 export const handleGeneration: RequestHandler = async (req, res) => {
   try {
     const request: GenerationRequest = req.body;
+<<<<<<< HEAD
 
     // Validate required fields
     if (!request.user_id || !request.model_id || !request.input) {
@@ -36,6 +37,28 @@ export const handleGeneration: RequestHandler = async (req, res) => {
       });
     }
 
+=======
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Authentication required",
+      });
+    }
+
+    // Validate required fields
+    if (!request.model_id || !request.input) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields: model_id, input",
+      });
+    }
+
+    // Use authenticated user's ID
+    request.user_id = user.id;
+
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
     // Initialize user if first time
     initializeUser(request.user_id);
 
@@ -133,8 +156,20 @@ export const handleGetModel: RequestHandler = (req, res) => {
  */
 export const handleGetUserUsage: RequestHandler = (req, res) => {
   try {
+<<<<<<< HEAD
     const { userId } = req.params;
     const stats = getUserUsageStats(userId);
+=======
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Authentication required",
+      });
+    }
+
+    const stats = getUserUsageStats(user.id);
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
     res.json({
       success: true,
@@ -194,26 +229,47 @@ export const handleAddUserBlocks: RequestHandler = (req, res) => {
  */
 export const handleInitializeUser: RequestHandler = (req, res) => {
   try {
+<<<<<<< HEAD
     const { user_id, starting_blocks } = req.body;
 
     if (!user_id) {
       return res.status(400).json({
         success: false,
         error: "Missing user_id",
+=======
+    const user = req.user;
+    const { starting_blocks } = req.body;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Authentication required",
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       });
     }
 
     // Give new users 10 blocks to start (3 free generations)
     const blocks = starting_blocks || 10;
+<<<<<<< HEAD
     initializeUser(user_id, blocks);
+=======
+    initializeUser(user.id, blocks);
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
     res.json({
       success: true,
       data: {
+<<<<<<< HEAD
         user_id,
         starting_blocks: blocks,
         message: "User initialized successfully",
         stats: getUserUsageStats(user_id),
+=======
+        user_id: user.id,
+        starting_blocks: blocks,
+        message: "User initialized successfully",
+        stats: getUserUsageStats(user.id),
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       },
     });
   } catch (error) {

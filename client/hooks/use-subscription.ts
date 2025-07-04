@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import { UserSubscription } from "@shared/api";
+<<<<<<< HEAD
+=======
+import { useUser } from "./use-auth";
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
 interface UseSubscriptionReturn {
   subscription: UserSubscription | null;
@@ -11,10 +15,15 @@ interface UseSubscriptionReturn {
   refreshSubscription: () => Promise<void>;
 }
 
+<<<<<<< HEAD
 // Mock user ID - in production, get from auth context
 const MOCK_USER_ID = "user_123";
 
 export function useSubscription(): UseSubscriptionReturn {
+=======
+export function useSubscription(): UseSubscriptionReturn {
+  const { user } = useUser();
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
   const [subscription, setSubscription] = useState<UserSubscription | null>(
     null,
   );
@@ -33,8 +42,15 @@ export function useSubscription(): UseSubscriptionReturn {
         setSubscription(parsed);
       }
 
+<<<<<<< HEAD
       // Fetch from API
       const response = await fetch(`/api/subscription/${MOCK_USER_ID}`);
+=======
+      // Fetch from API using user email
+      const response = await fetch(
+        `/api/subscription/current?email=${encodeURIComponent(user?.email || "guest@musarty.com")}`,
+      );
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       const result = await response.json();
 
       if (result.success && result.data) {
@@ -43,7 +59,11 @@ export function useSubscription(): UseSubscriptionReturn {
       } else {
         // No subscription found - user is on free tier
         const freeSubscription: UserSubscription = {
+<<<<<<< HEAD
           id: `free_${MOCK_USER_ID}`,
+=======
+          id: `free_${user?.email || "guest"}`,
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
           planId: "free",
           status: "trial",
           startDate: new Date().toISOString(),
@@ -67,7 +87,11 @@ export function useSubscription(): UseSubscriptionReturn {
         setSubscription(JSON.parse(localSubscription));
       } else {
         const freeSubscription: UserSubscription = {
+<<<<<<< HEAD
           id: `free_${MOCK_USER_ID}`,
+=======
+          id: `free_${user?.email || "guest"}`,
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
           planId: "free",
           status: "trial",
           startDate: new Date().toISOString(),

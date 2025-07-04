@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
+<<<<<<< HEAD
+=======
+import { useAuth } from "@/hooks/use-auth";
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -112,6 +116,19 @@ interface GeneratedCode {
 export default function NeonCity() {
   const [activeMode, setActiveMode] = useState<ContentMode | null>(null);
   const [prompt, setPrompt] = useState("");
+<<<<<<< HEAD
+=======
+  const { user, isSignedIn } = useAuth();
+
+  // Redirect to auth if not signed in
+  useEffect(() => {
+    if (!isSignedIn) {
+      localStorage.setItem("redirect_after_auth", "/pricing");
+      window.location.href = "/auth";
+      return;
+    }
+  }, [isSignedIn]);
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 
   // Handle URL parameters
   useEffect(() => {
@@ -615,9 +632,37 @@ export default function NeonCity() {
                               CONTENT_ZONES.find((z) => z.id === activeMode)
                                 ?.placeholder
                             }
+<<<<<<< HEAD
                             className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
                             disabled={isGenerating}
                           />
+=======
+                            className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-32 text-lg p-6 rounded-2xl"
+                            disabled={isGenerating}
+                          />
+
+                          {/* Image Upload for Text/Video */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-primary/80">
+                              Upload Reference Image (Optional)
+                            </label>
+                            <FileUpload
+                              onFileSelect={(files) => {
+                                if (files.length > 0) {
+                                  const fileName = files[0].name;
+                                  setPrompt(
+                                    (prev) =>
+                                      prev +
+                                      (prev ? "\n\n" : "") +
+                                      `[Reference image uploaded: ${fileName}] Please analyze this image and incorporate its elements into the ${activeMode} generation.`,
+                                  );
+                                }
+                              }}
+                              maxFiles={1}
+                              isProcessing={false}
+                            />
+                          </div>
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
                         </div>
 
                         <Button

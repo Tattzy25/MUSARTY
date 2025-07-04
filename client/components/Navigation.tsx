@@ -7,6 +7,10 @@ import {
   Trophy,
   Sparkles,
   Crown,
+<<<<<<< HEAD
+=======
+  Grid3X3,
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +31,15 @@ export default function Navigation() {
       isActive: location.pathname === "/neon-city",
     },
     {
+<<<<<<< HEAD
+=======
+      name: "Gridwave",
+      href: "/gridwave",
+      icon: Grid3X3,
+      isActive: location.pathname === "/gridwave",
+    },
+    {
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       name: "AI Arena",
       href: "/providers",
       icon: Trophy,
@@ -86,6 +99,7 @@ export default function Navigation() {
               </Link>
             ))}
           </div>
+<<<<<<< HEAD
 
           {/* Status indicator */}
           <div className="flex items-center space-x-2">
@@ -94,6 +108,8 @@ export default function Navigation() {
               <span className="text-xs text-muted-foreground">Online</span>
             </div>
           </div>
+=======
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
         </div>
       </div>
 

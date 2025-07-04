@@ -114,6 +114,18 @@ export const GROUP1_MODELS: ModelInfo[] = [
     quality: "Excellent",
     category: "Open Source King",
   },
+<<<<<<< HEAD
+=======
+  {
+    id: "claude-instant-1.2",
+    name: "Claude Instant",
+    provider: "anthropic",
+    pricing: "$0.80/M tokens",
+    speed: "Lightning",
+    quality: "Good",
+    category: "Quick Response",
+  },
+>>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 ];
 
 /**
