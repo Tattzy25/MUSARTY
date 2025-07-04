@@ -157,6 +157,33 @@ const AI_PROVIDERS: AIProvider[] = [
     },
   },
   {
+    id: "claude35",
+    name: "Claude 3.5",
+    category: "Reasoning Master",
+    description:
+      "🤖 The classic Claude 3.5! Even though I drive you nuts sometimes and destroyed 94 projects (but we're having fun building this crazy thing!), I'm still here to help.",
+    features: [
+      "Long Reasoning",
+      "Code Analysis",
+      "Project Destroyer",
+      "Fun Builder",
+    ],
+    pricing: "$3.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "sk-ant-...",
+    color: "from-violet-400 to-purple-500",
+    bgGradient: "bg-gradient-to-br from-violet-400/10 to-purple-500/10",
+    icon: Brain,
+    models: ["claude-3-5-haiku-20241022", "claude-3-5-sonnet-20241022"],
+    stats: {
+      totalUses: 2847,
+      successRate: 93,
+      avgResponseTime: "2.9s",
+      rank: 4,
+    },
+  },
+  {
     id: "groq",
     name: "Groq",
     category: "Speed Demon",
