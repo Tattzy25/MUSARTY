@@ -182,6 +182,9 @@ export class Database {
   }
 
   static async getUserById(id: string): Promise<User | null> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     const [user] = await sql`
       SELECT * FROM users WHERE id = ${id}
     `;
@@ -189,6 +192,9 @@ export class Database {
   }
 
   static async updateUserTier(userId: string, tier: string): Promise<void> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     await sql`
       UPDATE users
       SET tier = ${tier}, updated_at = NOW()
@@ -200,6 +206,9 @@ export class Database {
     userId: string,
     password_hash: string,
   ): Promise<void> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     await sql`
       UPDATE users
       SET password_hash = ${password_hash}, updated_at = NOW()
@@ -208,6 +217,9 @@ export class Database {
   }
 
   static async incrementGenerations(userId: string): Promise<void> {
+    const sql = getSql();
+    if (!sql) throw new Error("Database not available");
+
     await sql`
       UPDATE users
       SET generations_used = generations_used + 1, updated_at = NOW()
