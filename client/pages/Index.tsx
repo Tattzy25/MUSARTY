@@ -244,19 +244,24 @@ export default function Index() {
 
           {/* Main CTA Input */}
           <div className="max-w-4xl mx-auto mb-16">
-            <Card className="glass-strong neon-border p-2">
+            <Card
+              className="glass-strong neon-border"
+              style={{ padding: "8px 90px 8px 8px" }}
+            >
               <div className="flex flex-col md:flex-row gap-4">
                 <Input
                   placeholder="What should we build today? Describe your idea..."
                   value={buildPrompt}
                   onChange={(e) => setBuildPrompt(e.target.value)}
-                  className="flex-1 bg-transparent border-none text-lg px-6 py-4 placeholder:text-muted-foreground/60"
+                  className="flex-1 bg-transparent border-none placeholder:text-muted-foreground/60"
+                  style={{ fontSize: "22px", padding: "65px 1px 65px 11px" }}
                   onKeyDown={(e) => e.key === "Enter" && handleBuildSubmit()}
                 />
                 <Button
                   onClick={handleBuildSubmit}
                   disabled={!buildPrompt.trim()}
                   className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold px-8 py-4 text-lg neon-glow"
+                  style={{ margin: "auto 0 auto auto" }}
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Build with AI
@@ -264,10 +269,10 @@ export default function Index() {
                 </Button>
               </div>
             </Card>
-            <p className="text-sm text-muted-foreground mt-3">
-              ✨ Powered by v0 • 3 free generations • No credit card required
-            </p>
           </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            ✨ Powered by v0 • 3 free generations • No credit card required
+          </p>
 
           {/* Social Proof */}
           <div className="flex items-center justify-center space-x-8 mb-16">
