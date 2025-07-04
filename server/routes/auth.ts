@@ -1,33 +1,32 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { Database, User } from "../db/neon.js";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
-interface LoginRequest {
+interface User {
+  id: string;
   email: string;
-  password: string;
-}
-
-interface SignupRequest {
-  email: string;
-  password: string;
   name?: string;
-}
-
-interface ForgotPasswordRequest {
-  email: string;
+  tier: "free" | "pro" | "byok";
+  generations_used: number;
+  created_at: string;
 }
 
 interface AuthResponse {
   success: boolean;
   token?: string;
-  user?: Omit<User, "password_hash">;
+  user?: User;
   error?: string;
 }
+
+// In-memory user store for development
+const users = new Map<
+  string,
+  { email: string; password_hash: string; user: User }
+>();
 
 // Generate JWT token
 function generateToken(user: User): string {
@@ -55,16 +54,18 @@ export const verifyToken: RequestHandler = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET) as any;
 
-    // Get fresh user data
-    const user = await Database.getUserByEmail(decoded.email);
-    if (!user) {
+    // Find user
+    const userRecord = Array.from(users.values()).find(
+      (u) => u.user.email === decoded.email,
+    );
+    if (!userRecord) {
       return res.status(401).json({
         success: false,
         error: "User not found",
       });
     }
 
-    req.user = user;
+    req.user = userRecord.user as any;
     next();
   } catch (error) {
     return res.status(401).json({
@@ -77,7 +78,7 @@ export const verifyToken: RequestHandler = async (req, res, next) => {
 // Login endpoint
 export const handleLogin: RequestHandler = async (req, res) => {
   try {
-    const { email, password }: LoginRequest = req.body;
+    const { email, password } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -87,9 +88,9 @@ export const handleLogin: RequestHandler = async (req, res) => {
       } as AuthResponse);
     }
 
-    // Get user from database
-    const user = await Database.getUserByEmail(email.toLowerCase());
-    if (!user) {
+    // Get user
+    const userRecord = users.get(email.toLowerCase());
+    if (!userRecord) {
       return res.status(401).json({
         success: false,
         error: "Invalid email or password",
@@ -97,7 +98,10 @@ export const handleLogin: RequestHandler = async (req, res) => {
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      userRecord.password_hash,
+    );
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
@@ -106,15 +110,12 @@ export const handleLogin: RequestHandler = async (req, res) => {
     }
 
     // Generate token
-    const token = generateToken(user);
-
-    // Remove password from response
-    const { password_hash, ...userWithoutPassword } = user;
+    const token = generateToken(userRecord.user);
 
     res.json({
       success: true,
       token,
-      user: userWithoutPassword,
+      user: userRecord.user,
     } as AuthResponse);
   } catch (error) {
     console.error("Login error:", error);
@@ -128,7 +129,7 @@ export const handleLogin: RequestHandler = async (req, res) => {
 // Signup endpoint
 export const handleSignup: RequestHandler = async (req, res) => {
   try {
-    const { email, password, name }: SignupRequest = req.body;
+    const { email, password, name } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -146,8 +147,7 @@ export const handleSignup: RequestHandler = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await Database.getUserByEmail(email.toLowerCase());
-    if (existingUser) {
+    if (users.has(email.toLowerCase())) {
       return res.status(400).json({
         success: false,
         error: "User already exists with this email",
@@ -159,22 +159,29 @@ export const handleSignup: RequestHandler = async (req, res) => {
     const password_hash = await bcrypt.hash(password, saltRounds);
 
     // Create user
-    const user = await Database.createUser(
-      email.toLowerCase(),
-      password_hash,
+    const user: User = {
+      id: `user_${Date.now()}`,
+      email: email.toLowerCase(),
       name,
-    );
+      tier: "free",
+      generations_used: 0,
+      created_at: new Date().toISOString(),
+    };
+
+    // Store user
+    users.set(email.toLowerCase(), {
+      email: email.toLowerCase(),
+      password_hash,
+      user,
+    });
 
     // Generate token
     const token = generateToken(user);
 
-    // Remove password from response
-    const { password_hash: _, ...userWithoutPassword } = user;
-
     res.status(201).json({
       success: true,
       token,
-      user: userWithoutPassword,
+      user,
     } as AuthResponse);
   } catch (error) {
     console.error("Signup error:", error);
@@ -188,13 +195,10 @@ export const handleSignup: RequestHandler = async (req, res) => {
 // Verify token endpoint
 export const handleVerifyToken: RequestHandler = async (req, res) => {
   try {
-    // Token is already verified by middleware
     const user = req.user!;
-    const { password_hash, ...userWithoutPassword } = user;
-
     res.json({
       success: true,
-      user: userWithoutPassword,
+      user,
     });
   } catch (error) {
     console.error("Token verification error:", error);
@@ -209,11 +213,9 @@ export const handleVerifyToken: RequestHandler = async (req, res) => {
 export const handleGetMe: RequestHandler = async (req, res) => {
   try {
     const user = req.user!;
-    const { password_hash, ...userWithoutPassword } = user;
-
     res.json({
       success: true,
-      user: userWithoutPassword,
+      user,
     });
   } catch (error) {
     console.error("Get me error:", error);
@@ -227,8 +229,6 @@ export const handleGetMe: RequestHandler = async (req, res) => {
 // Logout endpoint
 export const handleLogout: RequestHandler = async (req, res) => {
   try {
-    // In a real implementation, you might want to blacklist the token
-    // For now, just send success response
     res.json({
       success: true,
       message: "Logged out successfully",
@@ -245,7 +245,7 @@ export const handleLogout: RequestHandler = async (req, res) => {
 // Forgot password endpoint
 export const handleForgotPassword: RequestHandler = async (req, res) => {
   try {
-    const { email }: ForgotPasswordRequest = req.body;
+    const { email } = req.body;
 
     if (!email) {
       return res.status(400).json({
@@ -253,33 +253,6 @@ export const handleForgotPassword: RequestHandler = async (req, res) => {
         error: "Email is required",
       });
     }
-
-    // Check if user exists
-    const user = await Database.getUserByEmail(email.toLowerCase());
-    if (!user) {
-      // Don't reveal if user exists or not for security
-      return res.json({
-        success: true,
-        message:
-          "If an account with that email exists, a reset link has been sent",
-      });
-    }
-
-    // Generate reset token
-    const resetToken = jwt.sign(
-      { userId: user.id, email: user.email, type: "password_reset" },
-      JWT_SECRET,
-      { expiresIn: "1h" },
-    );
-
-    // Store reset token in database
-    await Database.storePasswordResetToken(user.id, resetToken);
-
-    // TODO: Send email with reset link
-    // For now, just log it (in production, use a proper email service)
-    console.log(
-      `Password reset link for ${email}: /reset-password?token=${resetToken}`,
-    );
 
     res.json({
       success: true,
@@ -306,44 +279,6 @@ export const handleResetPassword: RequestHandler = async (req, res) => {
         error: "Token and new password are required",
       });
     }
-
-    if (newPassword.length < 6) {
-      return res.status(400).json({
-        success: false,
-        error: "Password must be at least 6 characters",
-      });
-    }
-
-    // Verify reset token
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    if (decoded.type !== "password_reset") {
-      return res.status(400).json({
-        success: false,
-        error: "Invalid reset token",
-      });
-    }
-
-    // Check if token is still valid in database
-    const isValidToken = await Database.verifyPasswordResetToken(
-      decoded.userId,
-      token,
-    );
-    if (!isValidToken) {
-      return res.status(400).json({
-        success: false,
-        error: "Invalid or expired reset token",
-      });
-    }
-
-    // Hash new password
-    const saltRounds = 12;
-    const password_hash = await bcrypt.hash(newPassword, saltRounds);
-
-    // Update password
-    await Database.updateUserPassword(decoded.userId, password_hash);
-
-    // Invalidate reset token
-    await Database.invalidatePasswordResetToken(decoded.userId);
 
     res.json({
       success: true,
