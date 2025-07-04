@@ -3,11 +3,16 @@ import { z } from "zod";
 import multer from "multer";
 import {
   convertImageToCode,
-  initializeOpenAI,
-  isOpenAIInitialized,
+  initializeProvider,
+  isProviderInitialized,
   type ConversionSettings,
-} from "../services/openai";
-import { getSettings, hasApiKey, getApiKey } from "../services/settings";
+} from "../services/ai-providers";
+import {
+  getSettings,
+  hasApiKey,
+  getApiKey,
+  getCurrentProvider,
+} from "../services/settings";
 
 const ConvertRequestSchema = z.object({
   files: z.array(
@@ -77,30 +82,33 @@ export const uploadMiddleware = upload.array("files", 5);
 
 export const handleConvert: RequestHandler = async (req, res) => {
   try {
-    // Check if API key is configured
-    if (!hasApiKey()) {
+    const appSettings = getSettings();
+    const provider = appSettings.aiProvider;
+
+    // Check if API key is configured for current provider
+    if (!hasApiKey(provider)) {
       return res.status(400).json({
         success: false,
-        error:
-          "OpenAI API key not configured. Please add your API key in Settings.",
+        error: `${provider.charAt(0).toUpperCase() + provider.slice(1)} API key not configured. Please add your API key in Settings.`,
       } as ConvertResponse);
     }
 
-    // Initialize OpenAI client if not already done
-    if (!isOpenAIInitialized()) {
-      const apiKey = getApiKey();
+    // Initialize provider client if not already done
+    if (!isProviderInitialized(provider)) {
+      const apiKey = getApiKey(provider);
       if (apiKey) {
-        initializeOpenAI(apiKey);
+        initializeProvider(provider, apiKey);
       }
     }
 
     const { files, settings: requestSettings } = ConvertRequestSchema.parse(
       req.body,
     );
-    const appSettings = getSettings();
     const conversionSettings: ConversionSettings = {
       ...appSettings,
       ...requestSettings,
+      provider: appSettings.aiProvider,
+      model: appSettings.aiModel,
     };
 
     const startTime = Date.now();
