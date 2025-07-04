@@ -84,7 +84,7 @@ export default function Navigation() {
       </div>
 
       {/* Cyber scan line */}
-      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-fire-orange to-transparent opacity-20" />
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-20" />
     </nav>
   );
 }
