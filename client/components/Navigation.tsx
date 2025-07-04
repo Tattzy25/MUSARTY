@@ -45,11 +45,11 @@ export default function Navigation() {
               </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
-                CodeForge AI
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+                Musarty
               </h1>
               <p className="text-xs text-muted-foreground -mt-1">
-                Image to Code Converter
+                Music • Art • AI Creation
               </p>
             </div>
           </Link>
