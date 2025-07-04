@@ -86,14 +86,6 @@ export default function Navigation() {
               </Link>
             ))}
           </div>
-
-          {/* Status indicator */}
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-2 px-3 py-1 glass rounded-full">
-              <div className="w-2 h-2 bg-primary rounded-full pulse-glow" />
-              <span className="text-xs text-muted-foreground">Online</span>
-            </div>
-          </div>
         </div>
       </div>
 

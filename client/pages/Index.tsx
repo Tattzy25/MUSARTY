@@ -204,7 +204,7 @@ export default function Index() {
                 asChild
               >
                 <Link to={user.isSignedIn ? "/neon-city" : "/auth"}>
-                  {user.isSignedIn ? "Dashboard" : "Get Started"}
+                  {user.isSignedIn ? "Neon City" : "Get Started"}
                 </Link>
               </Button>
             </div>
