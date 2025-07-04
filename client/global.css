@@ -137,11 +137,13 @@
 
 @layer components {
   .glass {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+    @apply bg-card/60 backdrop-blur-xl border border-primary/30;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
 
   .glass-strong {
-    @apply bg-card/90 backdrop-blur-2xl border border-border/70;
+    @apply bg-card/80 backdrop-blur-2xl border border-primary/50;
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
   }
 
   .neon-glow {
