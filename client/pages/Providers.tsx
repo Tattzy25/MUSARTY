@@ -690,8 +690,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Fast",
     quality: "Excellent",
     placeholder: "co_...",
-    color: "from-blue-400 to-indigo-600",
-    bgGradient: "bg-gradient-to-br from-blue-400/20 to-indigo-600/20",
+    color: "from-orange-400 to-red-600",
+    bgGradient: "bg-gradient-to-br from-orange-400/20 to-red-600/20",
     icon: Brain,
     models: ["command-r-plus", "command-r"],
     stats: {
