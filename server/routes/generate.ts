@@ -3,14 +3,27 @@ import { z } from "zod";
 import OpenAI from "openai";
 import Groq from "groq-sdk";
 
-// Initialize API clients
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Lazy initialize API clients to avoid import-time errors
+let groq: Groq | null = null;
+let openai: OpenAI | null = null;
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getGroq() {
+  if (!groq) {
+    groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY || "",
+    });
+  }
+  return groq;
+}
+
+function getOpenAI() {
+  if (!openai) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || "",
+    });
+  }
+  return openai;
+}
 
 const GenerateRequestSchema = z.object({
   mode: z.enum(["text", "image", "video", "music", "code"]),
