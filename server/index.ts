@@ -7,6 +7,7 @@ import {
   handleUpdateSettings,
   handleTestApiKey,
 } from "./routes/settings";
+import { generateContent } from "./routes/generate";
 
 export function createServer() {
   const app = express();
