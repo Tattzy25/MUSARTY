@@ -19,182 +19,132 @@ import {
 
 type ProcessingStage = "analyzing" | "converting" | "optimizing" | "completed";
 
+interface GeneratedCode {
+  react: string;
+  html: string;
+  css: string;
+  fileName: string;
+  originalFileName: string;
+}
+
 export default function Index() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<ProcessingStage>("analyzing");
-  const [generatedCode, setGeneratedCode] = useState<{
-    react: string;
-    html: string;
-    css: string;
-  } | null>(null);
+  const [generatedCodes, setGeneratedCodes] = useState<GeneratedCode[]>([]);
+  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFileSelect = async (file: File) => {
-    setSelectedFile(file);
+  const handleFileSelect = async (files: File[]) => {
+    setSelectedFiles(files);
     setIsProcessing(true);
     setProgress(0);
     setStage("analyzing");
-    setGeneratedCode(null);
+    setGeneratedCodes([]);
+    setError(null);
+    setCurrentFileIndex(0);
 
-    // Simulate AI processing stages
-    setTimeout(() => {
+    try {
+      // Convert files to base64
+      const fileData = await Promise.all(
+        files.map(async (file) => {
+          const base64 = await fileToBase64(file);
+          return {
+            data: base64,
+            name: file.name,
+            type: file.type,
+          };
+        }),
+      );
+
+      // Simulate processing stages
+      setStage("analyzing");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setProgress(25);
+
       setStage("converting");
-    }, 1500);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setProgress(50);
 
-    setTimeout(() => {
-      setProgress(65);
+      // Call the convert API
+      const response = await fetch("/api/convert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          files: fileData,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to convert images");
+      }
+
+      setProgress(75);
       setStage("optimizing");
-    }, 3000);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    setTimeout(() => {
       setProgress(100);
       setStage("completed");
+      setGeneratedCodes(result.data.results);
+    } catch (error) {
+      console.error("Error converting files:", error);
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
+      setStage("completed");
+    } finally {
       setIsProcessing(false);
+    }
+  };
 
-      // Generate mock code based on file name for demo
-      const fileName = file.name.split(".")[0];
-      setGeneratedCode({
-        react: `import React from 'react';
-import './styles.css';
-
-interface ${fileName.charAt(0).toUpperCase() + fileName.slice(1)}Props {
-  className?: string;
-}
-
-export const ${fileName.charAt(0).toUpperCase() + fileName.slice(1)}: React.FC<${fileName.charAt(0).toUpperCase() + fileName.slice(1)}Props> = ({
-  className
-}) => {
-  return (
-    <div className={\`${fileName.toLowerCase()}-container \${className || ''}\`}>
-      <div className="${fileName.toLowerCase()}-content">
-        <h1 className="${fileName.toLowerCase()}-title">
-          Generated Component
-        </h1>
-        <p className="${fileName.toLowerCase()}-description">
-          This component was automatically generated from your image using AI.
-          It includes responsive design, accessibility features, and optimized code.
-        </p>
-        <button className="${fileName.toLowerCase()}-button">
-          Click Me
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
-
-        html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${fileName.charAt(0).toUpperCase() + fileName.slice(1)} Component</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="${fileName.toLowerCase()}-container">
-        <div class="${fileName.toLowerCase()}-content">
-            <h1 class="${fileName.toLowerCase()}-title">
-                Generated Component
-            </h1>
-            <p class="${fileName.toLowerCase()}-description">
-                This component was automatically generated from your image using AI.
-                It includes responsive design, accessibility features, and optimized code.
-            </p>
-            <button class="${fileName.toLowerCase()}-button">
-                Click Me
-            </button>
-        </div>
-    </div>
-</body>
-</html>`,
-
-        css: `.${fileName.toLowerCase()}-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-.${fileName.toLowerCase()}-content {
-  max-width: 600px;
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.${fileName.toLowerCase()}-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.${fileName.toLowerCase()}-description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #4a5568;
-  margin-bottom: 2rem;
-}
-
-.${fileName.toLowerCase()}-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.${fileName.toLowerCase()}-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .${fileName.toLowerCase()}-content {
-    padding: 2rem;
-    margin: 1rem;
-  }
-
-  .${fileName.toLowerCase()}-title {
-    font-size: 2rem;
-  }
-
-  .${fileName.toLowerCase()}-description {
-    font-size: 1rem;
-  }
-}`,
-      });
-    }, 4500);
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result);
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleReset = () => {
-    setSelectedFile(null);
+    setSelectedFiles([]);
     setIsProcessing(false);
     setProgress(0);
     setStage("analyzing");
-    setGeneratedCode(null);
+    setGeneratedCodes([]);
+    setError(null);
+    setCurrentFileIndex(0);
+  };
+
+  const downloadAllFiles = () => {
+    generatedCodes.forEach((code) => {
+      // Create and download React file
+      downloadFile(code.react, `${code.fileName}.tsx`);
+      // Create and download HTML file
+      downloadFile(code.html, `${code.fileName}.html`);
+      // Create and download CSS file
+      downloadFile(code.css, `${code.fileName}.css`);
+    });
+  };
+
+  const downloadFile = (content: string, filename: string) => {
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const features = [
@@ -267,11 +217,12 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
         )}
 
         {/* File Upload Section */}
-        {!generatedCode && (
+        {generatedCodes.length === 0 && !error && (
           <div className="max-w-2xl mx-auto">
             <FileUpload
               onFileSelect={handleFileSelect}
               isProcessing={isProcessing}
+              maxFiles={5}
             />
           </div>
         )}
@@ -287,8 +238,38 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
           </div>
         )}
 
+        {/* Error Section */}
+        {error && (
+          <div className="max-w-2xl mx-auto mt-8">
+            <Card className="glass-strong border-red-500/50">
+              <CardContent className="p-6 text-center space-y-4">
+                <div className="relative mx-auto w-16 h-16">
+                  <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl" />
+                  <div className="relative flex items-center justify-center w-full h-full glass rounded-full border-red-500/50">
+                    <FileText className="w-8 h-8 text-red-500" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-red-500 mb-2">
+                    Conversion Failed
+                  </h3>
+                  <p className="text-muted-foreground">{error}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={handleReset}
+                  className="glass hover:neon-border"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Try Again
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Results Section */}
-        {generatedCode && (
+        {generatedCodes.length > 0 && (
           <div className="space-y-8 mt-8">
             {/* Success Header */}
             <div className="text-center space-y-4">
@@ -302,12 +283,31 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
                 Code Generated Successfully!
               </h2>
               <p className="text-muted-foreground">
-                Your image has been converted to production-ready code
+                {generatedCodes.length === 1
+                  ? "Your image has been converted to production-ready code"
+                  : `${generatedCodes.length} images have been converted to production-ready code`}
               </p>
             </div>
 
+            {/* File Navigation (if multiple files) */}
+            {generatedCodes.length > 1 && (
+              <div className="flex justify-center space-x-2">
+                {generatedCodes.map((_, index) => (
+                  <Button
+                    key={index}
+                    size="sm"
+                    variant={currentFileIndex === index ? "default" : "outline"}
+                    onClick={() => setCurrentFileIndex(index)}
+                    className="glass hover:neon-border"
+                  >
+                    {index + 1}
+                  </Button>
+                ))}
+              </div>
+            )}
+
             {/* File Info */}
-            {selectedFile && (
+            {selectedFiles[currentFileIndex] && (
               <Card className="glass-strong neon-border max-w-md mx-auto">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
@@ -316,10 +316,13 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">
-                        {selectedFile.name}
+                        {selectedFiles[currentFileIndex].name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {(selectedFile.size / 1024).toFixed(1)} KB
+                        {(selectedFiles[currentFileIndex].size / 1024).toFixed(
+                          1,
+                        )}{" "}
+                        KB
                       </p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-neon-green" />
@@ -332,12 +335,14 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
             )}
 
             {/* Generated Code */}
-            <CodeViewer
-              reactCode={generatedCode.react}
-              htmlCode={generatedCode.html}
-              cssCode={generatedCode.css}
-              fileName={selectedFile?.name.split(".")[0]}
-            />
+            {generatedCodes[currentFileIndex] && (
+              <CodeViewer
+                reactCode={generatedCodes[currentFileIndex].react}
+                htmlCode={generatedCodes[currentFileIndex].html}
+                cssCode={generatedCodes[currentFileIndex].css}
+                fileName={generatedCodes[currentFileIndex].fileName}
+              />
+            )}
 
             {/* Actions */}
             <div className="flex justify-center space-x-4">
@@ -347,11 +352,14 @@ export default ${fileName.charAt(0).toUpperCase() + fileName.slice(1)};`,
                 className="glass hover:neon-border"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Convert Another Image
+                Convert More Images
               </Button>
-              <Button className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow">
+              <Button
+                onClick={downloadAllFiles}
+                className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow"
+              >
                 <Download className="w-4 h-4 mr-2" />
-                Download All Files
+                Download All Files ({generatedCodes.length * 3} files)
               </Button>
             </div>
           </div>
