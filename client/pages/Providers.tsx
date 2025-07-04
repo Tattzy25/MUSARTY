@@ -210,7 +210,7 @@ const AI_PROVIDERS: AIProvider[] = [
       totalUses: 2841,
       successRate: 94,
       avgResponseTime: "0.8s",
-      rank: 6,
+      rank: 10,
     },
   },
   {
