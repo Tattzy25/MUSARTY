@@ -241,7 +241,7 @@ ${propsType}export const ${componentName}: React.FC${useTypeScript ? `<${compone
 export default ${componentName};`;
 }
 
-function generateMockHtmlCode(componentName: string): string {
+function generateHtmlCode(componentName: string): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -274,7 +274,7 @@ function generateMockHtmlCode(componentName: string): string {
 </html>`;
 }
 
-function generateMockCssCode(componentName: string): string {
+function generateCssCode(componentName: string): string {
   const className = componentName.toLowerCase();
 
   return `/* AI Generated CSS for ${componentName} Component */
