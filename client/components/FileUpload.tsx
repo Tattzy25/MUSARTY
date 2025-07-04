@@ -42,9 +42,11 @@ export default function FileUpload({
       {...getRootProps()}
       className={cn(
         "relative group cursor-pointer transition-all duration-300",
-        "glass-strong rounded-2xl p-12 border-2 border-dashed",
-        "hover:neon-border hover:scale-[1.02]",
-        isDragActive && "neon-border scale-[1.02] pulse-glow",
+        "bg-black/95 backdrop-blur-xl rounded-2xl p-12 border-2 border-dashed border-primary/30",
+        "shadow-[0_0_20px_rgba(212,172,53,0.2)] hover:shadow-[0_0_30px_rgba(212,172,53,0.4)]",
+        "hover:border-primary/50 hover:scale-[1.02]",
+        isDragActive &&
+          "border-primary/70 scale-[1.02] shadow-[0_0_40px_rgba(212,172,53,0.6)]",
         isProcessing && "cursor-not-allowed opacity-50",
       )}
     >
