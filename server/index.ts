@@ -12,7 +12,9 @@ import {
   handleGetPricing,
   handleCheckout,
   handleGetSubscription,
+  handleCompletePayment,
 } from "./routes/checkout";
+import { Database } from "./db/neon.js";
 import {
   handleGeneration,
   handleGetModels,
@@ -26,6 +28,9 @@ import {
 
 export function createServer() {
   const app = express();
+
+  // Initialize database
+  Database.init().catch(console.error);
 
   // Middleware
   app.use(cors());
@@ -51,6 +56,7 @@ export function createServer() {
   // Pricing and checkout routes
   app.get("/api/pricing", handleGetPricing);
   app.post("/api/checkout", handleCheckout);
+  app.post("/api/checkout/complete", handleCompletePayment);
   app.get("/api/subscription/:userId", handleGetSubscription);
 
   // Shot Caller routes (main AI generation system)
