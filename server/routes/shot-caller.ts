@@ -27,14 +27,25 @@ import {
 export const handleGeneration: RequestHandler = async (req, res) => {
   try {
     const request: GenerationRequest = req.body;
+    const user = req.user;
 
-    // Validate required fields
-    if (!request.user_id || !request.model_id || !request.input) {
-      return res.status(400).json({
+    if (!user) {
+      return res.status(401).json({
         success: false,
-        error: "Missing required fields: user_id, model_id, input",
+        error: "Authentication required",
       });
     }
+
+    // Validate required fields
+    if (!request.model_id || !request.input) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields: model_id, input",
+      });
+    }
+
+    // Use authenticated user's ID
+    request.user_id = user.id;
 
     // Initialize user if first time
     initializeUser(request.user_id);
@@ -133,8 +144,15 @@ export const handleGetModel: RequestHandler = (req, res) => {
  */
 export const handleGetUserUsage: RequestHandler = (req, res) => {
   try {
-    const { userId } = req.params;
-    const stats = getUserUsageStats(userId);
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Authentication required",
+      });
+    }
+
+    const stats = getUserUsageStats(user.id);
 
     res.json({
       success: true,
@@ -194,26 +212,27 @@ export const handleAddUserBlocks: RequestHandler = (req, res) => {
  */
 export const handleInitializeUser: RequestHandler = (req, res) => {
   try {
-    const { user_id, starting_blocks } = req.body;
+    const user = req.user;
+    const { starting_blocks } = req.body;
 
-    if (!user_id) {
-      return res.status(400).json({
+    if (!user) {
+      return res.status(401).json({
         success: false,
-        error: "Missing user_id",
+        error: "Authentication required",
       });
     }
 
     // Give new users 10 blocks to start (3 free generations)
     const blocks = starting_blocks || 10;
-    initializeUser(user_id, blocks);
+    initializeUser(user.id, blocks);
 
     res.json({
       success: true,
       data: {
-        user_id,
+        user_id: user.id,
         starting_blocks: blocks,
         message: "User initialized successfully",
-        stats: getUserUsageStats(user_id),
+        stats: getUserUsageStats(user.id),
       },
     });
   } catch (error) {
