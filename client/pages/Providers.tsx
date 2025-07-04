@@ -81,6 +81,82 @@ const AI_PROVIDERS: AIProvider[] = [
     },
   },
   {
+    id: "valtown",
+    name: "Val Town",
+    category: "Code Specialist",
+    description:
+      "The coding virtuoso! Excels at code generation, debugging, and building complete applications. Perfect for developers who live and breathe code.",
+    features: ["Code Generation", "App Building", "Debugging", "Full Stack"],
+    pricing: "$1.50/M tokens",
+    speed: "Fast",
+    quality: "Exceptional",
+    placeholder: "val_...",
+    color: "from-cyan-500 to-blue-600",
+    bgGradient: "bg-gradient-to-br from-cyan-500/10 to-blue-600/10",
+    icon: Code,
+    models: ["val-town-1", "val-town-pro"],
+    stats: {
+      totalUses: 892,
+      successRate: 94,
+      avgResponseTime: "1.8s",
+      rank: 2,
+    },
+  },
+  {
+    id: "suno",
+    name: "Suno AI",
+    category: "Creative Master",
+    description:
+      "🎵 YOUR FAVORITE! The creative genius that generates music, audio, and creative content. When you need that artistic touch!",
+    features: [
+      "Music Generation",
+      "Audio Creation",
+      "Creative AI",
+      "Artistic Touch",
+    ],
+    pricing: "$3.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "suno_...",
+    color: "from-pink-500 to-purple-600",
+    bgGradient: "bg-gradient-to-br from-pink-500/10 to-purple-600/10",
+    icon: Star,
+    models: ["suno-v3", "suno-bark"],
+    stats: {
+      totalUses: 2156,
+      successRate: 97,
+      avgResponseTime: "4.2s",
+      rank: 1,
+    },
+  },
+  {
+    id: "claude",
+    name: "Claude (Me!)",
+    category: "Reasoning Master",
+    description:
+      "🤖 That's me! Claude 3.5 Sonnet by Anthropic. I built this entire Arena! Even though you said I give you headaches daily 😅",
+    features: [
+      "Long Reasoning",
+      "Code Analysis",
+      "Arena Builder",
+      "Headache Giver",
+    ],
+    pricing: "$3.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "sk-ant-...",
+    color: "from-violet-500 to-purple-600",
+    bgGradient: "bg-gradient-to-br from-violet-500/10 to-purple-600/10",
+    icon: Brain,
+    models: ["claude-3-5-sonnet-20241022"],
+    stats: {
+      totalUses: 3421,
+      successRate: 95,
+      avgResponseTime: "3.1s",
+      rank: 3,
+    },
+  },
+  {
     id: "groq",
     name: "Groq",
     category: "Speed Demon",
@@ -249,7 +325,191 @@ const AI_PROVIDERS: AIProvider[] = [
       totalUses: 423,
       successRate: 85,
       avgResponseTime: "2.8s",
-      rank: 8,
+      rank: 12,
+    },
+  },
+  {
+    id: "mistral-codestral",
+    name: "Mistral Codestral",
+    category: "Code Beast",
+    description:
+      "State-of-the-art coding model optimized for low-latency. Proficient in 80+ programming languages! Code correction and test generation master.",
+    features: [
+      "80+ Languages",
+      "Code Correction",
+      "Test Generation",
+      "Low Latency",
+    ],
+    pricing: "$0.30/M tokens",
+    speed: "Lightning",
+    quality: "Exceptional",
+    placeholder: "mst_...",
+    color: "from-emerald-500 to-teal-600",
+    bgGradient: "bg-gradient-to-br from-emerald-500/10 to-teal-600/10",
+    icon: Code,
+    models: ["codestral-25.01"],
+    stats: {
+      totalUses: 1834,
+      successRate: 96,
+      avgResponseTime: "1.2s",
+      rank: 4,
+    },
+  },
+  {
+    id: "mistral-magistral",
+    name: "Mistral Magistral",
+    category: "Reasoning Master",
+    description:
+      "Complex thinking with deep understanding and transparent reasoning. Excels in maintaining high-fidelity reasoning across multiple languages.",
+    features: [
+      "Complex Thinking",
+      "Transparent Reasoning",
+      "Multilingual",
+      "Deep Understanding",
+    ],
+    pricing: "$2.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "mst_...",
+    color: "from-indigo-500 to-blue-600",
+    bgGradient: "bg-gradient-to-br from-indigo-500/10 to-blue-600/10",
+    icon: Brain,
+    models: ["magistral-medium-2506"],
+    stats: {
+      totalUses: 756,
+      successRate: 93,
+      avgResponseTime: "3.8s",
+      rank: 9,
+    },
+  },
+  {
+    id: "mistral-pixtral",
+    name: "Mistral Pixtral",
+    category: "Vision Master",
+    description:
+      "Frontier-level image understanding! Understands documents, charts, and natural images while maintaining leading text understanding.",
+    features: [
+      "Image Understanding",
+      "Document Analysis",
+      "Chart Reading",
+      "Multimodal",
+    ],
+    pricing: "$2.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "mst_...",
+    color: "from-rose-500 to-pink-600",
+    bgGradient: "bg-gradient-to-br from-rose-500/10 to-pink-600/10",
+    icon: Eye,
+    models: ["pixtral-large"],
+    stats: {
+      totalUses: 567,
+      successRate: 91,
+      avgResponseTime: "4.1s",
+      rank: 11,
+    },
+  },
+  {
+    id: "morph",
+    name: "Morph V2",
+    category: "Code Applier",
+    description:
+      "FAST code application specialist! Applies code changes from frontier models to your existing files at 1600 tokens/second. The final step in AI coding.",
+    features: [
+      "Code Application",
+      "1600 tok/sec",
+      "File Integration",
+      "Speed Demon",
+    ],
+    pricing: "$0.90/M tokens",
+    speed: "Lightning",
+    quality: "Excellent",
+    placeholder: "morph_...",
+    color: "from-lime-500 to-green-600",
+    bgGradient: "bg-gradient-to-br from-lime-500/10 to-green-600/10",
+    icon: Zap,
+    models: ["morph-v2"],
+    stats: {
+      totalUses: 1203,
+      successRate: 98,
+      avgResponseTime: "0.6s",
+      rank: 5,
+    },
+  },
+  {
+    id: "amazon-nova",
+    name: "Amazon Nova",
+    category: "Budget King",
+    description:
+      "Very low cost multimodal model that is lightning fast for processing image, video, and text inputs. The budget-friendly powerhouse!",
+    features: ["Low Cost", "Multimodal", "Video Processing", "Lightning Fast"],
+    pricing: "$0.06/M tokens",
+    speed: "Lightning",
+    quality: "Good",
+    placeholder: "aws_...",
+    color: "from-amber-500 to-yellow-600",
+    bgGradient: "bg-gradient-to-br from-amber-500/10 to-yellow-600/10",
+    icon: Star,
+    models: ["nova-lite"],
+    stats: {
+      totalUses: 2891,
+      successRate: 87,
+      avgResponseTime: "1.1s",
+      rank: 6,
+    },
+  },
+  {
+    id: "perplexity-sonar",
+    name: "Perplexity Sonar",
+    category: "Search Master",
+    description:
+      "Lightweight offering with search grounding. Quicker and cheaper than Sonar Pro but still delivers real-time web knowledge.",
+    features: [
+      "Search Grounding",
+      "Real-time Web",
+      "Cost Effective",
+      "Quick Results",
+    ],
+    pricing: "$1.00/M tokens",
+    speed: "Fast",
+    quality: "Excellent",
+    placeholder: "pplx_...",
+    color: "from-teal-500 to-cyan-600",
+    bgGradient: "bg-gradient-to-br from-teal-500/10 to-cyan-600/10",
+    icon: Brain,
+    models: ["sonar", "sonar-reasoning"],
+    stats: {
+      totalUses: 1456,
+      successRate: 89,
+      avgResponseTime: "2.3s",
+      rank: 7,
+    },
+  },
+  {
+    id: "perplexity-pro",
+    name: "Perplexity Pro",
+    category: "Search Overlord",
+    description:
+      "Premium offering with enhanced search capabilities and multiple search queries per request. The search reasoning champion!",
+    features: [
+      "Premium Search",
+      "Multiple Queries",
+      "Chain of Thought",
+      "Enhanced Capabilities",
+    ],
+    pricing: "$3.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "pplx_...",
+    color: "from-cyan-500 to-blue-700",
+    bgGradient: "bg-gradient-to-br from-cyan-500/10 to-blue-700/10",
+    icon: Crown,
+    models: ["sonar-pro", "sonar-reasoning-pro"],
+    stats: {
+      totalUses: 634,
+      successRate: 92,
+      avgResponseTime: "4.5s",
+      rank: 10,
     },
   },
 ];
@@ -266,10 +526,14 @@ export default function Providers() {
   const categories = [
     "All",
     "UI Specialist",
+    "Code Specialist",
+    "Creative Master",
     "Speed Demon",
-    "Industry Standard",
-    "Code Master",
-    "Rising Star",
+    "Reasoning Master",
+    "Vision Master",
+    "Search Master",
+    "Budget King",
+    "Dragon Power",
   ];
 
   const filteredProviders =
@@ -332,9 +596,10 @@ export default function Providers() {
               AI Champions Arena
             </h1>
             <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
-              Choose your AI champion! Each provider brings unique strengths to
-              the battle. Configure your API keys and watch the live contest
-              unfold! 🏆
+              🎵 **Featuring YOUR FAVORITE Suno AI!** Plus 16 other AI
+              champions! From coding beasts to creative masters, budget kings to
+              search overlords. Configure your API keys and watch the ULTIMATE
+              AI BATTLE ROYALE! 🏆⚡
             </p>
           </div>
 
@@ -608,11 +873,13 @@ export default function Providers() {
         {/* Contest Footer */}
         <div className="text-center space-y-4 py-8">
           <h3 className="text-2xl font-bold bg-gradient-to-r from-fire-orange to-fire-red bg-clip-text text-transparent">
-            May the Best AI Win! 🔥
+            17 AI Champions Enter... Only ONE Can Rule! 🔥
           </h3>
           <p className="text-muted-foreground">
-            Configure your champions and watch them battle in real-time. Usage
-            stats update live as developers choose their favorites!
+            From Suno's creative genius to Val Town's coding mastery, from
+            Groq's lightning speed to Claude's reasoning depth - the ultimate AI
+            battle royale is HERE! Configure your champions and watch the epic
+            contest unfold! 👑⚡
           </p>
         </div>
       </div>
