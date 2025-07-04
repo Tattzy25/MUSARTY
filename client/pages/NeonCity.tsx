@@ -129,7 +129,7 @@ export default function NeonCity() {
       }
     } catch (error) {
       console.error("Generation error:", error);
-      setResult("Error: Failed to connect to AI service");
+      setResult({ content: "❌ Error: Failed to connect to AI service" });
     } finally {
       setIsGenerating(false);
     }
