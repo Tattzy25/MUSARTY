@@ -153,7 +153,7 @@ const AI_PROVIDERS: AIProvider[] = [
       totalUses: 3421,
       successRate: 95,
       avgResponseTime: "3.1s",
-      rank: 3,
+      rank: 4,
     },
   },
   {
@@ -679,7 +679,7 @@ const AI_PROVIDERS: AIProvider[] = [
     name: "Cohere",
     category: "Language Master",
     description:
-      "💬 The enterprise language specialist! Command-R+ excels at business tasks, summarization, and professional communication. Corporate AI!",
+      "���� The enterprise language specialist! Command-R+ excels at business tasks, summarization, and professional communication. Corporate AI!",
     features: [
       "Enterprise Focus",
       "Business Tasks",
