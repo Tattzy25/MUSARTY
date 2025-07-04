@@ -38,9 +38,8 @@ import {
 } from "lucide-react";
 
 interface AppSettings {
-  openaiApiKey?: string;
   groqApiKey?: string;
-  anthropicApiKey?: string;
+  openaiApiKey?: string;
   geminiApiKey?: string;
   aiProvider: string;
   aiModel: string;
@@ -60,8 +59,8 @@ interface AppSettings {
 
 export default function Settings() {
   const [settings, setSettings] = useState<AppSettings>({
-    aiProvider: "openai",
-    aiModel: "gpt-4o",
+    aiProvider: "groq",
+    aiModel: "meta-llama/llama-4-scout-17b-16e-instruct",
     codeStyle: "modern",
     optimization: "balanced",
     includeComments: true,
@@ -76,24 +75,21 @@ export default function Settings() {
   });
 
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
-    openai: "",
     groq: "",
-    anthropic: "",
+    openai: "",
     gemini: "",
   });
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({
-    openai: false,
     groq: false,
-    anthropic: false,
+    openai: false,
     gemini: false,
   });
   const [isTestingApiKey, setIsTestingApiKey] = useState<string | null>(null);
   const [apiKeyStatuses, setApiKeyStatuses] = useState<
     Record<string, "valid" | "invalid" | null>
   >({
-    openai: null,
     groq: null,
-    anthropic: null,
+    openai: null,
     gemini: null,
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -199,8 +195,8 @@ export default function Settings() {
 
   const resetSettings = () => {
     setSettings({
-      aiProvider: "openai",
-      aiModel: "gpt-4o",
+      aiProvider: "groq",
+      aiModel: "meta-llama/llama-4-scout-17b-16e-instruct",
       codeStyle: "modern",
       optimization: "balanced",
       includeComments: true,
@@ -213,13 +209,8 @@ export default function Settings() {
       qualityLevel: 85,
       processingSpeed: 70,
     });
-    setApiKeys({ openai: "", groq: "", anthropic: "", gemini: "" });
-    setApiKeyStatuses({
-      openai: null,
-      groq: null,
-      anthropic: null,
-      gemini: null,
-    });
+    setApiKeys({ groq: "", openai: "", gemini: "" });
+    setApiKeyStatuses({ groq: null, openai: null, gemini: null });
   };
 
   return (
@@ -270,44 +261,33 @@ export default function Settings() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="glass-strong">
-                  <SelectItem value="openai">
+                  <SelectItem value="groq">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
                         className="text-fire-orange border-fire-orange"
                       >
-                        Industry Standard
+                        Granddaddy AI ⚡
                       </Badge>
-                      <span>OpenAI (Recommended)</span>
+                      <span>Groq (Recommended)</span>
                     </div>
                   </SelectItem>
-                  <SelectItem value="groq">
+                  <SelectItem value="openai">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
                         className="text-fire-red border-fire-red"
                       >
-                        Lightning Fast
+                        Industry Standard
                       </Badge>
-                      <span>Groq</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="anthropic">
-                    <div className="flex items-center space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="text-fire-yellow border-fire-yellow"
-                      >
-                        Premium Quality
-                      </Badge>
-                      <span>Anthropic Claude</span>
+                      <span>OpenAI</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="gemini">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
-                        className="text-ember-red border-ember-red"
+                        className="text-fire-yellow border-fire-yellow"
                       >
                         Google AI
                       </Badge>
@@ -319,14 +299,8 @@ export default function Settings() {
             </div>
 
             {/* Compact API Key Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                {
-                  key: "openai",
-                  name: "OpenAI",
-                  placeholder: "sk-...",
-                  url: "https://platform.openai.com/api-keys",
-                },
                 {
                   key: "groq",
                   name: "Groq",
@@ -334,10 +308,10 @@ export default function Settings() {
                   url: "https://console.groq.com/keys",
                 },
                 {
-                  key: "anthropic",
-                  name: "Anthropic",
-                  placeholder: "sk-ant-...",
-                  url: "https://console.anthropic.com/",
+                  key: "openai",
+                  name: "OpenAI",
+                  placeholder: "sk-...",
+                  url: "https://platform.openai.com/api-keys",
                 },
                 {
                   key: "gemini",
@@ -482,6 +456,54 @@ export default function Settings() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-strong">
+                    {settings.aiProvider === "groq" && (
+                      <>
+                        <SelectItem value="meta-llama/llama-4-scout-17b-16e-instruct">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              🚀 SCOUT
+                            </Badge>
+                            <span>Llama 4 Scout 17B (Recommended)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="llama-3.3-70b-versatile">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Latest
+                            </Badge>
+                            <span>Llama 3.3 70B</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="llama-3.2-90b-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-yellow border-fire-yellow"
+                            >
+                              Vision
+                            </Badge>
+                            <span>Llama 3.2 90B Vision</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="llama-3.2-11b-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-ember-red border-ember-red"
+                            >
+                              Fast
+                            </Badge>
+                            <span>Llama 3.2 11B Vision</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
                     {settings.aiProvider === "openai" && (
                       <>
                         <SelectItem value="gpt-4o">
@@ -492,7 +514,7 @@ export default function Settings() {
                             >
                               Latest & Best
                             </Badge>
-                            <span>GPT-4o (Recommended)</span>
+                            <span>GPT-4o</span>
                           </div>
                         </SelectItem>
                         <SelectItem value="gpt-4o-mini">
@@ -526,80 +548,6 @@ export default function Settings() {
                               Vision
                             </Badge>
                             <span>GPT-4 Vision</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                    {settings.aiProvider === "groq" && (
-                      <>
-                        <SelectItem value="llama-3.3-70b-versatile">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              Latest
-                            </Badge>
-                            <span>Llama 3.3 70B (New!)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="llama-3.2-90b-vision-preview">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Vision
-                            </Badge>
-                            <span>Llama 3.2 90B Vision</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="llama-3.2-11b-vision-preview">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Fast
-                            </Badge>
-                            <span>Llama 3.2 11B Vision</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                    {settings.aiProvider === "anthropic" && (
-                      <>
-                        <SelectItem value="claude-3-5-sonnet-20241022">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              Latest
-                            </Badge>
-                            <span>Claude 3.5 Sonnet (New!)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="claude-3-5-haiku-20241022">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Fast
-                            </Badge>
-                            <span>Claude 3.5 Haiku (New!)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="claude-3-opus-20240229">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Premium
-                            </Badge>
-                            <span>Claude 3 Opus</span>
                           </div>
                         </SelectItem>
                       </>
