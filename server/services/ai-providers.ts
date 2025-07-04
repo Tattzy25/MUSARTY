@@ -28,27 +28,19 @@ export interface AIProvider {
 }
 
 export const AI_PROVIDERS: Record<string, AIProvider> = {
-  openai: {
-    name: "OpenAI",
-    models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4-vision-preview"],
-    requiresApiKey: true,
-  },
   groq: {
     name: "Groq",
     models: [
+      "meta-llama/llama-4-scout-17b-16e-instruct",
       "llama-3.3-70b-versatile",
       "llama-3.2-90b-vision-preview",
       "llama-3.2-11b-vision-preview",
     ],
     requiresApiKey: true,
   },
-  anthropic: {
-    name: "Anthropic",
-    models: [
-      "claude-3-5-sonnet-20241022",
-      "claude-3-5-haiku-20241022",
-      "claude-3-opus-20240229",
-    ],
+  openai: {
+    name: "OpenAI",
+    models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4-vision-preview"],
     requiresApiKey: true,
   },
   gemini: {
@@ -69,12 +61,12 @@ const apiKeys: Record<string, string> = {};
 export function initializeProvider(provider: string, apiKey: string) {
   apiKeys[provider] = apiKey;
 
-  if (provider === "openai") {
-    openaiClient = new OpenAI({
+  if (provider === "groq") {
+    groqClient = new Groq({
       apiKey: apiKey,
     });
-  } else if (provider === "groq") {
-    groqClient = new Groq({
+  } else if (provider === "openai") {
+    openaiClient = new OpenAI({
       apiKey: apiKey,
     });
   }
@@ -82,10 +74,10 @@ export function initializeProvider(provider: string, apiKey: string) {
 }
 
 export function isProviderInitialized(provider: string): boolean {
-  if (provider === "openai") {
-    return openaiClient !== null;
-  } else if (provider === "groq") {
+  if (provider === "groq") {
     return groqClient !== null;
+  } else if (provider === "openai") {
+    return openaiClient !== null;
   }
   return false;
 }
@@ -110,10 +102,10 @@ export async function convertImageToCode(
   const componentName = sanitizeComponentName(fileName);
 
   switch (provider) {
-    case "openai":
-      return await convertWithOpenAI(imageBase64, componentName, settings);
     case "groq":
       return await convertWithGroq(imageBase64, componentName, settings);
+    case "openai":
+      return await convertWithOpenAI(imageBase64, componentName, settings);
     default:
       throw new Error(`Provider ${provider} not implemented yet`);
   }
@@ -338,12 +330,12 @@ export async function validateApiKey(
   apiKey: string,
 ): Promise<boolean> {
   try {
-    if (provider === "openai") {
-      const testClient = new OpenAI({ apiKey });
+    if (provider === "groq") {
+      const testClient = new Groq({ apiKey });
       await testClient.models.list();
       return true;
-    } else if (provider === "groq") {
-      const testClient = new Groq({ apiKey });
+    } else if (provider === "openai") {
+      const testClient = new OpenAI({ apiKey });
       await testClient.models.list();
       return true;
     }
