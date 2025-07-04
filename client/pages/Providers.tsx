@@ -980,8 +980,22 @@ export default function Providers() {
                   </Badge>
                 </div>
 
-                {/* Holographic Background */}
-                <div className="absolute inset-0 holographic opacity-5 pointer-events-none" />
+                {/* Gradient Accent Overlay */}
+                <div
+                  className={cn(
+                    "absolute inset-0 opacity-10 pointer-events-none",
+                    provider.bgGradient,
+                  )}
+                />
+
+                {/* Subtle Border Glow */}
+                <div
+                  className={cn(
+                    "absolute inset-0 rounded-lg opacity-20 pointer-events-none",
+                    "border-2",
+                    provider.color.replace("from-", "border-").split(" ")[0],
+                  )}
+                />
 
                 <CardHeader className="space-y-4">
                   <div className="flex items-start space-x-3">
