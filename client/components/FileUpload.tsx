@@ -75,7 +75,7 @@ export default function FileUpload({
 
         {/* Title */}
         <div>
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
             {isProcessing
               ? "Processing Images..."
               : maxFiles > 1
