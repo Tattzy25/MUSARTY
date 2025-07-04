@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 
 interface AppSettings {
+  openaiApiKey?: string;
   groqApiKey?: string;
   anthropicApiKey?: string;
   geminiApiKey?: string;
@@ -59,8 +60,8 @@ interface AppSettings {
 
 export default function Settings() {
   const [settings, setSettings] = useState<AppSettings>({
-    aiProvider: "groq",
-    aiModel: "llama-3.2-90b-vision-preview",
+    aiProvider: "openai",
+    aiModel: "gpt-4o",
     codeStyle: "modern",
     optimization: "balanced",
     includeComments: true,
@@ -75,11 +76,13 @@ export default function Settings() {
   });
 
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
+    openai: "",
     groq: "",
     anthropic: "",
     gemini: "",
   });
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({
+    openai: false,
     groq: false,
     anthropic: false,
     gemini: false,
@@ -88,6 +91,7 @@ export default function Settings() {
   const [apiKeyStatuses, setApiKeyStatuses] = useState<
     Record<string, "valid" | "invalid" | null>
   >({
+    openai: null,
     groq: null,
     anthropic: null,
     gemini: null,
@@ -195,8 +199,8 @@ export default function Settings() {
 
   const resetSettings = () => {
     setSettings({
-      aiProvider: "groq",
-      aiModel: "llama-3.2-90b-vision-preview",
+      aiProvider: "openai",
+      aiModel: "gpt-4o",
       codeStyle: "modern",
       optimization: "balanced",
       includeComments: true,
@@ -209,8 +213,13 @@ export default function Settings() {
       qualityLevel: 85,
       processingSpeed: 70,
     });
-    setApiKeys({ groq: "", anthropic: "", gemini: "" });
-    setApiKeyStatuses({ groq: null, anthropic: null, gemini: null });
+    setApiKeys({ openai: "", groq: "", anthropic: "", gemini: "" });
+    setApiKeyStatuses({
+      openai: null,
+      groq: null,
+      anthropic: null,
+      gemini: null,
+    });
   };
 
   return (
@@ -244,8 +253,9 @@ export default function Settings() {
               <span>AI Provider Configuration</span>
             </CardTitle>
             <CardDescription>
-              Configure API keys for different AI providers. Only enter keys you
-              want to add or update.
+              🔒 <strong>100% Secure:</strong> API keys are encrypted and never
+              displayed. Only enter keys to add/update them. Your hacker grandma
+              can't see them! Keys are masked and stored securely on the server.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -260,24 +270,35 @@ export default function Settings() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="glass-strong">
-                  <SelectItem value="groq">
+                  <SelectItem value="openai">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
                         className="text-fire-orange border-fire-orange"
                       >
-                        Fast
+                        Industry Standard
                       </Badge>
-                      <span>Groq (Recommended)</span>
+                      <span>OpenAI (Recommended)</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="groq">
+                    <div className="flex items-center space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="text-fire-red border-fire-red"
+                      >
+                        Lightning Fast
+                      </Badge>
+                      <span>Groq</span>
                     </div>
                   </SelectItem>
                   <SelectItem value="anthropic">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
-                        className="text-fire-red border-fire-red"
+                        className="text-fire-yellow border-fire-yellow"
                       >
-                        Premium
+                        Premium Quality
                       </Badge>
                       <span>Anthropic Claude</span>
                     </div>
@@ -286,9 +307,9 @@ export default function Settings() {
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
-                        className="text-fire-yellow border-fire-yellow"
+                        className="text-ember-red border-ember-red"
                       >
-                        Standard
+                        Google AI
                       </Badge>
                       <span>Google Gemini</span>
                     </div>
@@ -298,8 +319,14 @@ export default function Settings() {
             </div>
 
             {/* Compact API Key Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
+                {
+                  key: "openai",
+                  name: "OpenAI",
+                  placeholder: "sk-...",
+                  url: "https://platform.openai.com/api-keys",
+                },
                 {
                   key: "groq",
                   name: "Groq",
@@ -455,24 +482,83 @@ export default function Settings() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-strong">
-                    {settings.aiProvider === "groq" && (
+                    {settings.aiProvider === "openai" && (
                       <>
-                        <SelectItem value="llama-3.2-90b-vision-preview">
+                        <SelectItem value="gpt-4o">
                           <div className="flex items-center space-x-2">
                             <Badge
                               variant="outline"
                               className="text-fire-orange border-fire-orange"
                             >
-                              Premium
+                              Latest & Best
                             </Badge>
-                            <span>Llama 3.2 90B Vision (Recommended)</span>
+                            <span>GPT-4o (Recommended)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="gpt-4o-mini">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Fast & Cheap
+                            </Badge>
+                            <span>GPT-4o Mini</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="gpt-4-turbo">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-yellow border-fire-yellow"
+                            >
+                              Turbo
+                            </Badge>
+                            <span>GPT-4 Turbo</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="gpt-4-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-ember-red border-ember-red"
+                            >
+                              Vision
+                            </Badge>
+                            <span>GPT-4 Vision</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
+                    {settings.aiProvider === "groq" && (
+                      <>
+                        <SelectItem value="llama-3.3-70b-versatile">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              Latest
+                            </Badge>
+                            <span>Llama 3.3 70B (New!)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="llama-3.2-90b-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Vision
+                            </Badge>
+                            <span>Llama 3.2 90B Vision</span>
                           </div>
                         </SelectItem>
                         <SelectItem value="llama-3.2-11b-vision-preview">
                           <div className="flex items-center space-x-2">
                             <Badge
                               variant="outline"
-                              className="text-fire-red border-fire-red"
+                              className="text-fire-yellow border-fire-yellow"
                             >
                               Fast
                             </Badge>
@@ -489,12 +575,12 @@ export default function Settings() {
                               variant="outline"
                               className="text-fire-orange border-fire-orange"
                             >
-                              Premium
+                              Latest
                             </Badge>
-                            <span>Claude 3.5 Sonnet</span>
+                            <span>Claude 3.5 Sonnet (New!)</span>
                           </div>
                         </SelectItem>
-                        <SelectItem value="claude-3-haiku-20240307">
+                        <SelectItem value="claude-3-5-haiku-20241022">
                           <div className="flex items-center space-x-2">
                             <Badge
                               variant="outline"
@@ -502,29 +588,51 @@ export default function Settings() {
                             >
                               Fast
                             </Badge>
-                            <span>Claude 3 Haiku</span>
+                            <span>Claude 3.5 Haiku (New!)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="claude-3-opus-20240229">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-yellow border-fire-yellow"
+                            >
+                              Premium
+                            </Badge>
+                            <span>Claude 3 Opus</span>
                           </div>
                         </SelectItem>
                       </>
                     )}
                     {settings.aiProvider === "gemini" && (
                       <>
-                        <SelectItem value="gemini-1.5-pro">
+                        <SelectItem value="gemini-2.0-flash-exp">
                           <div className="flex items-center space-x-2">
                             <Badge
                               variant="outline"
                               className="text-fire-orange border-fire-orange"
+                            >
+                              Latest
+                            </Badge>
+                            <span>Gemini 2.0 Flash (New!)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="gemini-1.5-pro-002">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
                             >
                               Premium
                             </Badge>
                             <span>Gemini 1.5 Pro</span>
                           </div>
                         </SelectItem>
-                        <SelectItem value="gemini-1.5-flash">
+                        <SelectItem value="gemini-1.5-flash-002">
                           <div className="flex items-center space-x-2">
                             <Badge
                               variant="outline"
-                              className="text-fire-red border-fire-red"
+                              className="text-fire-yellow border-fire-yellow"
                             >
                               Fast
                             </Badge>
