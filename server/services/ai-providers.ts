@@ -453,6 +453,7 @@ export async function validateApiKey(
     }
     return false;
   } catch (error) {
+    console.error(`❌ ${provider} key validation failed:`, error.message);
     return false;
   }
 }
