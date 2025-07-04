@@ -118,8 +118,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Standard",
     quality: "Exceptional",
     placeholder: "suno_...",
-    color: "from-pink-500 to-purple-600",
-    bgGradient: "bg-gradient-to-br from-pink-500/10 to-purple-600/10",
+    color: "from-pink-400 to-purple-500",
+    bgGradient: "bg-gradient-to-br from-pink-400/25 to-purple-500/25",
     icon: Star,
     models: ["suno-v3", "suno-bark"],
     stats: {
