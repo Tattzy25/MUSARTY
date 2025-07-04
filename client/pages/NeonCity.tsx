@@ -324,82 +324,119 @@ export default function NeonCity() {
                     )}
                   </div>
 
-                  {/* Generation Interface */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[400px]">
-                    {/* Input Side */}
-                    <div className="space-y-6">
+                  {/* Specialized Generation Interface */}
+                  {activeMode === "music" && (
+                    <MusicGenerator
+                      prompt={prompt}
+                      setPrompt={setPrompt}
+                      isGenerating={isGenerating}
+                      onGenerate={handleGenerate}
+                      result={result}
+                    />
+                  )}
+
+                  {activeMode === "code" && (
+                    <CodeGenerator
+                      prompt={prompt}
+                      setPrompt={setPrompt}
+                      isGenerating={isGenerating}
+                      onGenerate={handleGenerate}
+                      result={result}
+                    />
+                  )}
+
+                  {activeMode === "image" && (
+                    <ImageGenerator
+                      prompt={prompt}
+                      setPrompt={setPrompt}
+                      isGenerating={isGenerating}
+                      onGenerate={handleGenerate}
+                      result={result}
+                    />
+                  )}
+
+                  {(activeMode === "text" || activeMode === "video") && (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[400px]">
+                      {/* Input Side */}
+                      <div className="space-y-6">
+                        <div className="space-y-4">
+                          <label className="text-xl font-bold text-primary">
+                            {
+                              CONTENT_ZONES.find((z) => z.id === activeMode)
+                                ?.description
+                            }
+                          </label>
+                          <Textarea
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            placeholder={
+                              CONTENT_ZONES.find((z) => z.id === activeMode)
+                                ?.placeholder
+                            }
+                            className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
+                            disabled={isGenerating}
+                          />
+                        </div>
+
+                        <Button
+                          onClick={handleGenerate}
+                          disabled={!prompt.trim() || isGenerating}
+                          className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 h-14 text-xl rounded-2xl"
+                        >
+                          {isGenerating ? (
+                            <>
+                              <Zap className="w-6 h-6 mr-3 animate-spin" />
+                              Generating...
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-6 h-6 mr-3" />
+                              Generate{" "}
+                              {activeMode.charAt(0).toUpperCase() +
+                                activeMode.slice(1)}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                      {/* Output Side */}
                       <div className="space-y-4">
                         <label className="text-xl font-bold text-primary">
-                          {
-                            CONTENT_ZONES.find((z) => z.id === activeMode)
-                              ?.description
-                          }
+                          Result
                         </label>
-                        <Textarea
-                          value={prompt}
-                          onChange={(e) => setPrompt(e.target.value)}
-                          placeholder={
-                            CONTENT_ZONES.find((z) => z.id === activeMode)
-                              ?.placeholder
-                          }
-                          className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
-                          disabled={isGenerating}
-                        />
-                      </div>
-
-                      <Button
-                        onClick={handleGenerate}
-                        disabled={!prompt.trim() || isGenerating}
-                        className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 h-14 text-xl rounded-2xl"
-                      >
-                        {isGenerating ? (
-                          <>
-                            <Zap className="w-6 h-6 mr-3 animate-spin" />
-                            Generating...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-6 h-6 mr-3" />
-                            Generate{" "}
-                            {activeMode.charAt(0).toUpperCase() +
-                              activeMode.slice(1)}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-
-                    {/* Output Side */}
-                    <div className="space-y-4">
-                      <label className="text-xl font-bold text-primary">
-                        Result
-                      </label>
-                      <div className="bg-black/40 border border-primary/30 rounded-2xl p-6 min-h-[300px] flex items-center justify-center">
-                        {isGenerating ? (
-                          <div className="text-center space-y-6">
-                            <Zap className="w-12 h-12 text-primary animate-spin mx-auto" />
-                            <div className="space-y-2">
-                              <p className="text-xl font-bold text-primary">
-                                GROQ Orchestrator Working
-                              </p>
-                              <p className="text-muted-foreground">
-                                Creating your {activeMode} content...
+                        <div className="bg-black/40 border border-primary/30 rounded-2xl p-6 min-h-[300px] flex items-center justify-center">
+                          {isGenerating ? (
+                            <div className="text-center space-y-6">
+                              <Zap className="w-12 h-12 text-primary animate-spin mx-auto" />
+                              <div className="space-y-2">
+                                <p className="text-xl font-bold text-primary">
+                                  GROQ Orchestrator Working
+                                </p>
+                                <p className="text-muted-foreground">
+                                  Creating your {activeMode} content...
+                                </p>
+                              </div>
+                            </div>
+                          ) : result ? (
+                            <div className="w-full">
+                              <div className="text-white text-lg whitespace-pre-wrap">
+                                {typeof result === "string"
+                                  ? result
+                                  : result.content ||
+                                    JSON.stringify(result, null, 2)}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="text-center text-muted-foreground">
+                              <p className="text-lg">
+                                Your generated content will appear here
                               </p>
                             </div>
-                          </div>
-                        ) : result ? (
-                          <div className="w-full">
-                            <div className="text-white text-lg">{result}</div>
-                          </div>
-                        ) : (
-                          <div className="text-center text-muted-foreground">
-                            <p className="text-lg">
-                              Your generated content will appear here
-                            </p>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
             </CardContent>
