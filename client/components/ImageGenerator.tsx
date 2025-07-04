@@ -27,7 +27,7 @@ export default function ImageGenerator({
   onGenerate,
   result,
 }: ImageGeneratorProps) {
-  const [style, setStyle] = useState("");
+  const [style, setStyle] = useState("none");
   const [aspectRatio, setAspectRatio] = useState("1:1");
   const [quality, setQuality] = useState("standard");
 
