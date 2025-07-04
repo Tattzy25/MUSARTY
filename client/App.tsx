@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Settings from "./pages/Settings";
 import Providers from "./pages/Providers";
+import NeonCity from "./pages/NeonCity";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
