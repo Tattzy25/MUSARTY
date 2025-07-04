@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+import OpenAI from "openai";
 
 export interface ConversionSettings {
   provider: string;
@@ -27,35 +28,52 @@ export interface AIProvider {
 }
 
 export const AI_PROVIDERS: Record<string, AIProvider> = {
+  openai: {
+    name: "OpenAI",
+    models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4-vision-preview"],
+    requiresApiKey: true,
+  },
   groq: {
     name: "Groq",
-    models: ["llama-3.2-90b-vision-preview", "llama-3.2-11b-vision-preview"],
+    models: [
+      "llama-3.3-70b-versatile",
+      "llama-3.2-90b-vision-preview",
+      "llama-3.2-11b-vision-preview",
+    ],
     requiresApiKey: true,
   },
   anthropic: {
     name: "Anthropic",
-    models: ["claude-3-5-sonnet-20241022", "claude-3-haiku-20240307"],
+    models: [
+      "claude-3-5-sonnet-20241022",
+      "claude-3-5-haiku-20241022",
+      "claude-3-opus-20240229",
+    ],
     requiresApiKey: true,
   },
   gemini: {
     name: "Google Gemini",
-    models: ["gemini-1.5-pro", "gemini-1.5-flash"],
+    models: [
+      "gemini-1.5-pro-002",
+      "gemini-1.5-flash-002",
+      "gemini-2.0-flash-exp",
+    ],
     requiresApiKey: true,
-  },
-  local: {
-    name: "Local Model",
-    models: ["llava", "moondream"],
-    requiresApiKey: false,
   },
 };
 
+let openaiClient: OpenAI | null = null;
 let groqClient: Groq | null = null;
 const apiKeys: Record<string, string> = {};
 
 export function initializeProvider(provider: string, apiKey: string) {
   apiKeys[provider] = apiKey;
 
-  if (provider === "groq") {
+  if (provider === "openai") {
+    openaiClient = new OpenAI({
+      apiKey: apiKey,
+    });
+  } else if (provider === "groq") {
     groqClient = new Groq({
       apiKey: apiKey,
     });
@@ -64,7 +82,9 @@ export function initializeProvider(provider: string, apiKey: string) {
 }
 
 export function isProviderInitialized(provider: string): boolean {
-  if (provider === "groq") {
+  if (provider === "openai") {
+    return openaiClient !== null;
+  } else if (provider === "groq") {
     return groqClient !== null;
   }
   return false;
@@ -90,10 +110,67 @@ export async function convertImageToCode(
   const componentName = sanitizeComponentName(fileName);
 
   switch (provider) {
+    case "openai":
+      return await convertWithOpenAI(imageBase64, componentName, settings);
     case "groq":
       return await convertWithGroq(imageBase64, componentName, settings);
     default:
       throw new Error(`Provider ${provider} not implemented yet`);
+  }
+}
+
+async function convertWithOpenAI(
+  imageBase64: string,
+  componentName: string,
+  settings: ConversionSettings,
+): Promise<ConversionResult> {
+  if (!openaiClient) {
+    throw new Error("OpenAI client not initialized");
+  }
+
+  const systemPrompt = createSystemPrompt(settings);
+  const userPrompt = createUserPrompt(componentName, settings);
+
+  try {
+    const response = await openaiClient.chat.completions.create({
+      model: settings.model,
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: userPrompt,
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+                detail: settings.qualityLevel > 80 ? "high" : "low",
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 4000,
+      temperature: 0.1,
+    });
+
+    const content = response.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error("No response from OpenAI");
+    }
+
+    return parseAIResponse(content, componentName);
+  } catch (error) {
+    console.error("OpenAI API Error:", error);
+    throw new Error(
+      `Failed to convert image with OpenAI: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
   }
 }
 
@@ -261,7 +338,11 @@ export async function validateApiKey(
   apiKey: string,
 ): Promise<boolean> {
   try {
-    if (provider === "groq") {
+    if (provider === "openai") {
+      const testClient = new OpenAI({ apiKey });
+      await testClient.models.list();
+      return true;
+    } else if (provider === "groq") {
       const testClient = new Groq({ apiKey });
       await testClient.models.list();
       return true;
