@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -28,11 +29,33 @@ import {
   Cpu,
   Shield,
   Bell,
+  Key,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
+interface AppSettings {
+  openaiApiKey?: string;
+  aiModel: string;
+  codeStyle: string;
+  optimization: string;
+  includeComments: boolean;
+  generateTypeScript: boolean;
+  includeTailwind: boolean;
+  responsiveDesign: boolean;
+  accessibilityFeatures: boolean;
+  performanceOptimization: boolean;
+  notifications: boolean;
+  qualityLevel: number;
+  processingSpeed: number;
+}
+
 export default function Settings() {
-  const [settings, setSettings] = useState({
-    aiModel: "gpt-4-vision",
+  const [settings, setSettings] = useState<AppSettings>({
+    aiModel: "gpt-4-vision-preview",
     codeStyle: "modern",
     optimization: "balanced",
     includeComments: true,
@@ -42,12 +65,114 @@ export default function Settings() {
     accessibilityFeatures: true,
     performanceOptimization: true,
     notifications: true,
-    qualityLevel: [85],
-    processingSpeed: [70],
+    qualityLevel: 85,
+    processingSpeed: 70,
   });
 
-  const updateSetting = (key: string, value: any) => {
+  const [apiKey, setApiKey] = useState("");
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [isTestingApiKey, setIsTestingApiKey] = useState(false);
+  const [apiKeyStatus, setApiKeyStatus] = useState<"valid" | "invalid" | null>(
+    null,
+  );
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch("/api/settings");
+      const data = await response.json();
+      if (data.success) {
+        setSettings(data.data);
+        if (data.data.openaiApiKey === "***configured***") {
+          setApiKeyStatus("valid");
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings:", error);
+    }
+  };
+
+  const testApiKey = async (key: string) => {
+    if (!key.trim()) return;
+
+    setIsTestingApiKey(true);
+    try {
+      const response = await fetch("/api/settings/test-api-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apiKey: key }),
+      });
+      const data = await response.json();
+      setApiKeyStatus(data.valid ? "valid" : "invalid");
+    } catch (error) {
+      setApiKeyStatus("invalid");
+    } finally {
+      setIsTestingApiKey(false);
+    }
+  };
+
+  const updateSetting = (key: keyof AppSettings, value: any) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const saveSettings = async () => {
+    setIsSaving(true);
+    try {
+      const settingsToSave = { ...settings };
+      if (apiKey.trim()) {
+        settingsToSave.openaiApiKey = apiKey.trim();
+      }
+
+      const response = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settingsToSave),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setLastSaved(new Date());
+        setSettings(data.data);
+        if (apiKey.trim()) {
+          setApiKeyStatus("valid");
+          setApiKey("");
+        }
+      } else {
+        throw new Error(data.error || "Failed to save settings");
+      }
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      alert(
+        "Failed to save settings: " +
+          (error instanceof Error ? error.message : "Unknown error"),
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const resetSettings = () => {
+    setSettings({
+      aiModel: "gpt-4-vision-preview",
+      codeStyle: "modern",
+      optimization: "balanced",
+      includeComments: true,
+      generateTypeScript: true,
+      includeTailwind: true,
+      responsiveDesign: true,
+      accessibilityFeatures: true,
+      performanceOptimization: true,
+      notifications: true,
+      qualityLevel: 85,
+      processingSpeed: 70,
+    });
+    setApiKey("");
+    setApiKeyStatus(null);
   };
 
   return (
@@ -73,6 +198,104 @@ export default function Settings() {
           </div>
         </div>
 
+        {/* OpenAI API Key Configuration */}
+        <Card className="glass-strong neon-border">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Key className="w-5 h-5 text-neon-pink" />
+              <span>OpenAI API Configuration</span>
+              {apiKeyStatus === "valid" && (
+                <CheckCircle2 className="w-5 h-5 text-neon-green" />
+              )}
+              {apiKeyStatus === "invalid" && (
+                <XCircle className="w-5 h-5 text-red-500" />
+              )}
+            </CardTitle>
+            <CardDescription>
+              Configure your OpenAI API key to enable AI-powered image to code
+              conversion. Get your API key from{" "}
+              <a
+                href="https://platform.openai.com/api-keys"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neon-blue hover:underline"
+              >
+                OpenAI Platform
+              </a>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">OpenAI API Key</label>
+              <div className="relative">
+                <Input
+                  type={showApiKey ? "text" : "password"}
+                  placeholder={
+                    settings.openaiApiKey === "***configured***"
+                      ? "API key is configured"
+                      : "sk-..."
+                  }
+                  value={apiKey}
+                  onChange={(e) => {
+                    setApiKey(e.target.value);
+                    setApiKeyStatus(null);
+                  }}
+                  className="glass pr-20"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-3">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    className="h-6 w-6 p-0"
+                  >
+                    {showApiKey ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </Button>
+                  {apiKey.trim() && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => testApiKey(apiKey)}
+                      disabled={isTestingApiKey}
+                      className="h-6 w-6 p-0"
+                    >
+                      {isTestingApiKey ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <CheckCircle2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </div>
+              {apiKeyStatus === "valid" && (
+                <p className="text-xs text-neon-green flex items-center space-x-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>API key is valid</span>
+                </p>
+              )}
+              {apiKeyStatus === "invalid" && (
+                <p className="text-xs text-red-500 flex items-center space-x-1">
+                  <XCircle className="w-3 h-3" />
+                  <span>API key is invalid</span>
+                </p>
+              )}
+              {settings.openaiApiKey === "***configured***" && !apiKey && (
+                <p className="text-xs text-neon-green flex items-center space-x-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>API key is configured and ready to use</span>
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* AI Model Settings */}
         <Card className="glass-strong neon-border">
           <CardHeader>
@@ -96,7 +319,7 @@ export default function Settings() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-strong">
-                    <SelectItem value="gpt-4-vision">
+                    <SelectItem value="gpt-4-vision-preview">
                       <div className="flex items-center space-x-2">
                         <Badge
                           variant="outline"
@@ -104,21 +327,21 @@ export default function Settings() {
                         >
                           Premium
                         </Badge>
-                        <span>GPT-4 Vision (Recommended)</span>
+                        <span>GPT-4 Vision Preview (Recommended)</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="claude-3">
+                    <SelectItem value="gpt-4-turbo">
                       <div className="flex items-center space-x-2">
                         <Badge
                           variant="outline"
                           className="text-neon-purple border-neon-purple"
                         >
-                          Pro
+                          Fast
                         </Badge>
-                        <span>Claude 3 Opus</span>
+                        <span>GPT-4 Turbo</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="gemini-pro">
+                    <SelectItem value="gpt-4">
                       <div className="flex items-center space-x-2">
                         <Badge
                           variant="outline"
@@ -126,7 +349,7 @@ export default function Settings() {
                         >
                           Standard
                         </Badge>
-                        <span>Gemini Pro</span>
+                        <span>GPT-4</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -161,13 +384,13 @@ export default function Settings() {
                 <div className="flex justify-between">
                   <label className="text-sm font-medium">Quality Level</label>
                   <span className="text-sm text-muted-foreground">
-                    {settings.qualityLevel[0]}%
+                    {settings.qualityLevel}%
                   </span>
                 </div>
                 <Slider
-                  value={settings.qualityLevel}
+                  value={[settings.qualityLevel]}
                   onValueChange={(value) =>
-                    updateSetting("qualityLevel", value)
+                    updateSetting("qualityLevel", value[0])
                   }
                   max={100}
                   min={50}
@@ -186,13 +409,13 @@ export default function Settings() {
                     Processing Speed
                   </label>
                   <span className="text-sm text-muted-foreground">
-                    {settings.processingSpeed[0]}%
+                    {settings.processingSpeed}%
                   </span>
                 </div>
                 <Slider
-                  value={settings.processingSpeed}
+                  value={[settings.processingSpeed]}
                   onValueChange={(value) =>
-                    updateSetting("processingSpeed", value)
+                    updateSetting("processingSpeed", value[0])
                   }
                   max={100}
                   min={30}
@@ -333,14 +556,35 @@ export default function Settings() {
         </Card>
 
         {/* Save Settings */}
-        <div className="flex justify-center space-x-4 pt-4">
-          <Button variant="outline" className="glass hover:neon-border">
-            Reset to Defaults
-          </Button>
-          <Button className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow">
-            <Zap className="w-4 h-4 mr-2" />
-            Save Settings
-          </Button>
+        <div className="flex flex-col items-center space-y-4 pt-4">
+          {lastSaved && (
+            <p className="text-xs text-muted-foreground flex items-center space-x-1">
+              <CheckCircle2 className="w-3 h-3 text-neon-green" />
+              <span>Settings saved at {lastSaved.toLocaleTimeString()}</span>
+            </p>
+          )}
+          <div className="flex space-x-4">
+            <Button
+              variant="outline"
+              onClick={resetSettings}
+              className="glass hover:neon-border"
+              disabled={isSaving}
+            >
+              Reset to Defaults
+            </Button>
+            <Button
+              onClick={saveSettings}
+              disabled={isSaving}
+              className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow"
+            >
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Zap className="w-4 h-4 mr-2" />
+              )}
+              {isSaving ? "Saving..." : "Save Settings"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
