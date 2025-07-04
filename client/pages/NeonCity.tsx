@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -112,6 +113,16 @@ interface GeneratedCode {
 export default function NeonCity() {
   const [activeMode, setActiveMode] = useState<ContentMode | null>(null);
   const [prompt, setPrompt] = useState("");
+  const { user, isSignedIn } = useAuth();
+
+  // Redirect to auth if not signed in
+  useEffect(() => {
+    if (!isSignedIn) {
+      localStorage.setItem("redirect_after_auth", "/pricing");
+      window.location.href = "/auth";
+      return;
+    }
+  }, [isSignedIn]);
 
   // Handle URL parameters
   useEffect(() => {
