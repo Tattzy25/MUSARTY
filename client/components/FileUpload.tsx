@@ -55,25 +55,25 @@ export default function FileUpload({
 
       {/* Cyber scan line effect */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-neon-blue to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-cyber-scan" />
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-fire-orange to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-cyber-scan" />
       </div>
 
       <div className="relative z-10 text-center space-y-6">
         {/* Icon */}
         <div className="relative mx-auto w-24 h-24">
-          <div className="absolute inset-0 bg-neon-blue/20 rounded-full blur-xl group-hover:bg-neon-blue/30 transition-all duration-300" />
+          <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl group-hover:bg-fire-orange/30 transition-all duration-300" />
           <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
             {isProcessing ? (
-              <Zap className="w-10 h-10 text-neon-blue animate-spin" />
+              <Zap className="w-10 h-10 text-fire-orange animate-spin" />
             ) : (
-              <Upload className="w-10 h-10 text-neon-blue group-hover:scale-110 transition-transform duration-300" />
+              <Upload className="w-10 h-10 text-fire-orange group-hover:scale-110 transition-transform duration-300" />
             )}
           </div>
         </div>
 
         {/* Title */}
         <div>
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-green bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
             {isProcessing
               ? "Processing Images..."
               : maxFiles > 1
@@ -91,15 +91,15 @@ export default function FileUpload({
         {!isProcessing && (
           <div className="flex justify-center space-x-8">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Image className="w-4 h-4 text-neon-blue" />
+              <Image className="w-4 h-4 text-fire-orange" />
               <span>PNG</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Image className="w-4 h-4 text-neon-purple" />
+              <Image className="w-4 h-4 text-fire-red" />
               <span>JPG</span>
             </div>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <FileText className="w-4 h-4 text-neon-green" />
+              <FileText className="w-4 h-4 text-fire-yellow" />
               <span>SVG</span>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function FileUpload({
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="w-2 h-2 bg-neon-blue rounded-full animate-data-flow"
+                className="w-2 h-2 bg-fire-orange rounded-full animate-data-flow"
                 style={{ animationDelay: `${i * 0.2}s` }}
               />
             ))}
