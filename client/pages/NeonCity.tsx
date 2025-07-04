@@ -116,27 +116,66 @@ export default function NeonCity() {
       <Navigation />
 
       <div className="max-w-6xl mx-auto p-6 space-y-8">
-        {/* Epic Header */}
-        <div className="text-center space-y-6 py-12">
-          <div className="relative mx-auto w-32 h-32">
-            <div className="absolute inset-0 bg-primary/30 rounded-full blur-2xl animate-pulse" />
-            <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-full border-2 border-primary/50">
-              <Sparkles className="w-16 h-16 text-primary" />
-            </div>
-          </div>
-
+        {/* Compact Header */}
+        <div className="text-center space-y-6 py-8">
           <div>
-            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-orange-400 via-red-500 via-pink-500 via-purple-500 to-primary bg-clip-text text-transparent animate-pulse">
               Neon City
             </h1>
-            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
               🌃 **Your AI Content Generation Hub** 🌃
-              <br />
-              Text • Images • Videos • Music • Code
               <br />
               Powered by GROQ orchestration for lightning speed! ⚡
             </p>
           </div>
+        </div>
+
+        {/* 5 Mode Cards in One Row */}
+        <div className="flex justify-center gap-4 mb-8">
+          {CONTENT_ZONES.map((zone) => {
+            const Icon = zone.icon;
+            return (
+              <button
+                key={zone.id}
+                onClick={() => setActiveMode(zone.id)}
+                className={cn(
+                  "relative overflow-hidden bg-black/95 border backdrop-blur-xl transition-all duration-300 cursor-pointer group",
+                  "w-24 h-24 rounded-2xl",
+                  "shadow-[0_0_15px_rgba(212,172,53,0.2)] hover:shadow-[0_0_25px_rgba(212,172,53,0.4)]",
+                  activeMode === zone.id
+                    ? "border-primary/70 shadow-[0_0_30px_rgba(212,172,53,0.6)] scale-110"
+                    : "border-primary/30 hover:border-primary/50 hover:scale-105",
+                )}
+              >
+                {/* Gradient Accent */}
+                <div
+                  className={cn("absolute inset-0 opacity-10", zone.bgGradient)}
+                />
+
+                {/* Icon */}
+                <div className="relative flex items-center justify-center w-full h-full">
+                  <Icon className="w-8 h-8 text-primary" />
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="h-full bg-primary animate-pulse" />
+                </div>
+
+                {/* Label */}
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+                  <span
+                    className={cn(
+                      "text-xs font-medium bg-gradient-to-r bg-clip-text text-transparent",
+                      zone.color,
+                    )}
+                  >
+                    {zone.name}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Mode Selection or Active Workspace */}
