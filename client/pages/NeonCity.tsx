@@ -140,10 +140,18 @@ export default function NeonCity() {
               ●●●●● ENCRYPTED
             </div>
           </div>
-          {CONTENT_ZONES.map((zone) => {
+          {CONTENT_ZONES.map((zone, index) => {
             const Icon = zone.icon;
             return (
-              <div key={zone.id} className="cyber-card-container">
+              <div key={zone.id} className="cyber-card-container relative">
+                {/* SECURITY LOCK INDICATOR */}
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-primary/20 rounded-full border border-primary/50 flex items-center justify-center z-50">
+                  <span className="text-[8px] text-primary">🔒</span>
+                </div>
+                {/* POSITION LOCK */}
+                <div className="absolute -bottom-2 -left-2 text-[6px] text-primary/60 font-mono bg-black/80 px-1 rounded">
+                  POS_{index + 1}_LOCK
+                </div>
                 <div
                   className="container noselect"
                   onClick={() => setActiveMode(zone.id)}
