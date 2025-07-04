@@ -8,6 +8,11 @@ import {
   handleTestApiKey,
 } from "./routes/settings";
 import { generateContent } from "./routes/generate";
+import {
+  handleGetPricing,
+  handleCheckout,
+  handleGetSubscription,
+} from "./routes/checkout";
 
 export function createServer() {
   const app = express();
