@@ -38,5 +38,10 @@ export function createServer() {
   app.post("/api/settings", handleUpdateSettings);
   app.post("/api/settings/test-api-key", handleTestApiKey);
 
+  // Pricing and checkout routes
+  app.get("/api/pricing", handleGetPricing);
+  app.post("/api/checkout", handleCheckout);
+  app.get("/api/subscription/:userId", handleGetSubscription);
+
   return app;
 }
