@@ -32,6 +32,7 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
     // Don't send the API keys back to the client for security
     const safeSettings = { ...settings };
     delete safeSettings.groqApiKey;
+    delete safeSettings.v0ApiKey;
     delete safeSettings.openaiApiKey;
     delete safeSettings.geminiApiKey;
 
@@ -40,6 +41,7 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
       data: {
         ...safeSettings,
         groqApiKey: settings.groqApiKey ? "***configured***" : undefined,
+        v0ApiKey: settings.v0ApiKey ? "***configured***" : undefined,
         openaiApiKey: settings.openaiApiKey ? "***configured***" : undefined,
         geminiApiKey: settings.geminiApiKey ? "***configured***" : undefined,
         availableProviders: AI_PROVIDERS,
@@ -64,6 +66,7 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
     // Validate API keys if being updated
     const apiKeyUpdates = [
       "groqApiKey",
+      "v0ApiKey",
       "openaiApiKey",
       "geminiApiKey",
     ] as const;
@@ -92,6 +95,7 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
     // Don't send the API keys back to the client
     const safeSettings = { ...updatedSettings };
     delete safeSettings.groqApiKey;
+    delete safeSettings.v0ApiKey;
     delete safeSettings.openaiApiKey;
     delete safeSettings.geminiApiKey;
 
@@ -100,6 +104,7 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
       data: {
         ...safeSettings,
         groqApiKey: updatedSettings.groqApiKey ? "***configured***" : undefined,
+        v0ApiKey: updatedSettings.v0ApiKey ? "***configured***" : undefined,
         openaiApiKey: updatedSettings.openaiApiKey
           ? "***configured***"
           : undefined,
