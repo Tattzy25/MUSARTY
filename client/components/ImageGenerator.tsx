@@ -32,7 +32,7 @@ export default function ImageGenerator({
   const [quality, setQuality] = useState("standard");
 
   const handleGenerate = () => {
-    const enhancedPrompt = `${prompt}${style ? `, ${style} style` : ""}${
+    const enhancedPrompt = `${prompt}${style && style !== "none" ? `, ${style} style` : ""}${
       aspectRatio !== "1:1" ? `, ${aspectRatio} aspect ratio` : ""
     }${quality === "hd" ? ", high quality, detailed" : ""}`;
 
