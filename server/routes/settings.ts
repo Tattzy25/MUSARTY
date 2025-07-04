@@ -31,6 +31,7 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
 
     // Don't send the API keys back to the client for security
     const safeSettings = { ...settings };
+    delete safeSettings.openaiApiKey;
     delete safeSettings.groqApiKey;
     delete safeSettings.anthropicApiKey;
     delete safeSettings.geminiApiKey;
@@ -39,6 +40,7 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
       success: true,
       data: {
         ...safeSettings,
+        openaiApiKey: settings.openaiApiKey ? "***configured***" : undefined,
         groqApiKey: settings.groqApiKey ? "***configured***" : undefined,
         anthropicApiKey: settings.anthropicApiKey
           ? "***configured***"
