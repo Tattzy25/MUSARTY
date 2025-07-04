@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserSubscription } from "@shared/api";
+import { useUser } from "./use-auth";
 
 interface UseSubscriptionReturn {
   subscription: UserSubscription | null;
@@ -11,10 +12,8 @@ interface UseSubscriptionReturn {
   refreshSubscription: () => Promise<void>;
 }
 
-// Get user ID from auth context
-import { useUser } from "./use-auth";
-
 export function useSubscription(): UseSubscriptionReturn {
+  const { user } = useUser();
   const [subscription, setSubscription] = useState<UserSubscription | null>(
     null,
   );
@@ -34,10 +33,8 @@ export function useSubscription(): UseSubscriptionReturn {
       }
 
       // Fetch from API using user email
-      const { user } = useUser();
-      const email = user?.email || "guest@musarty.com";
       const response = await fetch(
-        `/api/subscription/current?email=${encodeURIComponent(email)}`,
+        `/api/subscription/current?email=${encodeURIComponent(user?.email || "guest@musarty.com")}`,
       );
       const result = await response.json();
 
@@ -47,7 +44,7 @@ export function useSubscription(): UseSubscriptionReturn {
       } else {
         // No subscription found - user is on free tier
         const freeSubscription: UserSubscription = {
-          id: `free_${MOCK_USER_ID}`,
+          id: `free_${user?.email || "guest"}`,
           planId: "free",
           status: "trial",
           startDate: new Date().toISOString(),
@@ -71,7 +68,7 @@ export function useSubscription(): UseSubscriptionReturn {
         setSubscription(JSON.parse(localSubscription));
       } else {
         const freeSubscription: UserSubscription = {
-          id: `free_${MOCK_USER_ID}`,
+          id: `free_${user?.email || "guest"}`,
           planId: "free",
           status: "trial",
           startDate: new Date().toISOString(),

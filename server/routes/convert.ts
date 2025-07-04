@@ -172,7 +172,7 @@ function generateFallbackReactCode(fileName: string): string {
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
 
-  return generateMockReactCode(capitalizedName, {
+  return generateReactCode(capitalizedName, {
     generateTypeScript: true,
     includeTailwind: true,
     includeComments: true,
@@ -185,7 +185,7 @@ function generateFallbackHtmlCode(fileName: string): string {
     .replace(/[^a-zA-Z0-9]/g, "");
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
-  return generateMockHtmlCode(capitalizedName);
+  return generateHtmlCode(capitalizedName);
 }
 
 function generateFallbackCssCode(fileName: string): string {
@@ -194,10 +194,10 @@ function generateFallbackCssCode(fileName: string): string {
     .replace(/[^a-zA-Z0-9]/g, "");
   const capitalizedName =
     componentName.charAt(0).toUpperCase() + componentName.slice(1);
-  return generateMockCssCode(capitalizedName);
+  return generateCssCode(capitalizedName);
 }
 
-function generateMockReactCode(componentName: string, settings?: any): string {
+function generateReactCode(componentName: string, settings?: any): string {
   const useTypeScript = settings?.generateTypeScript !== false;
   const useTailwind = settings?.includeTailwind !== false;
   const includeComments = settings?.includeComments !== false;
