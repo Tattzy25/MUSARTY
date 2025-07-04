@@ -74,18 +74,18 @@ export function createServer() {
 
   // Pricing and checkout routes
   app.get("/api/pricing", handleGetPricing);
-  app.post("/api/checkout", handleCheckout);
-  app.post("/api/checkout/complete", handleCompletePayment);
-  app.get("/api/subscription/:userId", handleGetSubscription);
+  app.post("/api/checkout", verifyToken, handleCheckout);
+  app.post("/api/checkout/complete", verifyToken, handleCompletePayment);
+  app.get("/api/subscription/:userId", verifyToken, handleGetSubscription);
 
   // Shot Caller routes (main AI generation system)
-  app.post("/api/shot-caller/generate", handleGeneration);
+  app.post("/api/shot-caller/generate", verifyToken, handleGeneration);
   app.get("/api/models", handleGetModels);
   app.get("/api/models/:modelId", handleGetModel);
-  app.get("/api/users/:userId/usage", handleGetUserUsage);
-  app.post("/api/users/:userId/blocks", handleAddUserBlocks);
-  app.post("/api/users/initialize", handleInitializeUser);
-  app.get("/api/vault/stats", handleGetVaultStats);
+  app.get("/api/users/:userId/usage", verifyToken, handleGetUserUsage);
+  app.post("/api/users/:userId/blocks", verifyToken, handleAddUserBlocks);
+  app.post("/api/users/initialize", verifyToken, handleInitializeUser);
+  app.get("/api/vault/stats", handleGetVaultStats); // Admin only - add separate middleware later
   app.get("/api/health", handleHealthCheck);
 
   return app;
