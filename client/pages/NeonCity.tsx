@@ -178,68 +178,8 @@ export default function NeonCity() {
           })}
         </div>
 
-        {/* Mode Selection or Active Workspace */}
-        {!activeMode ? (
-          // Mode Selection Grid
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CONTENT_ZONES.map((zone) => {
-              const Icon = zone.icon;
-              return (
-                <Card
-                  key={zone.id}
-                  className="relative overflow-hidden bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_20px_rgba(212,172,53,0.3)] hover:shadow-[0_0_30px_rgba(212,172,53,0.5)] transition-all duration-300 cursor-pointer group"
-                  onClick={() => setActiveMode(zone.id)}
-                >
-                  {/* Gradient Accent */}
-                  <div
-                    className={cn(
-                      "absolute inset-0 opacity-10",
-                      zone.bgGradient,
-                    )}
-                  />
-
-                  <CardHeader className="text-center space-y-4">
-                    <div className="relative mx-auto w-16 h-16">
-                      <div
-                        className={cn(
-                          "absolute inset-0 rounded-full blur-xl opacity-40",
-                          zone.color.replace("from-", "bg-").split(" ")[0],
-                        )}
-                      />
-                      <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-full border border-primary/50">
-                        <Icon className="w-8 h-8 text-primary" />
-                      </div>
-                    </div>
-
-                    <CardTitle
-                      className={cn(
-                        "text-xl bg-gradient-to-r bg-clip-text text-transparent",
-                        zone.color,
-                      )}
-                    >
-                      {zone.name}
-                    </CardTitle>
-                  </CardHeader>
-
-                  <CardContent className="text-center pb-8">
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {zone.description}
-                    </p>
-
-                    <div className="mt-4 text-xs text-primary/60">
-                      Click to enter →
-                    </div>
-                  </CardContent>
-
-                  {/* Hover Effect */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="h-full bg-primary animate-pulse" />
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        ) : (
+        {/* Big Hero-Style Workspace */}
+        {activeMode && (
           // Active Workspace
           <div className="space-y-6">
             {/* Header */}
