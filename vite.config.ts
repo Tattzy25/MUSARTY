@@ -11,6 +11,16 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
+    rollupOptions: {
+      external: [
+        // Remove any Builder.io or external dependencies
+      ],
+    },
+  },
+  define: {
+    "process.env.NODE_ENV": JSON.stringify(
+      mode === "production" ? "production" : "development",
+    ),
   },
   plugins: [react(), expressPlugin()],
   resolve: {
