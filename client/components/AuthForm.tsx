@@ -74,7 +74,13 @@ export default function AuthForm({
     try {
       await onSignup?.(email, password);
     } catch (error: any) {
-      setError(error.message || "Signup failed");
+      const errorMessage = error.message || "Signup failed";
+      if (errorMessage.includes("User already exists")) {
+        setError("This email is already registered. Please login instead.");
+        setActiveTab("login");
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
