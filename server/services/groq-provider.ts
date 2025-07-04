@@ -1,14 +1,27 @@
 import Groq from "groq-sdk";
+import { getSmartKey } from "./vault_musarty";
 
 let groq: Groq | null = null;
 
 function getGroq() {
   if (!groq) {
-    if (!process.env.GROQ_API_KEY) {
-      throw new Error("GROQ_API_KEY environment variable is required");
+    // Try user's environment key first
+    let apiKey = process.env.GROQ_API_KEY;
+
+    // Fallback to vault key if no environment key
+    if (!apiKey) {
+      const vaultResult = getSmartKey("groq", 100);
+      apiKey = vaultResult.key;
     }
+
+    if (!apiKey) {
+      throw new Error(
+        "No GROQ API key available. Add GROQ_API_KEY environment variable or keys to vault.",
+      );
+    }
+
     groq = new Groq({
-      apiKey: process.env.GROQ_API_KEY,
+      apiKey: apiKey,
     });
   }
   return groq;
