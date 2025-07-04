@@ -234,9 +234,9 @@ export default function NeonCity() {
               )}
             </div>
 
-            {/* Generation Interface */}
-            <Card className="bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_20px_rgba(212,172,53,0.3)]">
-              <CardContent className="p-8 space-y-6">
+            {/* Big Hero-Style Generation Interface */}
+            <Card className="bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_30px_rgba(212,172,53,0.5)] min-h-[500px]">
+              <CardContent className="p-12 space-y-8">
                 {/* Input */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-primary">
