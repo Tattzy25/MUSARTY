@@ -128,8 +128,18 @@ export default function NeonCity() {
           </section>
         </div>
 
-        {/* 5 Cyber Cards in One Row */}
-        <div className="flex justify-center gap-6 mb-12">
+        {/* 🔒 SECURED CYBER CARDS - POSITION LOCKED 🔒 */}
+        <div className="flex justify-center gap-6 mb-12 relative">
+          {/* Security Grid Overlay */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="w-full h-full border border-primary/10 rounded-3xl"></div>
+            <div className="absolute top-2 left-4 text-[8px] text-primary/40 font-mono">
+              SECURE_GRID_LOCK
+            </div>
+            <div className="absolute bottom-2 right-4 text-[8px] text-primary/40 font-mono">
+              ●●●●● ENCRYPTED
+            </div>
+          </div>
           {CONTENT_ZONES.map((zone) => {
             const Icon = zone.icon;
             return (
