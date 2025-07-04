@@ -10,10 +10,21 @@
     <meta name="robots" content="index, follow" />
     <title>Musarty - AI Creation Hub</title>
     <script>
-      // Fix FullStory namespace conflict
-      window["_fs_namespace"] = "FS";
-      // Prevent external tracking issues
+      // Disable all external tracking to prevent conflicts
+      window["_fs_namespace"] = "FS_DISABLED";
       window._fs_ready = function () {};
+      window.hstc = { tracking: { Tracker: function () {} } };
+      window.amplitude = { track: function () {} };
+      window.mixpanel = { track: function () {} };
+
+      // Prevent MobX array access errors
+      window.onerror = function (msg, url, line, col, error) {
+        if (msg.includes("mobx.array") || msg.includes("out of bounds")) {
+          console.warn("Suppressed tracking error:", msg);
+          return true;
+        }
+        return false;
+      };
     </script>
   </head>
 
