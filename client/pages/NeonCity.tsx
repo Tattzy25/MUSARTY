@@ -238,8 +238,8 @@ export default function NeonCity() {
             <Card className="bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_30px_rgba(212,172,53,0.5)] min-h-[500px]">
               <CardContent className="p-12 space-y-8">
                 {/* Input */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-primary">
+                <div className="space-y-4">
+                  <label className="text-lg font-medium text-primary">
                     {
                       CONTENT_ZONES.find((z) => z.id === activeMode)
                         ?.description
@@ -252,7 +252,7 @@ export default function NeonCity() {
                       CONTENT_ZONES.find((z) => z.id === activeMode)
                         ?.placeholder
                     }
-                    className="bg-black/60 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-32"
+                    className="bg-black/60 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-40 text-lg p-6"
                     disabled={isGenerating}
                   />
                 </div>
