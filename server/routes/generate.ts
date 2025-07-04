@@ -91,7 +91,7 @@ export const generateContent: RequestHandler<
 // Text generation with GROQ (fast) or OpenAI (quality)
 async function generateText(prompt: string, provider: string): Promise<string> {
   if (provider === "groq") {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       messages: [
         {
           role: "system",
