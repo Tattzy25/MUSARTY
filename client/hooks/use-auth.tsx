@@ -76,7 +76,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        throw new Error("Invalid response from server");
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Login failed");
@@ -86,18 +91,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("musarty_token", data.token);
       setUser(data.user);
 
-      // Initialize user in Shot Caller system
-      await fetch("/api/users/initialize", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
-        },
-        body: JSON.stringify({
-          user_id: data.user.id,
-          starting_blocks: 10,
-        }),
-      });
+      // Initialize user in Shot Caller system (optional, don't fail if it doesn't work)
+      try {
+        const initResponse = await fetch("/api/users/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+          body: JSON.stringify({
+            user_id: data.user.id,
+            starting_blocks: 10,
+          }),
+        });
+        // Don't read the response body unless we need to
+        if (!initResponse.ok) {
+          console.warn("Failed to initialize user blocks");
+        }
+      } catch (initError) {
+        console.warn("User initialization failed:", initError);
+      }
 
       // Handle redirects
       const pendingPrompt = localStorage.getItem("pending_build_prompt");
@@ -132,7 +145,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        throw new Error("Invalid response from server");
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Signup failed");
@@ -142,18 +160,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("musarty_token", data.token);
       setUser(data.user);
 
-      // Initialize user in Shot Caller system
-      await fetch("/api/users/initialize", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${data.token}`,
-        },
-        body: JSON.stringify({
-          user_id: data.user.id,
-          starting_blocks: 10,
-        }),
-      });
+      // Initialize user in Shot Caller system (optional, don't fail if it doesn't work)
+      try {
+        const initResponse = await fetch("/api/users/initialize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+          body: JSON.stringify({
+            user_id: data.user.id,
+            starting_blocks: 10,
+          }),
+        });
+        // Don't read the response body unless we need to
+        if (!initResponse.ok) {
+          console.warn("Failed to initialize user blocks");
+        }
+      } catch (initError) {
+        console.warn("User initialization failed:", initError);
+      }
 
       // Handle redirects
       const pendingPrompt = localStorage.getItem("pending_build_prompt");
