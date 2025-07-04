@@ -107,7 +107,7 @@ const AI_PROVIDERS: AIProvider[] = [
     name: "Suno AI",
     category: "Creative Master",
     description:
-      "🎵 YOUR FAVORITE! The creative genius that generates music, audio, and creative content. When you need that artistic touch!",
+      "��� YOUR FAVORITE! The creative genius that generates music, audio, and creative content. When you need that artistic touch!",
     features: [
       "Music Generation",
       "Audio Creation",
@@ -180,7 +180,7 @@ const AI_PROVIDERS: AIProvider[] = [
       totalUses: 2847,
       successRate: 93,
       avgResponseTime: "2.9s",
-      rank: 4,
+      rank: 5,
     },
   },
   {
@@ -679,7 +679,7 @@ const AI_PROVIDERS: AIProvider[] = [
     name: "Cohere",
     category: "Language Master",
     description:
-      "���� The enterprise language specialist! Command-R+ excels at business tasks, summarization, and professional communication. Corporate AI!",
+      "💬 The enterprise language specialist! Command-R+ excels at business tasks, summarization, and professional communication. Corporate AI!",
     features: [
       "Enterprise Focus",
       "Business Tasks",
