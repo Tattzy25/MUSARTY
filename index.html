@@ -3,12 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello world project</title>
+    <meta
+      name="description"
+      content="Musarty - The Ultimate AI Creation Hub for Music, Art, and Content Generation"
+    />
+    <meta name="robots" content="index, follow" />
+    <title>Musarty - AI Creation Hub</title>
+    <script>
+      // Fix FullStory namespace conflict
+      window["_fs_namespace"] = "FS";
+      // Prevent external tracking issues
+      window._fs_ready = function () {};
+    </script>
   </head>
 
   <body>
     <div id="root"></div>
-
     <script type="module" src="/client/App.tsx"></script>
   </body>
 </html>
