@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Code, Eye, Download, Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import FileUpload from "./FileUpload";
 
 interface CodeGeneratorProps {
   prompt: string;
@@ -127,8 +128,30 @@ export default function CodeGenerator({
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Describe the React component you want to generate...
 Example: Create a modern contact form with name, email, and message fields. Use Tailwind CSS for styling with a dark theme and orange accents."
-                className="bg-black/60 border-primary/30 text-white h-48 text-lg"
+                className="bg-black/60 border-primary/30 text-white h-32 text-lg"
                 disabled={isGenerating}
+              />
+            </div>
+
+            {/* Image Upload for Design Reference */}
+            <div className="space-y-2">
+              <Label className="text-white">
+                Upload Design Reference (Optional)
+              </Label>
+              <FileUpload
+                onFileSelect={(files) => {
+                  if (files.length > 0) {
+                    const fileName = files[0].name;
+                    setPrompt(
+                      (prev) =>
+                        prev +
+                        (prev ? "\n\n" : "") +
+                        `[Design reference uploaded: ${fileName}] Create a React component that matches the design and layout shown in this image.`,
+                    );
+                  }
+                }}
+                maxFiles={1}
+                isProcessing={false}
               />
             </div>
 
