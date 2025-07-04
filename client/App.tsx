@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Settings from "./pages/Settings";
 import Providers from "./pages/Providers";
 import NeonCity from "./pages/NeonCity";
+import Gridwave from "./pages/Gridwave";
 import Pricing from "./pages/Pricing";
 import Checkout from "./pages/Checkout";
 import Auth from "./pages/Auth";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/providers" element={<Providers />} />
             <Route path="/neon-city" element={<NeonCity />} />
+            <Route path="/gridwave" element={<Gridwave />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/settings" element={<Settings />} />
