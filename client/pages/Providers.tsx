@@ -501,8 +501,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Fast",
     quality: "Excellent",
     placeholder: "pplx_...",
-    color: "from-teal-500 to-cyan-600",
-    bgGradient: "bg-gradient-to-br from-teal-500/10 to-cyan-600/10",
+    color: "from-orange-600 to-red-500",
+    bgGradient: "bg-gradient-to-br from-orange-600/10 to-red-500/10",
     icon: Brain,
     models: ["sonar", "sonar-reasoning"],
     stats: {
