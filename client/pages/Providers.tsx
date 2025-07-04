@@ -290,8 +290,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Fast",
     quality: "Excellent",
     placeholder: "mst_...",
-    color: "from-indigo-500 to-blue-500",
-    bgGradient: "bg-gradient-to-br from-indigo-500/10 to-blue-500/10",
+    color: "from-orange-500 to-red-600",
+    bgGradient: "bg-gradient-to-br from-orange-500/10 to-red-600/10",
     icon: Code,
     models: ["magistral-medium-2506", "codestral-25.01"],
     stats: {
