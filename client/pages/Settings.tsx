@@ -265,16 +265,18 @@ export default function Settings() {
             <CardTitle className="text-2xl bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
               Secure API Vault
             </CardTitle>
-            <CardDescription className="text-center max-w-lg mx-auto">
-              <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="text-center max-w-lg mx-auto space-y-2">
+              <div className="flex items-center justify-center space-x-2">
                 <Shield className="w-4 h-4 text-fire-orange" />
                 <span className="text-fire-orange font-semibold">
                   Military-Grade Encryption
                 </span>
               </div>
-              Your API key is encrypted with AES-256 before storage. Never
-              logged, never exposed, never compromised.
-            </CardDescription>
+              <CardDescription>
+                Your API key is encrypted with AES-256 before storage. Never
+                logged, never exposed, never compromised.
+              </CardDescription>
+            </div>
           </CardHeader>
           <CardContent className="space-y-8">
             {/* Security Features Display */}
