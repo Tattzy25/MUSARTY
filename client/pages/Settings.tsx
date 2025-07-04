@@ -615,7 +615,7 @@ export default function Settings() {
         <Card className="glass-strong neon-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Code className="w-5 h-5 text-neon-green" />
+              <Code className="w-5 h-5 text-fire-orange" />
               <span>Code Generation Options</span>
             </CardTitle>
             <CardDescription>
@@ -686,7 +686,7 @@ export default function Settings() {
         <Card className="glass-strong neon-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Download className="w-5 h-5 text-neon-pink" />
+              <Download className="w-5 h-5 text-fire-orange" />
               <span>Output & Export Settings</span>
             </CardTitle>
             <CardDescription>
@@ -740,7 +740,7 @@ export default function Settings() {
         <div className="flex flex-col items-center space-y-4 pt-4">
           {lastSaved && (
             <p className="text-xs text-muted-foreground flex items-center space-x-1">
-              <CheckCircle2 className="w-3 h-3 text-neon-green" />
+              <CheckCircle2 className="w-3 h-3 text-fire-orange" />
               <span>Settings saved at {lastSaved.toLocaleTimeString()}</span>
             </p>
           )}
@@ -756,7 +756,7 @@ export default function Settings() {
             <Button
               onClick={saveSettings}
               disabled={isSaving}
-              className="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-blue/80 hover:to-neon-purple/80 neon-glow"
+              className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 neon-glow"
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
