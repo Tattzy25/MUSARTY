@@ -4,6 +4,9 @@ interface User {
   id: string;
   email: string;
   name?: string;
+  tier: "free" | "pro" | "byok";
+  generations_used: number;
+  created_at: string;
 }
 
 interface AuthContextType {
@@ -14,6 +17,7 @@ interface AuthContextType {
   signup: (email: string, password: string) => Promise<void>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,35 +27,77 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem("musarty_user");
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        localStorage.removeItem("musarty_user");
-      }
-    }
-    setIsLoading(false);
+    checkAuthStatus();
   }, []);
+
+  const checkAuthStatus = async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("musarty_token");
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
+      // Verify token with backend
+      const response = await fetch("/api/auth/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData.user);
+      } else {
+        // Invalid token, remove it
+        localStorage.removeItem("musarty_token");
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      localStorage.removeItem("musarty_token");
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // For demo purposes, accept any email/password
-      const user: User = {
-        id: `user_${Date.now()}`,
-        email,
-        name: email.split("@")[0],
-      };
+      const data = await response.json();
 
-      setUser(user);
-      localStorage.setItem("musarty_user", JSON.stringify(user));
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
 
-      // Check for pending redirect
+      // Store JWT token
+      localStorage.setItem("musarty_token", data.token);
+      setUser(data.user);
+
+      // Initialize user in Shot Caller system
+      await fetch("/api/users/initialize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.token}`,
+        },
+        body: JSON.stringify({
+          user_id: data.user.id,
+          starting_blocks: 10,
+        }),
+      });
+
+      // Handle redirects
       const pendingPrompt = localStorage.getItem("pending_build_prompt");
       const redirectAfterAuth = localStorage.getItem("redirect_after_auth");
 
@@ -65,6 +111,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         window.location.href = "/neon-city";
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -73,27 +122,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // For demo purposes, create user immediately
-      const user: User = {
-        id: `user_${Date.now()}`,
-        email,
-        name: email.split("@")[0],
-      };
-
-      setUser(user);
-      localStorage.setItem("musarty_user", JSON.stringify(user));
-
-      // Initialize user with starting blocks
-      await fetch("/api/users/initialize", {
+      const response = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: user.id, starting_blocks: 10 }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      // Check for pending redirect
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Signup failed");
+      }
+
+      // Store JWT token
+      localStorage.setItem("musarty_token", data.token);
+      setUser(data.user);
+
+      // Initialize user in Shot Caller system
+      await fetch("/api/users/initialize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.token}`,
+        },
+        body: JSON.stringify({
+          user_id: data.user.id,
+          starting_blocks: 10,
+        }),
+      });
+
+      // Handle redirects
       const pendingPrompt = localStorage.getItem("pending_build_prompt");
       const redirectAfterAuth = localStorage.getItem("redirect_after_auth");
 
@@ -107,21 +167,75 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         window.location.href = "/neon-city";
       }
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("musarty_user");
-    window.location.href = "/";
+  const logout = async () => {
+    try {
+      const token = localStorage.getItem("musarty_token");
+      if (token) {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem("musarty_token");
+      window.location.href = "/";
+    }
   };
 
   const forgotPassword = async (email: string) => {
-    // Simulate forgot password
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert(`Password reset link sent to ${email}`);
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send reset email");
+      }
+
+      alert(`Password reset link sent to ${email}`);
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      throw error;
+    }
+  };
+
+  const refreshUser = async () => {
+    try {
+      const token = localStorage.getItem("musarty_token");
+      if (!token) return;
+
+      const response = await fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.error("Refresh user error:", error);
+    }
   };
 
   const value: AuthContextType = {
@@ -132,6 +246,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     logout,
     forgotPassword,
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
