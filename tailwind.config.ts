@@ -100,10 +100,40 @@ export default {
             height: "0",
           },
         },
+        holographic: {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "pulse-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px hsl(var(--primary) / 0.3)",
+          },
+          "50%": {
+            boxShadow: "0 0 30px hsl(var(--primary) / 0.6)",
+          },
+        },
+        "cyber-scan": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "data-flow": {
+          "0%": { transform: "translateY(-10px)", opacity: "0" },
+          "50%": { opacity: "1" },
+          "100%": { transform: "translateY(10px)", opacity: "0" },
+        },
+        "matrix-rain": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100vh)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        holographic: "holographic 8s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite alternate",
+        "cyber-scan": "cyber-scan 2s ease-in-out infinite",
+        "data-flow": "data-flow 3s ease-in-out infinite",
+        "matrix-rain": "matrix-rain 10s linear infinite",
       },
     },
   },
