@@ -31,20 +31,16 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
 
     // Don't send the API keys back to the client for security
     const safeSettings = { ...settings };
-    delete safeSettings.openaiApiKey;
     delete safeSettings.groqApiKey;
-    delete safeSettings.anthropicApiKey;
+    delete safeSettings.openaiApiKey;
     delete safeSettings.geminiApiKey;
 
     const response: SettingsResponse = {
       success: true,
       data: {
         ...safeSettings,
-        openaiApiKey: settings.openaiApiKey ? "***configured***" : undefined,
         groqApiKey: settings.groqApiKey ? "***configured***" : undefined,
-        anthropicApiKey: settings.anthropicApiKey
-          ? "***configured***"
-          : undefined,
+        openaiApiKey: settings.openaiApiKey ? "***configured***" : undefined,
         geminiApiKey: settings.geminiApiKey ? "***configured***" : undefined,
         availableProviders: AI_PROVIDERS,
       },
@@ -67,9 +63,8 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
 
     // Validate API keys if being updated
     const apiKeyUpdates = [
-      "openaiApiKey",
       "groqApiKey",
-      "anthropicApiKey",
+      "openaiApiKey",
       "geminiApiKey",
     ] as const;
 
@@ -96,20 +91,16 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
 
     // Don't send the API keys back to the client
     const safeSettings = { ...updatedSettings };
-    delete safeSettings.openaiApiKey;
     delete safeSettings.groqApiKey;
-    delete safeSettings.anthropicApiKey;
+    delete safeSettings.openaiApiKey;
     delete safeSettings.geminiApiKey;
 
     const response: SettingsResponse = {
       success: true,
       data: {
         ...safeSettings,
-        openaiApiKey: updatedSettings.openaiApiKey
-          ? "***configured***"
-          : undefined,
         groqApiKey: updatedSettings.groqApiKey ? "***configured***" : undefined,
-        anthropicApiKey: updatedSettings.anthropicApiKey
+        openaiApiKey: updatedSettings.openaiApiKey
           ? "***configured***"
           : undefined,
         geminiApiKey: updatedSettings.geminiApiKey
