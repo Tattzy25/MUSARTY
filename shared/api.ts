@@ -53,9 +53,8 @@ export interface ConvertResponse {
  * Settings API types
  */
 export interface SettingsRequest {
-  openaiApiKey?: string;
   groqApiKey?: string;
-  anthropicApiKey?: string;
+  openaiApiKey?: string;
   geminiApiKey?: string;
   aiProvider?: string;
   aiModel?: string;
@@ -75,9 +74,8 @@ export interface SettingsRequest {
 export interface SettingsResponse {
   success: boolean;
   data?: SettingsRequest & {
-    openaiApiKey?: string; // will be "***configured***" if set
     groqApiKey?: string; // will be "***configured***" if set
-    anthropicApiKey?: string; // will be "***configured***" if set
+    openaiApiKey?: string; // will be "***configured***" if set
     geminiApiKey?: string; // will be "***configured***" if set
     availableProviders?: any;
   };
