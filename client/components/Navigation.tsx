@@ -39,9 +39,9 @@ export default function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-fire-orange/20 rounded-lg blur-xl group-hover:bg-fire-orange/30 transition-all duration-300" />
+              <div className="absolute inset-0 bg-primary/20 rounded-lg blur-xl group-hover:bg-primary/30 transition-all duration-300" />
               <div className="relative flex items-center justify-center w-10 h-10 glass rounded-lg neon-border">
-                <Zap className="w-6 h-6 text-fire-orange group-hover:scale-110 transition-transform duration-300" />
+                <Zap className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
               </div>
             </div>
             <div>
