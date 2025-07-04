@@ -77,25 +77,16 @@ export default function Settings() {
   });
 
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
-    groq: "",
-    v0: "",
-    openai: "",
-    gemini: "",
+    primary: "",
   });
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({
-    groq: false,
-    v0: false,
-    openai: false,
-    gemini: false,
+    primary: false,
   });
   const [isTestingApiKey, setIsTestingApiKey] = useState<string | null>(null);
   const [apiKeyStatuses, setApiKeyStatuses] = useState<
     Record<string, "valid" | "invalid" | null>
   >({
-    groq: null,
-    v0: null,
-    openai: null,
-    gemini: null,
+    primary: null,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
