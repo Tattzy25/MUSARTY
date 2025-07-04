@@ -35,6 +35,17 @@ let VAULT_POOL: ProviderPool = {
   anthropic: [],
   gemini: [],
   stability: [],
+  runway: [],
+  suno: [],
+  mistral: [],
+  xai: [],
+  deepseek: [],
+  together: [],
+  amazon: [],
+  perplexity: [],
+  vercel: [],
+  midjourney: [],
+  morph: [],
 };
 
 // Usage tracking per key
@@ -204,10 +215,25 @@ export function initializeVault(): void {
       process.env.OPENAI_KEY_2,
       process.env.OPENAI_KEY_3,
     ],
-    groq: [process.env.GROQ_KEY_1, process.env.GROQ_KEY_2],
-    anthropic: [process.env.ANTHROPIC_KEY_1],
-    gemini: [process.env.GEMINI_KEY_1],
-    stability: [process.env.STABILITY_KEY_1],
+    groq: [
+      process.env.GROQ_KEY_1,
+      process.env.GROQ_KEY_2,
+      process.env.GROQ_KEY_3,
+    ],
+    anthropic: [process.env.ANTHROPIC_KEY_1, process.env.ANTHROPIC_KEY_2],
+    gemini: [process.env.GEMINI_KEY_1, process.env.GEMINI_KEY_2],
+    stability: [process.env.STABILITY_KEY_1, process.env.STABILITY_KEY_2],
+    runway: [process.env.RUNWAY_KEY_1],
+    suno: [process.env.SUNO_KEY_1],
+    mistral: [process.env.MISTRAL_KEY_1],
+    xai: [process.env.XAI_KEY_1],
+    deepseek: [process.env.DEEPSEEK_KEY_1],
+    together: [process.env.TOGETHER_KEY_1],
+    amazon: [process.env.AMAZON_KEY_1],
+    perplexity: [process.env.PERPLEXITY_KEY_1],
+    vercel: [process.env.VERCEL_KEY_1],
+    midjourney: [process.env.MIDJOURNEY_KEY_1],
+    morph: [process.env.MORPH_KEY_1],
   };
 
   Object.entries(musartyKeys).forEach(([provider, keys]) => {
