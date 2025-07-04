@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -248,9 +249,15 @@ export default function Settings() {
               <span>AI Provider Configuration</span>
             </CardTitle>
             <CardDescription>
-              🔒 <strong>100% Secure:</strong> API keys are encrypted and never
-              displayed. Only enter keys to add/update them. Your hacker grandma
-              can't see them! Keys are masked and stored securely on the server.
+              🔒 <strong>100% Secure:</strong> Configure your AI providers in
+              the dedicated{" "}
+              <Link
+                to="/providers"
+                className="text-fire-orange hover:underline"
+              >
+                AI Arena →
+              </Link>{" "}
+              where each AI gets its own beautiful card!
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
