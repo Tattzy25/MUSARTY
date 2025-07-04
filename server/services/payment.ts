@@ -1,4 +1,5 @@
-import { PayPalApi, core } from "@paypal/paypal-server-sdk";
+import pkg from "@paypal/paypal-server-sdk";
+const { PayPalApi, core } = pkg;
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = process.env;
 
