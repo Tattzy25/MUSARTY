@@ -1,0 +1,693 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Futuristic AI Theme
+   * HSL color values for dark futuristic design
+  */
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 45 65% 52%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 45 65% 52%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 45 65% 52%;
+    --input: 45 65% 52%;
+    --ring: 45 65% 52%;
+    --radius: 0.5rem;
+
+    /* INSANE AI card gradients for tattty.com */
+    --electric-orange: 25 100% 65%; /* #FF8833 */
+    --blazing-red: 15 100% 55%; /* #FF4000 */
+    --electric-pink: 320 100% 60%; /* #FF1A9F */
+    --neon-purple: 258 100% 70%; /* #8B5CF6 */
+    --fire-orange: 20 100% 60%; /* Replace blue with fire orange */
+    --electric-yellow: 45 100% 60%; /* #FFAA1A */
+    --fire-orange: 25 100% 60%;
+    --fire-red: 15 100% 50%;
+    --fire-yellow: 35 100% 55%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    /* Enhanced glass effect for dark mode */
+    --glass-bg: 240 10% 3.9%;
+    --glass-border: 240 3.7% 25.9%;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 200 100% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 200 100% 50%;
+
+    --fire-orange: 25 100% 60%;
+    --neon-purple: 260 100% 50%;
+    --neon-green: 150 100% 40%;
+    --neon-pink: 320 100% 60%;
+    --blazing-orange: 20 100% 65%;
+    --cyber-purple: 280 100% 55%;
+    --matrix-green: 120 100% 35%;
+
+    --glass-bg: 0 0% 98%;
+    --glass-border: 0 0% 90%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(
+        circle at 20% 50%,
+        hsl(var(--primary) / 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        hsl(var(--primary) / 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        hsl(var(--primary) / 0.08) 0%,
+        transparent 50%
+      );
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-card/60 backdrop-blur-xl border border-primary/30;
+    box-shadow: 0 8px 32px 0 rgba(230, 68, 17, 1);
+  }
+
+  .glass-strong {
+    @apply bg-card/80 backdrop-blur-2xl border border-primary/50;
+    box-shadow: 0 12px 40px 0 rgba(230, 68, 17, 0.5);
+  }
+
+  .neon-glow {
+    box-shadow:
+      0 0 20px hsl(var(--primary) / 0.3),
+      0 0 40px hsl(var(--primary) / 0.2),
+      0 0 60px hsl(var(--primary) / 0.1);
+  }
+
+  .neon-border {
+    @apply border border-primary/50;
+    box-shadow:
+      0 0 10px hsl(var(--primary) / 0.3),
+      inset 0 0 10px hsl(var(--primary) / 0.1);
+  }
+
+  .cyber-grid {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .holographic {
+    background: linear-gradient(
+      45deg,
+      hsl(var(--electric-orange) / 0.2),
+      hsl(var(--electric-pink) / 0.2),
+      hsl(var(--neon-purple) / 0.2),
+      hsl(var(--fire-orange) / 0.2),
+      hsl(var(--electric-yellow) / 0.2)
+    );
+    background-size: 400% 400%;
+    animation: holographic 6s ease-in-out infinite;
+  }
+
+  @keyframes holographic {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    }
+    to {
+      box-shadow: 0 0 30px hsl(var(--primary) / 0.6);
+    }
+  }
+
+  /* CYBER SECURITY LOCKED CARDS - DO NOT MODIFY */
+  .cyber-card-container .container {
+    position: relative;
+    width: 160px;
+    height: 220px;
+    transition: 200ms;
+    cursor: pointer;
+    /* SECURITY LOCK - CARDS CANNOT MOVE */
+    transform-origin: center center;
+    will-change: transform;
+    contain: layout style paint;
+  }
+
+  .cyber-card-container .container:active {
+    width: 150px;
+    height: 210px;
+  }
+
+  .cyber-card-container #card {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    transition: 700ms;
+    background: linear-gradient(45deg, #1a1a1a, #262626);
+    border: 2px solid hsl(var(--primary) / 0.3);
+    overflow: hidden;
+    box-shadow:
+      0 0 20px hsl(var(--primary) / 0.2),
+      inset 0 0 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .cyber-card-container .active-card {
+    border: 2px solid hsl(var(--primary) / 0.8) !important;
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.6) !important;
+    transform: scale(1.05) !important;
+  }
+
+  .cyber-card-container .card-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cyber-card-container .icon-container {
+    position: relative;
+    z-index: 10;
+    margin-top: 20px;
+  }
+
+  .cyber-card-container .card-icon {
+    width: 32px;
+    height: 32px;
+    color: hsl(var(--primary));
+    filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.5));
+  }
+
+  .cyber-card-container .title {
+    position: relative;
+    z-index: 10;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-align: center;
+    background: linear-gradient(
+      45deg,
+      hsl(var(--primary)),
+      hsl(var(--electric-orange))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px hsl(var(--primary) / 0.3));
+    margin: 10px 0;
+  }
+
+  .cyber-card-container .subtitle {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+  }
+
+  .cyber-card-container .description {
+    color: hsl(var(--primary) / 0.8);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .cyber-card-container .glowing-elements {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .cyber-card-container .glow-1,
+  .cyber-card-container .glow-2,
+  .cyber-card-container .glow-3 {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      hsl(var(--primary) / 0.3) 0%,
+      hsl(var(--primary) / 0) 70%
+    );
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cyber-card-container .glow-1 {
+    top: -15px;
+    left: -15px;
+  }
+  .cyber-card-container .glow-2 {
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+  }
+  .cyber-card-container .glow-3 {
+    bottom: -15px;
+    left: 30%;
+  }
+
+  .cyber-card-container .card-particles span {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: hsl(var(--primary));
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Hover effects */
+  .cyber-card-container .tracker:hover ~ #card .glowing-elements div {
+    opacity: 1;
+  }
+
+  .cyber-card-container .tracker:hover ~ #card .card-particles span {
+    animation: particleFloat 2s infinite;
+  }
+
+  @keyframes particleFloat {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(calc(var(--x, 0) * 20px), calc(var(--y, 0) * 20px));
+      opacity: 0;
+    }
+  }
+
+  /* Particle positions */
+  .cyber-card-container .card-particles span:nth-child(1) {
+    --x: 1;
+    --y: -1;
+    top: 40%;
+    left: 20%;
+  }
+  .cyber-card-container .card-particles span:nth-child(2) {
+    --x: -1;
+    --y: -1;
+    top: 60%;
+    right: 20%;
+  }
+  .cyber-card-container .card-particles span:nth-child(3) {
+    --x: 0.5;
+    --y: 1;
+    top: 20%;
+    left: 40%;
+  }
+  .cyber-card-container .card-particles span:nth-child(4) {
+    --x: -0.5;
+    --y: 1;
+    top: 80%;
+    right: 40%;
+  }
+  .cyber-card-container .card-particles span:nth-child(5) {
+    --x: 1;
+    --y: 0.5;
+    top: 30%;
+    left: 60%;
+  }
+  .cyber-card-container .card-particles span:nth-child(6) {
+    --x: -1;
+    --y: 0.5;
+    top: 70%;
+    right: 60%;
+  }
+
+  .cyber-card-container #card::before {
+    content: "";
+    background: radial-gradient(
+      circle at center,
+      hsl(var(--primary) / 0.1) 0%,
+      hsl(var(--electric-orange) / 0.05) 50%,
+      transparent 100%
+    );
+    filter: blur(20px);
+    opacity: 0;
+    width: 150%;
+    height: 150%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+
+  .cyber-card-container .tracker:hover ~ #card::before {
+    opacity: 1;
+  }
+
+  .cyber-card-container .tracker {
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cyber-card-container .tracker:hover {
+    cursor: pointer;
+  }
+
+  .cyber-card-container .tracker:hover ~ #card {
+    transition: 300ms;
+    filter: brightness(1.2);
+    transform: translateY(-5px);
+  }
+
+  .cyber-card-container .canvas {
+    perspective: 800px;
+    inset: 0;
+    z-index: 200;
+    position: absolute;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+  }
+
+  .cyber-card-container .tr-1:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(15deg) rotateY(-8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-2:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(15deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-3:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(15deg) rotateY(8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-4:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(0deg) rotateY(-8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-5:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-6:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(0deg) rotateY(8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-7:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(-15deg) rotateY(-8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-8:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(-15deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .tr-9:hover ~ #card {
+    transition: 125ms ease-in-out;
+    transform: rotateX(-15deg) rotateY(8deg) rotateZ(0deg);
+  }
+
+  .cyber-card-container .noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .cyber-card-container .card-glare {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      125deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 45%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 55%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+
+  .cyber-card-container .cyber-lines span {
+    position: absolute;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / 0.3),
+      transparent
+    );
+  }
+
+  .cyber-card-container .cyber-lines span:nth-child(1) {
+    top: 20%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: lineGrow 3s linear infinite;
+  }
+
+  .cyber-card-container .cyber-lines span:nth-child(2) {
+    top: 40%;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: right;
+    animation: lineGrow 3s linear infinite 1s;
+  }
+
+  .cyber-card-container .cyber-lines span:nth-child(3) {
+    top: 60%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: lineGrow 3s linear infinite 2s;
+  }
+
+  .cyber-card-container .cyber-lines span:nth-child(4) {
+    top: 80%;
+    right: 0;
+    width: 100%;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: right;
+    animation: lineGrow 3s linear infinite 1.5s;
+  }
+
+  .cyber-card-container .corner-elements span {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid hsl(var(--primary) / 0.3);
+  }
+
+  .cyber-card-container .corner-elements span:nth-child(1) {
+    top: 8px;
+    left: 8px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .cyber-card-container .corner-elements span:nth-child(2) {
+    top: 8px;
+    right: 8px;
+    border-left: 0;
+    border-bottom: 0;
+  }
+
+  .cyber-card-container .corner-elements span:nth-child(3) {
+    bottom: 8px;
+    left: 8px;
+    border-right: 0;
+    border-top: 0;
+  }
+
+  .cyber-card-container .corner-elements span:nth-child(4) {
+    bottom: 8px;
+    right: 8px;
+    border-left: 0;
+    border-top: 0;
+  }
+
+  /* CYBER SECURITY LOCKS */
+  .cyber-card-container .corner-elements::before {
+    content: "🔒";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 8px;
+    color: hsl(var(--primary) / 0.6);
+    z-index: 100;
+    pointer-events: none;
+    filter: drop-shadow(0 0 3px hsl(var(--primary) / 0.8));
+  }
+
+  .cyber-card-container .corner-elements::after {
+    content: "SECURED";
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    font-size: 6px;
+    color: hsl(var(--primary) / 0.4);
+    z-index: 100;
+    pointer-events: none;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+
+  .cyber-card-container .scan-line {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      hsl(var(--primary) / 0.2),
+      transparent
+    );
+    transform: translateY(-100%);
+    animation: scanMove 3s linear infinite;
+  }
+
+  @keyframes lineGrow {
+    0% {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes scanMove {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  .cyber-card-container #card:hover .card-glare {
+    opacity: 1;
+  }
+
+  .cyber-card-container .corner-elements span {
+    transition: all 0.3s ease;
+  }
+
+  .cyber-card-container #card:hover .corner-elements span {
+    border-color: hsl(var(--primary) / 0.8);
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+  }
+}
