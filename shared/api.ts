@@ -10,3 +10,78 @@
 export interface DemoResponse {
   message: string;
 }
+
+/**
+ * Convert API types
+ */
+export interface ConvertRequest {
+  files: Array<{
+    data: string; // base64 data
+    name: string;
+    type: string;
+  }>;
+  settings?: {
+    aiModel?: string;
+    codeStyle?: string;
+    generateTypeScript?: boolean;
+    includeTailwind?: boolean;
+    responsiveDesign?: boolean;
+    accessibilityFeatures?: boolean;
+    performanceOptimization?: boolean;
+    includeComments?: boolean;
+    qualityLevel?: number;
+  };
+}
+
+export interface ConvertResponse {
+  success: boolean;
+  data?: {
+    results: Array<{
+      react: string;
+      html: string;
+      css: string;
+      fileName: string;
+      originalFileName: string;
+    }>;
+    processingTime: number;
+    totalFiles: number;
+  };
+  error?: string;
+}
+
+/**
+ * Settings API types
+ */
+export interface SettingsRequest {
+  openaiApiKey?: string;
+  aiModel?: string;
+  codeStyle?: string;
+  optimization?: string;
+  includeComments?: boolean;
+  generateTypeScript?: boolean;
+  includeTailwind?: boolean;
+  responsiveDesign?: boolean;
+  accessibilityFeatures?: boolean;
+  performanceOptimization?: boolean;
+  notifications?: boolean;
+  qualityLevel?: number;
+  processingSpeed?: number;
+}
+
+export interface SettingsResponse {
+  success: boolean;
+  data?: SettingsRequest & {
+    openaiApiKey?: string; // will be "***configured***" if set
+  };
+  error?: string;
+}
+
+export interface ApiKeyTestRequest {
+  apiKey: string;
+}
+
+export interface ApiKeyTestResponse {
+  success: boolean;
+  valid?: boolean;
+  error?: string;
+}
