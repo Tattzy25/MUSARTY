@@ -51,7 +51,7 @@ export default function FileUpload({
       <input {...getInputProps()} />
 
       {/* Background Effects */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-neon-blue/5 via-neon-purple/5 to-neon-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       {/* Cyber scan line effect */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
