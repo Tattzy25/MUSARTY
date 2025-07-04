@@ -890,7 +890,10 @@ export default function Providers() {
           </div>
 
           <div>
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
+            <h1
+              className="bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent"
+              style={{ font: "700 60px/60px Audiowide, display" }}
+            >
               AI Champions Arena
             </h1>
             <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
