@@ -25,15 +25,22 @@ export const handleGetSettings: RequestHandler = async (req, res) => {
   try {
     const settings = getSettings();
 
-    // Don't send the API key back to the client for security
+    // Don't send the API keys back to the client for security
     const safeSettings = { ...settings };
-    delete safeSettings.openaiApiKey;
+    delete safeSettings.groqApiKey;
+    delete safeSettings.anthropicApiKey;
+    delete safeSettings.geminiApiKey;
 
     const response: SettingsResponse = {
       success: true,
       data: {
         ...safeSettings,
-        openaiApiKey: settings.openaiApiKey ? "***configured***" : undefined,
+        groqApiKey: settings.groqApiKey ? "***configured***" : undefined,
+        anthropicApiKey: settings.anthropicApiKey
+          ? "***configured***"
+          : undefined,
+        geminiApiKey: settings.geminiApiKey ? "***configured***" : undefined,
+        availableProviders: AI_PROVIDERS,
       },
     };
 
@@ -52,31 +59,49 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
   try {
     const validatedSettings = SettingsSchema.partial().parse(req.body);
 
-    // If API key is being updated, validate it
-    if (validatedSettings.openaiApiKey) {
-      const isValid = await validateApiKey(validatedSettings.openaiApiKey);
-      if (!isValid) {
-        return res.status(400).json({
-          success: false,
-          error: "Invalid OpenAI API key",
-        } as SettingsResponse);
-      }
+    // Validate API keys if being updated
+    const apiKeyUpdates = [
+      "groqApiKey",
+      "anthropicApiKey",
+      "geminiApiKey",
+    ] as const;
 
-      // Initialize OpenAI with the new key
-      initializeOpenAI(validatedSettings.openaiApiKey);
+    for (const keyField of apiKeyUpdates) {
+      if (validatedSettings[keyField]) {
+        const provider = keyField.replace("ApiKey", "");
+        const isValid = await validateApiKey(
+          provider,
+          validatedSettings[keyField]!,
+        );
+        if (!isValid) {
+          return res.status(400).json({
+            success: false,
+            error: `Invalid ${provider} API key`,
+          } as SettingsResponse);
+        }
+
+        // Initialize provider with the new key
+        initializeProvider(provider, validatedSettings[keyField]!);
+      }
     }
 
     const updatedSettings = updateSettings(validatedSettings);
 
-    // Don't send the API key back to the client
+    // Don't send the API keys back to the client
     const safeSettings = { ...updatedSettings };
-    delete safeSettings.openaiApiKey;
+    delete safeSettings.groqApiKey;
+    delete safeSettings.anthropicApiKey;
+    delete safeSettings.geminiApiKey;
 
     const response: SettingsResponse = {
       success: true,
       data: {
         ...safeSettings,
-        openaiApiKey: updatedSettings.openaiApiKey
+        groqApiKey: updatedSettings.groqApiKey ? "***configured***" : undefined,
+        anthropicApiKey: updatedSettings.anthropicApiKey
+          ? "***configured***"
+          : undefined,
+        geminiApiKey: updatedSettings.geminiApiKey
           ? "***configured***"
           : undefined,
       },
@@ -96,9 +121,14 @@ export const handleUpdateSettings: RequestHandler = async (req, res) => {
 // POST /api/settings/test-api-key
 export const handleTestApiKey: RequestHandler = async (req, res) => {
   try {
-    const { apiKey } = z.object({ apiKey: z.string() }).parse(req.body);
+    const { provider, apiKey } = z
+      .object({
+        provider: z.string(),
+        apiKey: z.string(),
+      })
+      .parse(req.body);
 
-    const isValid = await validateApiKey(apiKey);
+    const isValid = await validateApiKey(provider, apiKey);
 
     const response: ApiKeyTestResponse = {
       success: true,
