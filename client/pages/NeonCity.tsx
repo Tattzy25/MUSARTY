@@ -15,6 +15,9 @@ import {
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import MusicGenerator from "@/components/MusicGenerator";
+import CodeGenerator from "@/components/CodeGenerator";
+import ImageGenerator from "@/components/ImageGenerator";
 
 type ContentMode = "text" | "image" | "video" | "music" | "code";
 
