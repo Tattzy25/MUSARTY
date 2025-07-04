@@ -119,8 +119,16 @@ export default function NeonCity() {
         {/* Compact Header */}
         <div className="text-center space-y-6 py-8">
           <div>
-            <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-orange-400 via-red-500 via-pink-500 via-purple-500 to-primary bg-clip-text text-transparent animate-pulse">
-              Neon City
+            <h1
+              className="text-6xl md:text-8xl font-black tracking-[0.2em] bg-gradient-to-r from-primary via-orange-400 via-red-500 via-pink-400 via-purple-500 to-primary bg-clip-text text-transparent animate-pulse drop-shadow-[0_0_30px_rgba(212,172,53,0.8)]"
+              style={{
+                fontFamily:
+                  'Impact, "Franklin Gothic Bold", "Helvetica Inserat", "Bitstream Vera Sans Bold", sans-serif',
+                letterSpacing: "0.15em",
+                fontStretch: "ultra-expanded",
+              }}
+            >
+              NEON CITY
             </h1>
             <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
               🌃 **Your AI Content Generation Hub** 🌃
