@@ -5,23 +5,13 @@ let groq: Groq | null = null;
 
 function getGroq() {
   if (!groq) {
-    // Try user's environment key first
-    let apiKey = process.env.GROQ_API_KEY;
-
-    // Fallback to vault key if no environment key
-    if (!apiKey) {
-      const vaultResult = getSmartKey("groq", 100);
-      apiKey = vaultResult.key;
-    }
-
-    if (!apiKey) {
+    if (!process.env.GROQ_API_KEY) {
       throw new Error(
-        "No GROQ API key available. Add GROQ_API_KEY environment variable or keys to vault.",
+        "GROQ_API_KEY environment variable is required. Please add your API key in Settings.",
       );
     }
-
     groq = new Groq({
-      apiKey: apiKey,
+      apiKey: process.env.GROQ_API_KEY,
     });
   }
   return groq;
