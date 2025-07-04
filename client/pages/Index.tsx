@@ -171,7 +171,7 @@ export default function Index() {
 
       <div className="max-w-7xl mx-auto p-6">
         {/* Hero Section */}
-        {!selectedFile && !generatedCode && (
+        {selectedFiles.length === 0 && generatedCodes.length === 0 && (
           <div className="text-center py-12 space-y-8">
             <div className="space-y-4">
               <Badge
