@@ -173,8 +173,10 @@ export const handleGetSubscription: RequestHandler = async (req, res) => {
     if (email) {
       user = await Database.getUserByEmail(email as string);
     } else {
-      // In a real app, you'd validate the user ID properly
-      user = await Database.getUserByEmail("user@example.com"); // Placeholder
+      return res.status(400).json({
+        success: false,
+        error: "Email parameter is required",
+      });
     }
 
     if (!user) {

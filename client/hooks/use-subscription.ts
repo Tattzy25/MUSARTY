@@ -11,8 +11,8 @@ interface UseSubscriptionReturn {
   refreshSubscription: () => Promise<void>;
 }
 
-// Mock user ID - in production, get from auth context
-const MOCK_USER_ID = "user_123";
+// Get user ID from auth context
+import { useUser } from "./use-auth";
 
 export function useSubscription(): UseSubscriptionReturn {
   const [subscription, setSubscription] = useState<UserSubscription | null>(
@@ -33,8 +33,12 @@ export function useSubscription(): UseSubscriptionReturn {
         setSubscription(parsed);
       }
 
-      // Fetch from API
-      const response = await fetch(`/api/subscription/${MOCK_USER_ID}`);
+      // Fetch from API using user email
+      const { user } = useUser();
+      const email = user?.email || "guest@musarty.com";
+      const response = await fetch(
+        `/api/subscription/current?email=${encodeURIComponent(email)}`,
+      );
       const result = await response.json();
 
       if (result.success && result.data) {
