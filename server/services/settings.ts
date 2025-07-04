@@ -3,6 +3,7 @@ import { z } from "zod";
 export const SettingsSchema = z.object({
   // API Keys for different providers
   groqApiKey: z.string().optional(),
+  v0ApiKey: z.string().optional(),
   openaiApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
 
@@ -54,6 +55,8 @@ export function getApiKey(provider: string): string | undefined {
   switch (provider) {
     case "groq":
       return appSettings.groqApiKey;
+    case "v0":
+      return appSettings.v0ApiKey;
     case "openai":
       return appSettings.openaiApiKey;
     case "gemini":
@@ -75,6 +78,7 @@ export function getCurrentProvider(): string {
 export function getAllApiKeys(): Record<string, string | undefined> {
   return {
     groq: appSettings.groqApiKey,
+    v0: appSettings.v0ApiKey,
     openai: appSettings.openaiApiKey,
     gemini: appSettings.geminiApiKey,
   };
