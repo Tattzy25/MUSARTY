@@ -436,7 +436,7 @@ export default function Settings() {
         <Card className="glass-strong neon-border">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Cpu className="w-5 h-5 text-neon-blue" />
+              <Cpu className="w-5 h-5 text-fire-orange" />
               <span>AI Model Configuration</span>
             </CardTitle>
             <CardDescription>
@@ -451,43 +451,88 @@ export default function Settings() {
                   value={settings.aiModel}
                   onValueChange={(value) => updateSetting("aiModel", value)}
                 >
-                  <SelectTrigger className="glass">
+                  <SelectTrigger className="glass max-w-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-strong">
-                    <SelectItem value="gpt-4-vision-preview">
-                      <div className="flex items-center space-x-2">
-                        <Badge
-                          variant="outline"
-                          className="text-neon-blue border-neon-blue"
-                        >
-                          Premium
-                        </Badge>
-                        <span>GPT-4 Vision Preview (Recommended)</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="gpt-4-turbo">
-                      <div className="flex items-center space-x-2">
-                        <Badge
-                          variant="outline"
-                          className="text-neon-purple border-neon-purple"
-                        >
-                          Fast
-                        </Badge>
-                        <span>GPT-4 Turbo</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="gpt-4">
-                      <div className="flex items-center space-x-2">
-                        <Badge
-                          variant="outline"
-                          className="text-neon-green border-neon-green"
-                        >
-                          Standard
-                        </Badge>
-                        <span>GPT-4</span>
-                      </div>
-                    </SelectItem>
+                    {settings.aiProvider === "groq" && (
+                      <>
+                        <SelectItem value="llama-3.2-90b-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              Premium
+                            </Badge>
+                            <span>Llama 3.2 90B Vision (Recommended)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="llama-3.2-11b-vision-preview">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Fast
+                            </Badge>
+                            <span>Llama 3.2 11B Vision</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
+                    {settings.aiProvider === "anthropic" && (
+                      <>
+                        <SelectItem value="claude-3-5-sonnet-20241022">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              Premium
+                            </Badge>
+                            <span>Claude 3.5 Sonnet</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="claude-3-haiku-20240307">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Fast
+                            </Badge>
+                            <span>Claude 3 Haiku</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
+                    {settings.aiProvider === "gemini" && (
+                      <>
+                        <SelectItem value="gemini-1.5-pro">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              Premium
+                            </Badge>
+                            <span>Gemini 1.5 Pro</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="gemini-1.5-flash">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Fast
+                            </Badge>
+                            <span>Gemini 1.5 Flash</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
