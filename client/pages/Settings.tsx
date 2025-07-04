@@ -38,7 +38,10 @@ import {
 } from "lucide-react";
 
 interface AppSettings {
-  openaiApiKey?: string;
+  groqApiKey?: string;
+  anthropicApiKey?: string;
+  geminiApiKey?: string;
+  aiProvider: string;
   aiModel: string;
   codeStyle: string;
   optimization: string;
@@ -51,11 +54,13 @@ interface AppSettings {
   notifications: boolean;
   qualityLevel: number;
   processingSpeed: number;
+  availableProviders?: any;
 }
 
 export default function Settings() {
   const [settings, setSettings] = useState<AppSettings>({
-    aiModel: "gpt-4-vision-preview",
+    aiProvider: "groq",
+    aiModel: "llama-3.2-90b-vision-preview",
     codeStyle: "modern",
     optimization: "balanced",
     includeComments: true,
@@ -69,12 +74,24 @@ export default function Settings() {
     processingSpeed: 70,
   });
 
-  const [apiKey, setApiKey] = useState("");
-  const [showApiKey, setShowApiKey] = useState(false);
-  const [isTestingApiKey, setIsTestingApiKey] = useState(false);
-  const [apiKeyStatus, setApiKeyStatus] = useState<"valid" | "invalid" | null>(
-    null,
-  );
+  const [apiKeys, setApiKeys] = useState<Record<string, string>>({
+    groq: "",
+    anthropic: "",
+    gemini: "",
+  });
+  const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({
+    groq: false,
+    anthropic: false,
+    gemini: false,
+  });
+  const [isTestingApiKey, setIsTestingApiKey] = useState<string | null>(null);
+  const [apiKeyStatuses, setApiKeyStatuses] = useState<
+    Record<string, "valid" | "invalid" | null>
+  >({
+    groq: null,
+    anthropic: null,
+    gemini: null,
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -88,31 +105,42 @@ export default function Settings() {
       const data = await response.json();
       if (data.success) {
         setSettings(data.data);
-        if (data.data.openaiApiKey === "***configured***") {
-          setApiKeyStatus("valid");
-        }
+        // Update API key statuses based on configured keys
+        const newStatuses: Record<string, "valid" | "invalid" | null> = {};
+        Object.keys(apiKeys).forEach((provider) => {
+          const keyField = `${provider}ApiKey` as keyof AppSettings;
+          newStatuses[provider] =
+            data.data[keyField] === "***configured***" ? "valid" : null;
+        });
+        setApiKeyStatuses(newStatuses);
       }
     } catch (error) {
       console.error("Failed to fetch settings:", error);
     }
   };
 
-  const testApiKey = async (key: string) => {
+  const testApiKey = async (provider: string, key: string) => {
     if (!key.trim()) return;
 
-    setIsTestingApiKey(true);
+    setIsTestingApiKey(provider);
     try {
       const response = await fetch("/api/settings/test-api-key", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey: key }),
+        body: JSON.stringify({ provider, apiKey: key }),
       });
       const data = await response.json();
-      setApiKeyStatus(data.valid ? "valid" : "invalid");
+      setApiKeyStatuses((prev) => ({
+        ...prev,
+        [provider]: data.valid ? "valid" : "invalid",
+      }));
     } catch (error) {
-      setApiKeyStatus("invalid");
+      setApiKeyStatuses((prev) => ({
+        ...prev,
+        [provider]: "invalid",
+      }));
     } finally {
-      setIsTestingApiKey(false);
+      setIsTestingApiKey(null);
     }
   };
 
@@ -124,9 +152,14 @@ export default function Settings() {
     setIsSaving(true);
     try {
       const settingsToSave = { ...settings };
-      if (apiKey.trim()) {
-        settingsToSave.openaiApiKey = apiKey.trim();
-      }
+
+      // Add API keys that have been entered
+      Object.entries(apiKeys).forEach(([provider, key]) => {
+        if (key.trim()) {
+          const keyField = `${provider}ApiKey` as keyof AppSettings;
+          settingsToSave[keyField] = key.trim() as any;
+        }
+      });
 
       const response = await fetch("/api/settings", {
         method: "POST",
@@ -138,10 +171,14 @@ export default function Settings() {
       if (data.success) {
         setLastSaved(new Date());
         setSettings(data.data);
-        if (apiKey.trim()) {
-          setApiKeyStatus("valid");
-          setApiKey("");
-        }
+
+        // Update statuses and clear entered keys
+        Object.keys(apiKeys).forEach((provider) => {
+          if (apiKeys[provider].trim()) {
+            setApiKeyStatuses((prev) => ({ ...prev, [provider]: "valid" }));
+            setApiKeys((prev) => ({ ...prev, [provider]: "" }));
+          }
+        });
       } else {
         throw new Error(data.error || "Failed to save settings");
       }
@@ -158,7 +195,8 @@ export default function Settings() {
 
   const resetSettings = () => {
     setSettings({
-      aiModel: "gpt-4-vision-preview",
+      aiProvider: "groq",
+      aiModel: "llama-3.2-90b-vision-preview",
       codeStyle: "modern",
       optimization: "balanced",
       includeComments: true,
@@ -171,8 +209,8 @@ export default function Settings() {
       qualityLevel: 85,
       processingSpeed: 70,
     });
-    setApiKey("");
-    setApiKeyStatus(null);
+    setApiKeys({ groq: "", anthropic: "", gemini: "" });
+    setApiKeyStatuses({ groq: null, anthropic: null, gemini: null });
   };
 
   return (
