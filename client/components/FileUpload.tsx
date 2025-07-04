@@ -4,23 +4,25 @@ import { Upload, Image, FileText, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FileUploadProps {
-  onFileSelect: (file: File) => void;
+  onFileSelect: (files: File[]) => void;
   isProcessing?: boolean;
+  maxFiles?: number;
 }
 
 export default function FileUpload({
   onFileSelect,
   isProcessing,
+  maxFiles = 5,
 }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
-        onFileSelect(acceptedFiles[0]);
+        onFileSelect(acceptedFiles.slice(0, maxFiles));
       }
     },
-    [onFileSelect],
+    [onFileSelect, maxFiles],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -30,7 +32,8 @@ export default function FileUpload({
       "image/jpeg": [".jpg", ".jpeg"],
       "image/svg+xml": [".svg"],
     },
-    multiple: false,
+    multiple: maxFiles > 1,
+    maxFiles,
     disabled: isProcessing,
   });
 
@@ -71,12 +74,16 @@ export default function FileUpload({
         {/* Title */}
         <div>
           <h3 className="text-2xl font-bold bg-gradient-to-r from-neon-blue via-neon-purple to-neon-green bg-clip-text text-transparent">
-            {isProcessing ? "Processing Image..." : "Drop Your Image Here"}
+            {isProcessing
+              ? "Processing Images..."
+              : maxFiles > 1
+                ? "Drop Your Images Here"
+                : "Drop Your Image Here"}
           </h3>
           <p className="text-muted-foreground mt-2">
             {isProcessing
-              ? "AI is analyzing and converting your image"
-              : "Upload PNG, JPG, or SVG files to convert to React code"}
+              ? "AI is analyzing and converting your images"
+              : `Upload PNG, JPG, or SVG files to convert to React code${maxFiles > 1 ? ` (up to ${maxFiles} files)` : ""}`}
           </p>
         </div>
 
