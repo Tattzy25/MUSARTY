@@ -7,6 +7,7 @@ import {
   Trophy,
   Sparkles,
   Crown,
+  Grid3X3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,12 @@ export default function Navigation() {
       href: "/neon-city",
       icon: Sparkles,
       isActive: location.pathname === "/neon-city",
+    },
+    {
+      name: "Gridwave",
+      href: "/gridwave",
+      icon: Grid3X3,
+      isActive: location.pathname === "/gridwave",
     },
     {
       name: "AI Arena",
