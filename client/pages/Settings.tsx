@@ -157,13 +157,22 @@ export default function Settings() {
     try {
       const settingsToSave = { ...settings };
 
-      // Add API keys that have been entered
-      Object.entries(apiKeys).forEach(([provider, key]) => {
-        if (key.trim()) {
-          const keyField = `${provider}ApiKey` as keyof AppSettings;
-          settingsToSave[keyField] = key.trim() as any;
+      // Add primary API key if entered
+      if (apiKeys.primary?.trim()) {
+        // Auto-detect provider and save to appropriate field
+        const key = apiKeys.primary.trim();
+        if (key.startsWith("gsk-")) {
+          settingsToSave.groqApiKey = key;
+        } else if (key.startsWith("sk-ant-")) {
+          // For Anthropic, we'll use openai field as fallback
+          settingsToSave.openaiApiKey = key;
+        } else if (key.startsWith("AIza")) {
+          settingsToSave.geminiApiKey = key;
+        } else {
+          // Default to OpenAI for sk- keys
+          settingsToSave.openaiApiKey = key;
         }
-      });
+      }
 
       const response = await fetch("/api/settings", {
         method: "POST",
