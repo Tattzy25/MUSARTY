@@ -990,11 +990,15 @@ export default function Providers() {
 
                 {/* Subtle Border Glow */}
                 <div
-                  className={cn(
-                    "absolute inset-0 rounded-lg opacity-20 pointer-events-none",
-                    "border-2",
-                    provider.color.replace("from-", "border-").split(" ")[0],
-                  )}
+                  className="absolute inset-0 rounded-lg opacity-20 pointer-events-none border-2"
+                  style={{
+                    border:
+                      provider.id === "suno"
+                        ? "2px solid rgba(229, 86, 11, 1)"
+                        : provider.id === "claude35"
+                          ? "2px solid rgba(210, 112, 17, 1)"
+                          : "2px solid rgba(229, 86, 11, 1)",
+                  }}
                 />
 
                 <CardHeader className="space-y-4">
@@ -1117,7 +1121,7 @@ export default function Providers() {
             From Suno's creative genius to Val Town's coding mastery, from
             Groq's lightning speed to Claude's reasoning depth - the ultimate AI
             battle royale is HERE! Configure your champions and watch the epic
-            contest unfold! 👑⚡
+            contest unfold! 👑���
           </p>
         </div>
       </div>
