@@ -19,6 +19,9 @@ import { cn } from "@/lib/utils";
 import MusicGenerator from "@/components/MusicGenerator";
 import CodeGenerator from "@/components/CodeGenerator";
 import ImageGenerator from "@/components/ImageGenerator";
+import FileUpload from "@/components/FileUpload";
+import CodeViewer from "@/components/CodeViewer";
+import AIProcessor from "@/components/AIProcessor";
 
 type ContentMode = "text" | "image" | "video" | "music" | "code" | "convert";
 
