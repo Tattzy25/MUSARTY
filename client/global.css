@@ -170,13 +170,14 @@
   .holographic {
     background: linear-gradient(
       45deg,
-      hsl(var(--fire-orange) / 0.1),
-      hsl(var(--fire-red) / 0.1),
-      hsl(var(--fire-yellow) / 0.1),
-      hsl(var(--flame-orange) / 0.1)
+      hsl(var(--electric-orange) / 0.2),
+      hsl(var(--electric-pink) / 0.2),
+      hsl(var(--neon-purple) / 0.2),
+      hsl(var(--cyber-blue) / 0.2),
+      hsl(var(--electric-yellow) / 0.2)
     );
     background-size: 400% 400%;
-    animation: holographic 8s ease-in-out infinite;
+    animation: holographic 6s ease-in-out infinite;
   }
 
   @keyframes holographic {
