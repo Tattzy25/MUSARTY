@@ -101,14 +101,16 @@ export default function Settings() {
       const data = await response.json();
       if (data.success) {
         setSettings(data.data);
-        // Update API key statuses based on configured keys
-        const newStatuses: Record<string, "valid" | "invalid" | null> = {};
-        Object.keys(apiKeys).forEach((provider) => {
-          const keyField = `${provider}ApiKey` as keyof AppSettings;
-          newStatuses[provider] =
-            data.data[keyField] === "***configured***" ? "valid" : null;
+        // Update API key status based on configured key
+        const hasConfiguredKey =
+          data.data.openaiApiKey === "***configured***" ||
+          data.data.groqApiKey === "***configured***" ||
+          data.data.geminiApiKey === "***configured***" ||
+          data.data.v0ApiKey === "***configured***";
+
+        setApiKeyStatuses({
+          primary: hasConfiguredKey ? "valid" : null,
         });
-        setApiKeyStatuses(newStatuses);
       }
     } catch (error) {
       console.error("Failed to fetch settings:", error);
