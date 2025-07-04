@@ -112,20 +112,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.warn("User initialization failed:", initError);
       }
 
-      // Handle redirects
-      const pendingPrompt = localStorage.getItem("pending_build_prompt");
-      const redirectAfterAuth = localStorage.getItem("redirect_after_auth");
-
-      if (pendingPrompt && redirectAfterAuth) {
-        localStorage.removeItem("pending_build_prompt");
-        localStorage.removeItem("redirect_after_auth");
-        window.location.href = `${redirectAfterAuth}&prompt=${encodeURIComponent(pendingPrompt)}`;
-      } else if (redirectAfterAuth) {
-        localStorage.removeItem("redirect_after_auth");
-        window.location.href = redirectAfterAuth;
-      } else {
-        window.location.href = "/neon-city";
-      }
+      // Handle redirects - always go to pricing after login
+      localStorage.removeItem("pending_build_prompt");
+      localStorage.removeItem("redirect_after_auth");
+      window.location.href = "/pricing";
     } catch (error) {
       console.error("Login error:", error);
       throw error;
@@ -181,20 +171,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.warn("User initialization failed:", initError);
       }
 
-      // Handle redirects
-      const pendingPrompt = localStorage.getItem("pending_build_prompt");
-      const redirectAfterAuth = localStorage.getItem("redirect_after_auth");
-
-      if (pendingPrompt && redirectAfterAuth) {
-        localStorage.removeItem("pending_build_prompt");
-        localStorage.removeItem("redirect_after_auth");
-        window.location.href = `${redirectAfterAuth}&prompt=${encodeURIComponent(pendingPrompt)}`;
-      } else if (redirectAfterAuth) {
-        localStorage.removeItem("redirect_after_auth");
-        window.location.href = redirectAfterAuth;
-      } else {
-        window.location.href = "/neon-city";
-      }
+      // Handle redirects - always go to pricing after signup
+      localStorage.removeItem("pending_build_prompt");
+      localStorage.removeItem("redirect_after_auth");
+      window.location.href = "/pricing";
     } catch (error) {
       console.error("Signup error:", error);
       throw error;
