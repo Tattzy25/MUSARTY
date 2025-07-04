@@ -2,14 +2,13 @@ import { z } from "zod";
 
 export const SettingsSchema = z.object({
   // API Keys for different providers
-  openaiApiKey: z.string().optional(),
   groqApiKey: z.string().optional(),
-  anthropicApiKey: z.string().optional(),
+  openaiApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
 
   // AI Configuration
-  aiProvider: z.string().default("openai"),
-  aiModel: z.string().default("gpt-4o"),
+  aiProvider: z.string().default("groq"),
+  aiModel: z.string().default("meta-llama/llama-4-scout-17b-16e-instruct"),
   codeStyle: z.string().default("modern"),
   optimization: z.string().default("balanced"),
   includeComments: z.boolean().default(true),
@@ -27,8 +26,8 @@ export type AppSettings = z.infer<typeof SettingsSchema>;
 
 // In-memory storage for settings (in production, use a database)
 let appSettings: AppSettings = {
-  aiProvider: "openai",
-  aiModel: "gpt-4o",
+  aiProvider: "groq",
+  aiModel: "meta-llama/llama-4-scout-17b-16e-instruct",
   codeStyle: "modern",
   optimization: "balanced",
   includeComments: true,
@@ -53,12 +52,10 @@ export function updateSettings(newSettings: Partial<AppSettings>): AppSettings {
 
 export function getApiKey(provider: string): string | undefined {
   switch (provider) {
-    case "openai":
-      return appSettings.openaiApiKey;
     case "groq":
       return appSettings.groqApiKey;
-    case "anthropic":
-      return appSettings.anthropicApiKey;
+    case "openai":
+      return appSettings.openaiApiKey;
     case "gemini":
       return appSettings.geminiApiKey;
     default:
@@ -77,9 +74,8 @@ export function getCurrentProvider(): string {
 
 export function getAllApiKeys(): Record<string, string | undefined> {
   return {
-    openai: appSettings.openaiApiKey,
     groq: appSettings.groqApiKey,
-    anthropic: appSettings.anthropicApiKey,
+    openai: appSettings.openaiApiKey,
     gemini: appSettings.geminiApiKey,
   };
 }
