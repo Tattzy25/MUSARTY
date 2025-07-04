@@ -220,8 +220,8 @@ export default function Settings() {
       qualityLevel: 85,
       processingSpeed: 70,
     });
-    setApiKeys({ groq: "", v0: "", openai: "", gemini: "" });
-    setApiKeyStatuses({ groq: null, v0: null, openai: null, gemini: null });
+    setApiKeys({ primary: "" });
+    setApiKeyStatuses({ primary: null });
   };
 
   return (
