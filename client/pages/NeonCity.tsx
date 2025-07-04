@@ -133,12 +133,8 @@ export default function NeonCity() {
           {/* Security Grid Overlay */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="w-full h-full border border-primary/10 rounded-3xl"></div>
-            <div className="absolute top-2 left-4 text-[8px] text-primary/40 font-mono">
-              SECURE_GRID_LOCK
-            </div>
-            <div className="absolute bottom-2 right-4 text-[8px] text-primary/40 font-mono">
-              ●●●●● ENCRYPTED
-            </div>
+            <div className="absolute top-2 left-4 text-[8px] text-primary/40 font-mono">SECURE_GRID_LOCK</div>
+            <div className="absolute bottom-2 right-4 text-[8px] text-primary/40 font-mono">●●●●● ENCRYPTED</div>
           </div>
           {CONTENT_ZONES.map((zone, index) => {
             const Icon = zone.icon;
@@ -152,10 +148,7 @@ export default function NeonCity() {
                 <div className="absolute -bottom-2 -left-2 text-[6px] text-primary/60 font-mono bg-black/80 px-1 rounded">
                   POS_{index + 1}_LOCK
                 </div>
-                <div
-                  className="container noselect"
-                  onClick={() => setActiveMode(zone.id)}
-                >
+                <div className="container noselect" onClick={() => setActiveMode(zone.id)}>
                   <div className="canvas">
                     <div className="tracker tr-1" />
                     <div className="tracker tr-2" />
@@ -166,17 +159,11 @@ export default function NeonCity() {
                     <div className="tracker tr-7" />
                     <div className="tracker tr-8" />
                     <div className="tracker tr-9" />
-                    <div
-                      id="card"
-                      className={cn(activeMode === zone.id && "active-card")}
-                    >
+                    <div id="card" className={cn(activeMode === zone.id && "active-card")}>
                       <div className="card-content">
                         <div className="card-glare" />
                         <div className="cyber-lines">
-                          <span />
-                          <span />
-                          <span />
-                          <span />
+                          <span /><span /><span /><span />
                         </div>
                         <div className="icon-container">
                           <Icon className="card-icon" />
@@ -188,27 +175,19 @@ export default function NeonCity() {
                           <div className="glow-3" />
                         </div>
                         <div className="subtitle">
-                          <span className="description">
-                            {zone.description}
-                          </span>
+                          <span className="description">{zone.description}</span>
                         </div>
                         <div className="card-particles">
-                          <span />
-                          <span />
-                          <span /> <span />
-                          <span />
-                          <span />
+                          <span /><span /><span /> <span /><span /><span />
                         </div>
                         <div className="corner-elements">
-                          <span />
-                          <span />
-                          <span />
-                          <span />
+                          <span /><span /><span /><span />
                         </div>
                         <div className="scan-line" />
                       </div>
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
             );
@@ -244,18 +223,10 @@ export default function NeonCity() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-8">
                     {CONTENT_ZONES.map((zone) => (
-                      <div
-                        key={zone.id}
-                        className="text-left p-6 bg-black/40 rounded-2xl border border-primary/20"
-                      >
+                      <div key={zone.id} className="text-left p-6 bg-black/40 rounded-2xl border border-primary/20">
                         <div className="flex items-center space-x-3 mb-3">
                           <zone.icon className="w-6 h-6 text-primary" />
-                          <h3
-                            className={cn(
-                              "text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent",
-                              zone.color,
-                            )}
-                          >
+                          <h3 className={cn("text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent", zone.color)}>
                             {zone.name}
                           </h3>
                         </div>
@@ -280,31 +251,17 @@ export default function NeonCity() {
                         ← Back
                       </Button>
                       {(() => {
-                        const zone = CONTENT_ZONES.find(
-                          (z) => z.id === activeMode,
-                        );
+                        const zone = CONTENT_ZONES.find((z) => z.id === activeMode);
                         const Icon = zone?.icon;
                         return (
                           <div className="flex items-center space-x-3">
                             <div className="relative w-12 h-12">
-                              <div
-                                className={cn(
-                                  "absolute inset-0 rounded-lg blur-xl opacity-40",
-                                  zone?.color
-                                    .replace("from-", "bg-")
-                                    .split(" ")[0],
-                                )}
-                              />
+                              <div className={cn("absolute inset-0 rounded-lg blur-xl opacity-40", zone?.color.replace("from-", "bg-").split(" ")[0])} />
                               <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-lg border border-primary/50">
                                 <Icon className="w-6 h-6 text-primary" />
                               </div>
                             </div>
-                            <h2
-                              className={cn(
-                                "text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent",
-                                zone?.color,
-                              )}
-                            >
+                            <h2 className={cn("text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent", zone?.color)}>
                               {zone?.name} Generator
                             </h2>
                           </div>
@@ -329,18 +286,12 @@ export default function NeonCity() {
                     <div className="space-y-6">
                       <div className="space-y-4">
                         <label className="text-xl font-bold text-primary">
-                          {
-                            CONTENT_ZONES.find((z) => z.id === activeMode)
-                              ?.description
-                          }
+                          {CONTENT_ZONES.find((z) => z.id === activeMode)?.description}
                         </label>
                         <Textarea
                           value={prompt}
                           onChange={(e) => setPrompt(e.target.value)}
-                          placeholder={
-                            CONTENT_ZONES.find((z) => z.id === activeMode)
-                              ?.placeholder
-                          }
+                          placeholder={CONTENT_ZONES.find((z) => z.id === activeMode)?.placeholder}
                           className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
                           disabled={isGenerating}
                         />
@@ -359,9 +310,7 @@ export default function NeonCity() {
                         ) : (
                           <>
                             <Sparkles className="w-6 h-6 mr-3" />
-                            Generate{" "}
-                            {activeMode.charAt(0).toUpperCase() +
-                              activeMode.slice(1)}
+                            Generate {activeMode.charAt(0).toUpperCase() + activeMode.slice(1)}
                           </>
                         )}
                       </Button>
@@ -377,12 +326,8 @@ export default function NeonCity() {
                           <div className="text-center space-y-6">
                             <Zap className="w-12 h-12 text-primary animate-spin mx-auto" />
                             <div className="space-y-2">
-                              <p className="text-xl font-bold text-primary">
-                                GROQ Orchestrator Working
-                              </p>
-                              <p className="text-muted-foreground">
-                                Creating your {activeMode} content...
-                              </p>
+                              <p className="text-xl font-bold text-primary">GROQ Orchestrator Working</p>
+                              <p className="text-muted-foreground">Creating your {activeMode} content...</p>
                             </div>
                           </div>
                         ) : result ? (
@@ -391,9 +336,7 @@ export default function NeonCity() {
                           </div>
                         ) : (
                           <div className="text-center text-muted-foreground">
-                            <p className="text-lg">
-                              Your generated content will appear here
-                            </p>
+                            <p className="text-lg">Your generated content will appear here</p>
                           </div>
                         )}
                       </div>
