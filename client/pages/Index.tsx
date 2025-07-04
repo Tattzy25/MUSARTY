@@ -33,26 +33,18 @@ export default function Index() {
   const handleBuildSubmit = async () => {
     if (!buildPrompt.trim()) return;
 
-    // Check if user is logged in
-    if (!user.isSignedIn) {
-      // Redirect to auth with the prompt stored
-      localStorage.setItem("pending_build_prompt", buildPrompt);
-      localStorage.setItem("redirect_after_auth", "/neon-city?mode=code");
-      window.location.href = "/auth";
-      return;
-    }
-
-    // User is logged in, redirect to Neon City with v0 mode
-    window.location.href = `/neon-city?mode=code&prompt=${encodeURIComponent(buildPrompt)}`;
+    // ALWAYS require authentication and payment
+    localStorage.setItem("pending_build_prompt", buildPrompt);
+    localStorage.setItem("redirect_after_auth", "/pricing");
+    window.location.href = "/auth";
+    return;
   };
 
   const handleFeatureClick = (feature: string) => {
-    if (!user.isSignedIn) {
-      localStorage.setItem("redirect_after_auth", `/neon-city?mode=${feature}`);
-      window.location.href = "/auth";
-      return;
-    }
-    window.location.href = `/neon-city?mode=${feature}`;
+    // ALWAYS require authentication and payment
+    localStorage.setItem("redirect_after_auth", "/pricing");
+    window.location.href = "/auth";
+    return;
   };
 
   const features = [
@@ -578,15 +570,14 @@ export default function Index() {
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <Button
                   size="lg"
-                  onClick={() =>
-                    !user.isSignedIn
-                      ? (window.location.href = "/auth")
-                      : (window.location.href = "/neon-city")
-                  }
+                  onClick={() => {
+                    localStorage.setItem("redirect_after_auth", "/pricing");
+                    window.location.href = "/auth";
+                  }}
                   className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold px-8 py-4 text-lg neon-glow"
                 >
                   <Sparkles className="w-6 h-6 mr-2" />
-                  Start Creating Free
+                  Sign Up & Get Started
                 </Button>
                 <Button
                   variant="outline"
