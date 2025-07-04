@@ -186,131 +186,195 @@ export default function NeonCity() {
           })}
         </div>
 
-        {/* Big Hero-Style Workspace */}
-        {activeMode && (
-          // Active Workspace
-          <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Button
-                  variant="outline"
-                  onClick={resetMode}
-                  className="bg-black/80 border-primary/30"
-                >
-                  ← Back to Neon City
-                </Button>
-                <div className="flex items-center space-x-3">
-                  {(() => {
-                    const zone = CONTENT_ZONES.find((z) => z.id === activeMode);
-                    const Icon = zone?.icon;
-                    return (
-                      <>
-                        <div className="relative w-10 h-10">
-                          <div
-                            className={cn(
-                              "absolute inset-0 rounded-lg blur-xl opacity-40",
-                              zone?.color.replace("from-", "bg-").split(" ")[0],
-                            )}
-                          />
-                          <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-lg border border-primary/50">
-                            <Icon className="w-5 h-5 text-primary" />
-                          </div>
-                        </div>
-                        <h2
-                          className={cn(
-                            "text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent",
-                            zone?.color,
-                          )}
-                        >
-                          {zone?.name}
-                        </h2>
-                      </>
-                    );
-                  })()}
-                </div>
-              </div>
+        {/* MASSIVE Hero-Style Content Area */}
+        <div className="relative">
+          {/* Giant SaaS Hero-Style Container */}
+          <Card className="bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_40px_rgba(212,172,53,0.6)] min-h-[600px] rounded-3xl overflow-hidden">
+            {/* Gradient Background Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
 
-              {result && (
-                <Button
-                  onClick={handleDownload}
-                  className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download
-                </Button>
-              )}
-            </div>
-
-            {/* Big Hero-Style Generation Interface */}
-            <Card className="bg-black/95 border border-primary/30 backdrop-blur-xl shadow-[0_0_30px_rgba(212,172,53,0.5)] min-h-[500px]">
-              <CardContent className="p-12 space-y-8">
-                {/* Input */}
-                <div className="space-y-4">
-                  <label className="text-lg font-medium text-primary">
-                    {
-                      CONTENT_ZONES.find((z) => z.id === activeMode)
-                        ?.description
-                    }
-                  </label>
-                  <Textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder={
-                      CONTENT_ZONES.find((z) => z.id === activeMode)
-                        ?.placeholder
-                    }
-                    className="bg-black/60 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-40 text-lg p-6"
-                    disabled={isGenerating}
-                  />
-                </div>
-
-                {/* Generate Button */}
-                <Button
-                  onClick={handleGenerate}
-                  disabled={!prompt.trim() || isGenerating}
-                  className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 h-12 text-lg"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Zap className="w-5 h-5 mr-2 animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      Generate{" "}
-                      {activeMode.charAt(0).toUpperCase() + activeMode.slice(1)}
-                    </>
-                  )}
-                </Button>
-
-                {/* Result Area */}
-                {(result || isGenerating) && (
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-primary">
-                      Result
-                    </label>
-                    <div className="bg-black/60 border border-primary/30 rounded-lg p-6 min-h-[200px]">
-                      {isGenerating ? (
-                        <div className="flex items-center justify-center h-full">
-                          <div className="text-center space-y-4">
-                            <Zap className="w-8 h-8 text-primary animate-spin mx-auto" />
-                            <p className="text-muted-foreground">
-                              GROQ orchestrator is working its magic...
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-white">{result}</div>
-                      )}
+            <CardContent className="relative p-16 space-y-8">
+              {!activeMode ? (
+                // Default State - Show Instructions
+                <div className="text-center space-y-8 py-20">
+                  <div className="relative mx-auto w-24 h-24">
+                    <div className="absolute inset-0 bg-primary/30 rounded-full blur-2xl animate-pulse" />
+                    <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-full border-2 border-primary/50">
+                      <Sparkles className="w-12 h-12 text-primary" />
                     </div>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        )}
+
+                  <div className="space-y-4">
+                    <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-orange-400 to-primary bg-clip-text text-transparent">
+                      Choose Your Creative Mode
+                    </h2>
+                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                      Select one of the modes above to start creating with AI
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-8">
+                    {CONTENT_ZONES.map((zone) => (
+                      <div
+                        key={zone.id}
+                        className="text-left p-6 bg-black/40 rounded-2xl border border-primary/20"
+                      >
+                        <div className="flex items-center space-x-3 mb-3">
+                          <zone.icon className="w-6 h-6 text-primary" />
+                          <h3
+                            className={cn(
+                              "text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent",
+                              zone.color,
+                            )}
+                          >
+                            {zone.name}
+                          </h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {zone.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                // Active Mode - Show Generation Interface
+                <div className="space-y-8">
+                  {/* Mode Header */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        variant="outline"
+                        onClick={resetMode}
+                        className="bg-black/60 border-primary/30 hover:bg-primary/10"
+                      >
+                        ← Back
+                      </Button>
+                      {(() => {
+                        const zone = CONTENT_ZONES.find(
+                          (z) => z.id === activeMode,
+                        );
+                        const Icon = zone?.icon;
+                        return (
+                          <div className="flex items-center space-x-3">
+                            <div className="relative w-12 h-12">
+                              <div
+                                className={cn(
+                                  "absolute inset-0 rounded-lg blur-xl opacity-40",
+                                  zone?.color
+                                    .replace("from-", "bg-")
+                                    .split(" ")[0],
+                                )}
+                              />
+                              <div className="relative flex items-center justify-center w-full h-full bg-black/90 rounded-lg border border-primary/50">
+                                <Icon className="w-6 h-6 text-primary" />
+                              </div>
+                            </div>
+                            <h2
+                              className={cn(
+                                "text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent",
+                                zone?.color,
+                              )}
+                            >
+                              {zone?.name} Generator
+                            </h2>
+                          </div>
+                        );
+                      })()}
+                    </div>
+
+                    {result && (
+                      <Button
+                        onClick={handleDownload}
+                        className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50"
+                      >
+                        <Download className="w-5 h-5 mr-2" />
+                        Download
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Generation Interface */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[400px]">
+                    {/* Input Side */}
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <label className="text-xl font-bold text-primary">
+                          {
+                            CONTENT_ZONES.find((z) => z.id === activeMode)
+                              ?.description
+                          }
+                        </label>
+                        <Textarea
+                          value={prompt}
+                          onChange={(e) => setPrompt(e.target.value)}
+                          placeholder={
+                            CONTENT_ZONES.find((z) => z.id === activeMode)
+                              ?.placeholder
+                          }
+                          className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
+                          disabled={isGenerating}
+                        />
+                      </div>
+
+                      <Button
+                        onClick={handleGenerate}
+                        disabled={!prompt.trim() || isGenerating}
+                        className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50 h-14 text-xl rounded-2xl"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <Zap className="w-6 h-6 mr-3 animate-spin" />
+                            Generating...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-6 h-6 mr-3" />
+                            Generate{" "}
+                            {activeMode.charAt(0).toUpperCase() +
+                              activeMode.slice(1)}
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {/* Output Side */}
+                    <div className="space-y-4">
+                      <label className="text-xl font-bold text-primary">
+                        Result
+                      </label>
+                      <div className="bg-black/40 border border-primary/30 rounded-2xl p-6 min-h-[300px] flex items-center justify-center">
+                        {isGenerating ? (
+                          <div className="text-center space-y-6">
+                            <Zap className="w-12 h-12 text-primary animate-spin mx-auto" />
+                            <div className="space-y-2">
+                              <p className="text-xl font-bold text-primary">
+                                GROQ Orchestrator Working
+                              </p>
+                              <p className="text-muted-foreground">
+                                Creating your {activeMode} content...
+                              </p>
+                            </div>
+                          </div>
+                        ) : result ? (
+                          <div className="w-full">
+                            <div className="text-white text-lg">{result}</div>
+                          </div>
+                        ) : (
+                          <div className="text-center text-muted-foreground">
+                            <p className="text-lg">
+                              Your generated content will appear here
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Orchestrator Info */}
         <div className="text-center space-y-4 py-8">
