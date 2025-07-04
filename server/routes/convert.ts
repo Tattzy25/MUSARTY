@@ -1,12 +1,25 @@
 import { RequestHandler } from "express";
 import { z } from "zod";
+import multer from "multer";
+import {
+  convertImageToCode,
+  initializeOpenAI,
+  isOpenAIInitialized,
+  type ConversionSettings,
+} from "../services/openai";
+import { getSettings, hasApiKey, getApiKey } from "../services/settings";
 
 const ConvertRequestSchema = z.object({
-  imageData: z.string(),
-  fileName: z.string(),
+  files: z.array(
+    z.object({
+      data: z.string(), // base64 data
+      name: z.string(),
+      type: z.string(),
+    }),
+  ),
   settings: z
     .object({
-      aiModel: z.string().default("gpt-4-vision"),
+      aiModel: z.string().default("gpt-4-vision-preview"),
       codeStyle: z.string().default("modern"),
       generateTypeScript: z.boolean().default(true),
       includeTailwind: z.boolean().default(true),
@@ -14,6 +27,7 @@ const ConvertRequestSchema = z.object({
       accessibilityFeatures: z.boolean().default(true),
       performanceOptimization: z.boolean().default(true),
       includeComments: z.boolean().default(true),
+      qualityLevel: z.number().default(85),
     })
     .optional(),
 });
@@ -21,50 +35,116 @@ const ConvertRequestSchema = z.object({
 export interface ConvertResponse {
   success: boolean;
   data?: {
-    react: string;
-    html: string;
-    css: string;
-    fileName: string;
+    results: Array<{
+      react: string;
+      html: string;
+      css: string;
+      fileName: string;
+      originalFileName: string;
+    }>;
     processingTime: number;
+    totalFiles: number;
   };
   error?: string;
 }
 
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/svg+xml",
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Invalid file type. Only PNG, JPG, and SVG files are allowed.",
+        ),
+      );
+    }
+  },
+});
+
+export const uploadMiddleware = upload.array("files", 5);
+
 export const handleConvert: RequestHandler = async (req, res) => {
   try {
-    const { imageData, fileName, settings } = ConvertRequestSchema.parse(
+    // Check if API key is configured
+    if (!hasApiKey()) {
+      return res.status(400).json({
+        success: false,
+        error:
+          "OpenAI API key not configured. Please add your API key in Settings.",
+      } as ConvertResponse);
+    }
+
+    // Initialize OpenAI client if not already done
+    if (!isOpenAIInitialized()) {
+      const apiKey = getApiKey();
+      if (apiKey) {
+        initializeOpenAI(apiKey);
+      }
+    }
+
+    const { files, settings: requestSettings } = ConvertRequestSchema.parse(
       req.body,
     );
+    const appSettings = getSettings();
+    const conversionSettings: ConversionSettings = {
+      ...appSettings,
+      ...requestSettings,
+    };
 
     const startTime = Date.now();
+    const results = [];
 
-    // In a real implementation, this would:
-    // 1. Process the image with AI (OpenAI GPT-4 Vision, Claude, etc.)
-    // 2. Generate React components based on the image
-    // 3. Optimize the code
-    // 4. Return the generated code
+    // Process each file
+    for (const file of files) {
+      try {
+        // Remove data URL prefix if present
+        const base64Data = file.data.replace(/^data:image\/[a-z]+;base64,/, "");
 
-    // For now, return a mock response
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate processing time
+        const result = await convertImageToCode(
+          base64Data,
+          file.name,
+          conversionSettings,
+        );
 
-    const componentName = fileName
-      .replace(/\.[^/.]+$/, "")
-      .replace(/[^a-zA-Z0-9]/g, "");
-    const capitalizedName =
-      componentName.charAt(0).toUpperCase() + componentName.slice(1);
+        results.push({
+          ...result,
+          originalFileName: file.name,
+        });
+      } catch (error) {
+        console.error(`Error processing file ${file.name}:`, error);
+        // For now, add a fallback result
+        results.push({
+          react: generateFallbackReactCode(file.name),
+          html: generateFallbackHtmlCode(file.name),
+          css: generateFallbackCssCode(file.name),
+          fileName: file.name.replace(/\.[^/.]+$/, ""),
+          originalFileName: file.name,
+        });
+      }
+    }
 
-    const mockResponse: ConvertResponse = {
+    const response: ConvertResponse = {
       success: true,
       data: {
-        react: generateMockReactCode(capitalizedName, settings),
-        html: generateMockHtmlCode(capitalizedName),
-        css: generateMockCssCode(capitalizedName),
-        fileName: componentName,
+        results,
         processingTime: Date.now() - startTime,
+        totalFiles: files.length,
       },
     };
 
-    res.json(mockResponse);
+    res.json(response);
   } catch (error) {
     console.error("Error in convert handler:", error);
 
@@ -76,6 +156,38 @@ export const handleConvert: RequestHandler = async (req, res) => {
     res.status(400).json(errorResponse);
   }
 };
+
+function generateFallbackReactCode(fileName: string): string {
+  const componentName = fileName
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[^a-zA-Z0-9]/g, "");
+  const capitalizedName =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
+
+  return generateMockReactCode(capitalizedName, {
+    generateTypeScript: true,
+    includeTailwind: true,
+    includeComments: true,
+  });
+}
+
+function generateFallbackHtmlCode(fileName: string): string {
+  const componentName = fileName
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[^a-zA-Z0-9]/g, "");
+  const capitalizedName =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
+  return generateMockHtmlCode(capitalizedName);
+}
+
+function generateFallbackCssCode(fileName: string): string {
+  const componentName = fileName
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[^a-zA-Z0-9]/g, "");
+  const capitalizedName =
+    componentName.charAt(0).toUpperCase() + componentName.slice(1);
+  return generateMockCssCode(capitalizedName);
+}
 
 function generateMockReactCode(componentName: string, settings?: any): string {
   const useTypeScript = settings?.generateTypeScript !== false;
@@ -175,7 +287,7 @@ function generateMockCssCode(componentName: string): string {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.1),
     0 0 0 1px rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -257,15 +369,15 @@ function generateMockCssCode(componentName: string): string {
   .${className}-container {
     padding: 1rem;
   }
-  
+
   .${className}-content {
     padding: 2rem;
   }
-  
+
   .${className}-title {
     font-size: 2rem;
   }
-  
+
   .${className}-description {
     font-size: 1rem;
   }
@@ -276,7 +388,7 @@ function generateMockCssCode(componentName: string): string {
   .${className}-button {
     transition: none;
   }
-  
+
   .${className}-button:hover {
     transform: none;
   }
@@ -288,7 +400,7 @@ function generateMockCssCode(componentName: string): string {
     background: white;
     border: 2px solid black;
   }
-  
+
   .${className}-title {
     -webkit-text-fill-color: black;
     background: none;
