@@ -3,22 +3,36 @@ import { PayPalApi, core } from "@paypal/paypal-server-sdk";
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = process.env;
 
 if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-  throw new Error("PayPal credentials are required");
+  console.warn(
+    "⚠️  PayPal credentials not found. Payment functionality will be disabled.",
+  );
+  console.warn(
+    "Please set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.",
+  );
 }
 
-const client = new PayPalApi({
-  clientCredentialsAuthCredentials: {
-    oAuthClientId: PAYPAL_CLIENT_ID,
-    oAuthClientSecret: PAYPAL_CLIENT_SECRET,
-  },
-  environment:
-    NODE_ENV === "production"
-      ? core.Environment.Production
-      : core.Environment.Sandbox,
-  logging: {
-    logLevel: core.LogLevel.INFO,
-  },
-});
+let client: PayPalApi | null = null;
+
+if (PAYPAL_CLIENT_ID && PAYPAL_CLIENT_SECRET) {
+  try {
+    client = new PayPalApi({
+      clientCredentialsAuthCredentials: {
+        oAuthClientId: PAYPAL_CLIENT_ID,
+        oAuthClientSecret: PAYPAL_CLIENT_SECRET,
+      },
+      environment:
+        NODE_ENV === "production"
+          ? core.Environment.Production
+          : core.Environment.Sandbox,
+      logging: {
+        logLevel: core.LogLevel.INFO,
+      },
+    });
+    console.log("✅ PayPal client initialized successfully");
+  } catch (error) {
+    console.error("❌ Failed to initialize PayPal client:", error);
+  }
+}
 
 export interface PaymentRequest {
   amount: number;
@@ -38,6 +52,12 @@ export class PaymentService {
   static async createPayment(
     request: PaymentRequest,
   ): Promise<PaymentResponse> {
+    if (!client) {
+      throw new Error(
+        "PayPal client not initialized. Please check your PayPal credentials.",
+      );
+    }
+
     try {
       const createRequest = {
         body: {
@@ -46,7 +66,7 @@ export class PaymentService {
             {
               amount: {
                 currencyCode: request.currency,
-                value: request.amount.toString(),
+                value: request.amount.toFixed(2),
               },
               description: request.description,
             },
@@ -63,31 +83,61 @@ export class PaymentService {
         },
       };
 
+      console.log("🔄 Creating PayPal payment:", {
+        amount: request.amount,
+        currency: request.currency,
+        description: request.description,
+      });
+
       const response = await client.orders.ordersCreate(createRequest);
       const order = response.result;
+
+      if (!order.id) {
+        throw new Error("PayPal order creation failed - no order ID returned");
+      }
 
       const approvalUrl = order.links?.find(
         (link) => link.rel === "approve",
       )?.href;
 
+      console.log("✅ PayPal payment created:", {
+        orderId: order.id,
+        status: order.status,
+        hasApprovalUrl: !!approvalUrl,
+      });
+
       return {
-        id: order.id!,
+        id: order.id,
         status: order.status!,
         approvalUrl,
       };
     } catch (error) {
-      console.error("PayPal payment creation failed:", error);
-      throw new Error("Failed to create payment");
+      console.error("❌ PayPal payment creation failed:", error);
+      if (error instanceof Error) {
+        throw new Error(`PayPal payment creation failed: ${error.message}`);
+      }
+      throw new Error("PayPal payment creation failed with unknown error");
     }
   }
 
   static async capturePayment(
     orderId: string,
   ): Promise<{ status: string; details: any }> {
+    if (!client) {
+      throw new Error("PayPal client not initialized");
+    }
+
     try {
+      console.log("🔄 Capturing PayPal payment:", orderId);
+
       const response = await client.orders.ordersCapture({
         id: orderId,
         body: {},
+      });
+
+      console.log("✅ PayPal payment captured:", {
+        orderId,
+        status: response.result.status,
       });
 
       return {
@@ -95,22 +145,38 @@ export class PaymentService {
         details: response.result,
       };
     } catch (error) {
-      console.error("PayPal payment capture failed:", error);
-      throw new Error("Failed to capture payment");
+      console.error("❌ PayPal payment capture failed:", error);
+      if (error instanceof Error) {
+        throw new Error(`PayPal payment capture failed: ${error.message}`);
+      }
+      throw new Error("PayPal payment capture failed with unknown error");
     }
   }
 
   static async getPaymentDetails(orderId: string): Promise<any> {
+    if (!client) {
+      throw new Error("PayPal client not initialized");
+    }
+
     try {
+      console.log("🔍 Getting PayPal payment details:", orderId);
+
       const response = await client.orders.ordersGet({
         id: orderId,
       });
 
       return response.result;
     } catch (error) {
-      console.error("PayPal payment details retrieval failed:", error);
-      throw new Error("Failed to get payment details");
+      console.error("❌ PayPal payment details retrieval failed:", error);
+      if (error instanceof Error) {
+        throw new Error(`Failed to get payment details: ${error.message}`);
+      }
+      throw new Error("Failed to get payment details with unknown error");
     }
+  }
+
+  static isConfigured(): boolean {
+    return !!client && !!PAYPAL_CLIENT_ID && !!PAYPAL_CLIENT_SECRET;
   }
 
   // Pre-configured payment amounts
