@@ -235,35 +235,11 @@ export default function NeonCity() {
 
                   <div className="space-y-4">
                     <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-orange-400 to-primary bg-clip-text text-transparent">
-                      Choose Your Creative Mode
+                      Ready to Create
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                      Select one of the modes above to start creating with AI
+                      Select a mode above to start generating with AI
                     </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto pt-8">
-                    {CONTENT_ZONES.map((zone) => (
-                      <div
-                        key={zone.id}
-                        className="text-left p-6 bg-black/40 rounded-2xl border border-primary/20"
-                      >
-                        <div className="flex items-center space-x-3 mb-3">
-                          <zone.icon className="w-6 h-6 text-primary" />
-                          <h3
-                            className={cn(
-                              "text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent",
-                              zone.color,
-                            )}
-                          >
-                            {zone.name}
-                          </h3>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {zone.description}
-                        </p>
-                      </div>
-                    ))}
                   </div>
                 </div>
               ) : (
