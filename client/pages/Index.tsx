@@ -23,6 +23,7 @@ import {
   RefreshCw,
   Crown,
   Palette,
+  Download,
 } from "lucide-react";
 
 export default function Index() {
