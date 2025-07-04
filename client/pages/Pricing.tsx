@@ -70,6 +70,34 @@ export default function Pricing() {
       <Navigation />
 
       <div className="max-w-7xl mx-auto p-6">
+        {/* Upgrade Banner */}
+        {isUpgrade && (
+          <div className="max-w-4xl mx-auto mb-8">
+            <Card className="glass-strong neon-border border-fire-orange/50 bg-fire-orange/5">
+              <CardContent className="p-6 text-center">
+                <div className="flex items-center justify-center space-x-3 mb-4">
+                  <Zap className="w-6 h-6 text-fire-orange" />
+                  <h2 className="text-xl font-bold">Free Generations Used</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  You've used all 3 free generations! Upgrade to Pro for
+                  unlimited access to all AI tools.
+                </p>
+                <Button
+                  size="lg"
+                  className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold neon-glow"
+                  asChild
+                >
+                  <Link to="/checkout">
+                    Upgrade Now - $4.99
+                    <Crown className="w-5 h-5 ml-2" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Hero Section */}
         <div className="text-center py-12 space-y-8">
           <div className="space-y-4">
