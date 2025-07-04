@@ -138,50 +138,71 @@ export default function NeonCity() {
           </div>
         </div>
 
-        {/* 5 Mode Cards in One Row */}
-        <div className="flex justify-center gap-4 mb-8">
+        {/* 5 Cyber Cards in One Row */}
+        <div className="flex justify-center gap-6 mb-12">
           {CONTENT_ZONES.map((zone) => {
             const Icon = zone.icon;
             return (
-              <button
-                key={zone.id}
-                onClick={() => setActiveMode(zone.id)}
-                className={cn(
-                  "relative overflow-hidden bg-black/95 border backdrop-blur-xl transition-all duration-300 cursor-pointer group",
-                  "w-24 h-24 rounded-2xl",
-                  "shadow-[0_0_15px_rgba(212,172,53,0.2)] hover:shadow-[0_0_25px_rgba(212,172,53,0.4)]",
-                  activeMode === zone.id
-                    ? "border-primary/70 shadow-[0_0_30px_rgba(212,172,53,0.6)] scale-110"
-                    : "border-primary/30 hover:border-primary/50 hover:scale-105",
-                )}
-              >
-                {/* Gradient Accent */}
+              <div key={zone.id} className="cyber-card-container">
                 <div
-                  className={cn("absolute inset-0 opacity-10", zone.bgGradient)}
-                />
-
-                {/* Icon */}
-                <div className="relative flex items-center justify-center w-full h-full">
-                  <Icon className="w-8 h-8 text-primary" />
+                  className="container noselect"
+                  onClick={() => setActiveMode(zone.id)}
+                >
+                  <div className="canvas">
+                    <div className="tracker tr-1" />
+                    <div className="tracker tr-2" />
+                    <div className="tracker tr-3" />
+                    <div className="tracker tr-4" />
+                    <div className="tracker tr-5" />
+                    <div className="tracker tr-6" />
+                    <div className="tracker tr-7" />
+                    <div className="tracker tr-8" />
+                    <div className="tracker tr-9" />
+                    <div
+                      id="card"
+                      className={cn(activeMode === zone.id && "active-card")}
+                    >
+                      <div className="card-content">
+                        <div className="card-glare" />
+                        <div className="cyber-lines">
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                        <div className="icon-container">
+                          <Icon className="card-icon" />
+                        </div>
+                        <div className="title">{zone.name.toUpperCase()}</div>
+                        <div className="glowing-elements">
+                          <div className="glow-1" />
+                          <div className="glow-2" />
+                          <div className="glow-3" />
+                        </div>
+                        <div className="subtitle">
+                          <span className="description">
+                            {zone.description}
+                          </span>
+                        </div>
+                        <div className="card-particles">
+                          <span />
+                          <span />
+                          <span /> <span />
+                          <span />
+                          <span />
+                        </div>
+                        <div className="corner-elements">
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                        <div className="scan-line" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                {/* Hover Effect */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="h-full bg-primary animate-pulse" />
-                </div>
-
-                {/* Label */}
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
-                  <span
-                    className={cn(
-                      "text-xs font-medium bg-gradient-to-r bg-clip-text text-transparent",
-                      zone.color,
-                    )}
-                  >
-                    {zone.name}
-                  </span>
-                </div>
-              </button>
+              </div>
             );
           })}
         </div>
