@@ -1,39 +1,10 @@
-import pkg from "@paypal/paypal-server-sdk";
-const { PayPalApi, core } = pkg;
-
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, NODE_ENV } = process.env;
 
-if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-  console.warn(
-    "⚠️  PayPal credentials not found. Payment functionality will be disabled.",
-  );
-  console.warn(
-    "Please set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.",
-  );
-}
-
-let client: PayPalApi | null = null;
-
-if (PAYPAL_CLIENT_ID && PAYPAL_CLIENT_SECRET) {
-  try {
-    client = new PayPalApi({
-      clientCredentialsAuthCredentials: {
-        oAuthClientId: PAYPAL_CLIENT_ID,
-        oAuthClientSecret: PAYPAL_CLIENT_SECRET,
-      },
-      environment:
-        NODE_ENV === "production"
-          ? core.Environment.Production
-          : core.Environment.Sandbox,
-      logging: {
-        logLevel: core.LogLevel.INFO,
-      },
-    });
-    console.log("✅ PayPal client initialized successfully");
-  } catch (error) {
-    console.error("❌ Failed to initialize PayPal client:", error);
-  }
-}
+// PayPal API Base URLs
+const PAYPAL_API_BASE =
+  NODE_ENV === "production"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
 
 export interface PaymentRequest {
   amount: number;
@@ -49,135 +20,209 @@ export interface PaymentResponse {
   approvalUrl?: string;
 }
 
+let accessToken: string | null = null;
+let tokenExpiry: number = 0;
+
+async function getAccessToken(): Promise<string> {
+  // Return cached token if still valid
+  if (accessToken && Date.now() < tokenExpiry) {
+    return accessToken;
+  }
+
+  if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+    throw new Error("PayPal credentials not configured");
+  }
+
+  try {
+    const response = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Language": "en_US",
+        Authorization: `Basic ${Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64")}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "grant_type=client_credentials",
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `PayPal auth failed: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    accessToken = data.access_token;
+    tokenExpiry = Date.now() + data.expires_in * 1000 - 60000; // Refresh 1 min early
+
+    console.log("✅ PayPal access token obtained");
+    return accessToken;
+  } catch (error) {
+    console.error("❌ PayPal authentication failed:", error);
+    throw new Error("Failed to authenticate with PayPal");
+  }
+}
+
 export class PaymentService {
   static async createPayment(
     request: PaymentRequest,
   ): Promise<PaymentResponse> {
-    if (!client) {
-      throw new Error(
-        "PayPal client not initialized. Please check your PayPal credentials.",
-      );
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      throw new Error("PayPal not configured");
     }
 
     try {
-      const createRequest = {
-        body: {
-          intent: "CAPTURE",
-          purchaseUnits: [
-            {
-              amount: {
-                currencyCode: request.currency,
-                value: request.amount.toFixed(2),
-              },
-              description: request.description,
+      const token = await getAccessToken();
+
+      const orderData = {
+        intent: "CAPTURE",
+        purchase_units: [
+          {
+            amount: {
+              currency_code: request.currency,
+              value: request.amount.toFixed(2),
             },
-          ],
-          applicationContext: {
-            returnUrl: request.returnUrl,
-            cancelUrl: request.cancelUrl,
-            userAction: "PAY_NOW",
-            paymentMethod: {
-              payerSelected: "PAYPAL",
-              payeePreferred: "IMMEDIATE_PAYMENT_REQUIRED",
-            },
+            description: request.description,
+          },
+        ],
+        application_context: {
+          return_url: request.returnUrl,
+          cancel_url: request.cancelUrl,
+          user_action: "PAY_NOW",
+          payment_method: {
+            payer_selected: "PAYPAL",
+            payee_preferred: "IMMEDIATE_PAYMENT_REQUIRED",
           },
         },
       };
 
-      console.log("🔄 Creating PayPal payment:", {
+      console.log("🔄 Creating PayPal order:", {
         amount: request.amount,
         currency: request.currency,
-        description: request.description,
       });
 
-      const response = await client.orders.ordersCreate(createRequest);
-      const order = response.result;
+      const response = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "PayPal-Request-Id": `ORDER-${Date.now()}`,
+        },
+        body: JSON.stringify(orderData),
+      });
 
-      if (!order.id) {
-        throw new Error("PayPal order creation failed - no order ID returned");
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("❌ PayPal order creation failed:", errorData);
+        throw new Error(`PayPal order creation failed: ${response.status}`);
       }
 
+      const order = await response.json();
       const approvalUrl = order.links?.find(
-        (link) => link.rel === "approve",
+        (link: any) => link.rel === "approve",
       )?.href;
 
-      console.log("✅ PayPal payment created:", {
+      console.log("✅ PayPal order created:", {
         orderId: order.id,
         status: order.status,
-        hasApprovalUrl: !!approvalUrl,
       });
 
       return {
         id: order.id,
-        status: order.status!,
+        status: order.status,
         approvalUrl,
       };
     } catch (error) {
-      console.error("❌ PayPal payment creation failed:", error);
-      if (error instanceof Error) {
-        throw new Error(`PayPal payment creation failed: ${error.message}`);
-      }
-      throw new Error("PayPal payment creation failed with unknown error");
+      console.error("❌ PayPal payment creation error:", error);
+      throw error;
     }
   }
 
   static async capturePayment(
     orderId: string,
   ): Promise<{ status: string; details: any }> {
-    if (!client) {
-      throw new Error("PayPal client not initialized");
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      throw new Error("PayPal not configured");
     }
 
     try {
+      const token = await getAccessToken();
+
       console.log("🔄 Capturing PayPal payment:", orderId);
 
-      const response = await client.orders.ordersCapture({
-        id: orderId,
-        body: {},
-      });
+      const response = await fetch(
+        `${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}/capture`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            "PayPal-Request-Id": `CAPTURE-${Date.now()}`,
+          },
+          body: JSON.stringify({}),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("❌ PayPal capture failed:", errorData);
+        throw new Error(`PayPal capture failed: ${response.status}`);
+      }
+
+      const captureData = await response.json();
 
       console.log("✅ PayPal payment captured:", {
         orderId,
-        status: response.result.status,
+        status: captureData.status,
       });
 
       return {
-        status: response.result.status!,
-        details: response.result,
+        status: captureData.status,
+        details: captureData,
       };
     } catch (error) {
-      console.error("❌ PayPal payment capture failed:", error);
-      if (error instanceof Error) {
-        throw new Error(`PayPal payment capture failed: ${error.message}`);
-      }
-      throw new Error("PayPal payment capture failed with unknown error");
+      console.error("❌ PayPal capture error:", error);
+      throw error;
     }
   }
 
   static async getPaymentDetails(orderId: string): Promise<any> {
-    if (!client) {
-      throw new Error("PayPal client not initialized");
+    if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+      throw new Error("PayPal not configured");
     }
 
     try {
-      console.log("🔍 Getting PayPal payment details:", orderId);
+      const token = await getAccessToken();
 
-      const response = await client.orders.ordersGet({
-        id: orderId,
-      });
+      console.log("🔍 Getting PayPal order details:", orderId);
 
-      return response.result;
-    } catch (error) {
-      console.error("❌ PayPal payment details retrieval failed:", error);
-      if (error instanceof Error) {
-        throw new Error(`Failed to get payment details: ${error.message}`);
+      const response = await fetch(
+        `${PAYPAL_API_BASE}/v2/checkout/orders/${orderId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error("❌ PayPal get order failed:", errorData);
+        throw new Error(`PayPal get order failed: ${response.status}`);
       }
-      throw new Error("Failed to get payment details with unknown error");
+
+      const orderData = await response.json();
+      return orderData;
+    } catch (error) {
+      console.error("❌ PayPal get order error:", error);
+      throw error;
     }
   }
 
   static isConfigured(): boolean {
-    return !!client && !!PAYPAL_CLIENT_ID && !!PAYPAL_CLIENT_SECRET;
+    return !!(PAYPAL_CLIENT_ID && PAYPAL_CLIENT_SECRET);
   }
 
   // Pre-configured payment amounts
@@ -190,17 +235,17 @@ export class PaymentService {
     BLOCK_10: {
       amount: 1.99,
       currency: "USD",
-      description: "Musarty - 10 Generation Block",
+      description: "Musarty - 10 Generation Blocks",
     },
     BLOCK_50: {
       amount: 7.99,
       currency: "USD",
-      description: "Musarty - 50 Generation Block",
+      description: "Musarty - 50 Generation Blocks",
     },
     BLOCK_100: {
       amount: 14.99,
       currency: "USD",
-      description: "Musarty - 100 Generation Block",
+      description: "Musarty - 100 Generation Blocks",
     },
   };
 }
