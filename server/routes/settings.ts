@@ -6,7 +6,11 @@ import {
   SettingsSchema,
   type AppSettings,
 } from "../services/settings";
-import { initializeOpenAI, validateApiKey } from "../services/openai";
+import {
+  initializeProvider,
+  validateApiKey,
+  AI_PROVIDERS,
+} from "../services/ai-providers";
 
 export interface SettingsResponse {
   success: boolean;
