@@ -615,9 +615,31 @@ export default function NeonCity() {
                               CONTENT_ZONES.find((z) => z.id === activeMode)
                                 ?.placeholder
                             }
-                            className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-48 text-lg p-6 rounded-2xl"
+                            className="bg-black/40 border-primary/30 text-white placeholder:text-muted-foreground resize-none h-32 text-lg p-6 rounded-2xl"
                             disabled={isGenerating}
                           />
+
+                          {/* Image Upload for Text/Video */}
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-primary/80">
+                              Upload Reference Image (Optional)
+                            </label>
+                            <FileUpload
+                              onFileSelect={(files) => {
+                                if (files.length > 0) {
+                                  const fileName = files[0].name;
+                                  setPrompt(
+                                    (prev) =>
+                                      prev +
+                                      (prev ? "\n\n" : "") +
+                                      `[Reference image uploaded: ${fileName}] Please analyze this image and incorporate its elements into the ${activeMode} generation.`,
+                                  );
+                                }
+                              }}
+                              maxFiles={1}
+                              isProcessing={false}
+                            />
+                          </div>
                         </div>
 
                         <Button
