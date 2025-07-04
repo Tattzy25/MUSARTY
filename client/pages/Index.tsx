@@ -574,7 +574,7 @@ export default function Index() {
                   size="lg"
                   onClick={() =>
                     !user.isSignedIn
-                      ? (window.location.href = "/handler/signup")
+                      ? (window.location.href = "/auth")
                       : (window.location.href = "/neon-city")
                   }
                   className="bg-gradient-to-r from-fire-orange to-fire-red hover:from-fire-orange/80 hover:to-fire-red/80 text-black font-bold px-8 py-4 text-lg neon-glow"
