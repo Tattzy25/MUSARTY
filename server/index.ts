@@ -1,7 +1,12 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { handleConvert } from "./routes/convert";
+import { handleConvert, uploadMiddleware } from "./routes/convert";
+import {
+  handleGetSettings,
+  handleUpdateSettings,
+  handleTestApiKey,
+} from "./routes/settings";
 
 export function createServer() {
   const app = express();
@@ -17,7 +22,12 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
-  app.post("/api/convert", handleConvert);
+  app.post("/api/convert", uploadMiddleware, handleConvert);
+
+  // Settings routes
+  app.get("/api/settings", handleGetSettings);
+  app.post("/api/settings", handleUpdateSettings);
+  app.post("/api/settings/test-api-key", handleTestApiKey);
 
   return app;
 }
