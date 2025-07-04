@@ -39,6 +39,7 @@ import {
 
 interface AppSettings {
   groqApiKey?: string;
+  v0ApiKey?: string;
   openaiApiKey?: string;
   geminiApiKey?: string;
   aiProvider: string;
@@ -76,11 +77,13 @@ export default function Settings() {
 
   const [apiKeys, setApiKeys] = useState<Record<string, string>>({
     groq: "",
+    v0: "",
     openai: "",
     gemini: "",
   });
   const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({
     groq: false,
+    v0: false,
     openai: false,
     gemini: false,
   });
@@ -89,6 +92,7 @@ export default function Settings() {
     Record<string, "valid" | "invalid" | null>
   >({
     groq: null,
+    v0: null,
     openai: null,
     gemini: null,
   });
@@ -209,8 +213,8 @@ export default function Settings() {
       qualityLevel: 85,
       processingSpeed: 70,
     });
-    setApiKeys({ groq: "", openai: "", gemini: "" });
-    setApiKeyStatuses({ groq: null, openai: null, gemini: null });
+    setApiKeys({ groq: "", v0: "", openai: "", gemini: "" });
+    setApiKeyStatuses({ groq: null, v0: null, openai: null, gemini: null });
   };
 
   return (
@@ -272,11 +276,22 @@ export default function Settings() {
                       <span>Groq (Recommended)</span>
                     </div>
                   </SelectItem>
-                  <SelectItem value="openai">
+                  <SelectItem value="v0">
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
                         className="text-fire-red border-fire-red"
+                      >
+                        UI Specialist 🎨
+                      </Badge>
+                      <span>v0 (Vercel)</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="openai">
+                    <div className="flex items-center space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="text-fire-yellow border-fire-yellow"
                       >
                         Industry Standard
                       </Badge>
@@ -287,7 +302,7 @@ export default function Settings() {
                     <div className="flex items-center space-x-2">
                       <Badge
                         variant="outline"
-                        className="text-fire-yellow border-fire-yellow"
+                        className="text-ember-red border-ember-red"
                       >
                         Google AI
                       </Badge>
@@ -299,13 +314,19 @@ export default function Settings() {
             </div>
 
             {/* Compact API Key Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
                   key: "groq",
                   name: "Groq",
                   placeholder: "gsk_...",
                   url: "https://console.groq.com/keys",
+                },
+                {
+                  key: "v0",
+                  name: "v0 (Vercel)",
+                  placeholder: "v0_...",
+                  url: "https://v0.dev/api",
                 },
                 {
                   key: "openai",
@@ -500,6 +521,43 @@ export default function Settings() {
                               Fast
                             </Badge>
                             <span>Llama 3.2 11B Vision</span>
+                          </div>
+                        </SelectItem>
+                      </>
+                    )}
+                    {settings.aiProvider === "v0" && (
+                      <>
+                        <SelectItem value="v0-1.5-lg">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-orange border-fire-orange"
+                            >
+                              🎨 UI Expert
+                            </Badge>
+                            <span>v0 1.5 Large (Recommended)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="v0-1.5-md">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-red border-fire-red"
+                            >
+                              Everyday Tasks
+                            </Badge>
+                            <span>v0 1.5 Medium</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="v0-1.0-md">
+                          <div className="flex items-center space-x-2">
+                            <Badge
+                              variant="outline"
+                              className="text-fire-yellow border-fire-yellow"
+                            >
+                              Legacy
+                            </Badge>
+                            <span>v0 1.0 Medium</span>
                           </div>
                         </SelectItem>
                       </>
