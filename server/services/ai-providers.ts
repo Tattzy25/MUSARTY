@@ -1,5 +1,7 @@
 import Groq from "groq-sdk";
 import OpenAI from "openai";
+import { openai } from "@ai-sdk/openai";
+import { generateText } from "ai";
 
 export interface ConversionSettings {
   provider: string;
@@ -38,6 +40,11 @@ export const AI_PROVIDERS: Record<string, AIProvider> = {
     ],
     requiresApiKey: true,
   },
+  v0: {
+    name: "v0 (Vercel)",
+    models: ["v0-1.5-lg", "v0-1.5-md", "v0-1.0-md"],
+    requiresApiKey: true,
+  },
   openai: {
     name: "OpenAI",
     models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4-vision-preview"],
@@ -56,6 +63,7 @@ export const AI_PROVIDERS: Record<string, AIProvider> = {
 
 let openaiClient: OpenAI | null = null;
 let groqClient: Groq | null = null;
+let v0ApiKey: string | null = null;
 const apiKeys: Record<string, string> = {};
 
 export function initializeProvider(provider: string, apiKey: string) {
@@ -65,6 +73,9 @@ export function initializeProvider(provider: string, apiKey: string) {
     groqClient = new Groq({
       apiKey: apiKey,
     });
+  } else if (provider === "v0") {
+    v0ApiKey = apiKey;
+    // v0 uses AI SDK with OpenAI-compatible API
   } else if (provider === "openai") {
     openaiClient = new OpenAI({
       apiKey: apiKey,
@@ -76,6 +87,8 @@ export function initializeProvider(provider: string, apiKey: string) {
 export function isProviderInitialized(provider: string): boolean {
   if (provider === "groq") {
     return groqClient !== null;
+  } else if (provider === "v0") {
+    return v0ApiKey !== null;
   } else if (provider === "openai") {
     return openaiClient !== null;
   }
@@ -104,10 +117,63 @@ export async function convertImageToCode(
   switch (provider) {
     case "groq":
       return await convertWithGroq(imageBase64, componentName, settings);
+    case "v0":
+      return await convertWithV0(imageBase64, componentName, settings);
     case "openai":
       return await convertWithOpenAI(imageBase64, componentName, settings);
     default:
       throw new Error(`Provider ${provider} not implemented yet`);
+  }
+}
+
+async function convertWithV0(
+  imageBase64: string,
+  componentName: string,
+  settings: ConversionSettings,
+): Promise<ConversionResult> {
+  if (!v0ApiKey) {
+    throw new Error("v0 API key not initialized");
+  }
+
+  const systemPrompt = createV0SystemPrompt(settings);
+  const userPrompt = createUserPrompt(componentName, settings);
+
+  try {
+    // Use AI SDK with v0 models
+    const { text } = await generateText({
+      model: openai(settings.model, {
+        apiKey: v0ApiKey,
+        baseURL: "https://api.v0.dev/chat/completions", // v0 API endpoint
+      }),
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: userPrompt,
+            },
+            {
+              type: "image",
+              image: `data:image/jpeg;base64,${imageBase64}`,
+            },
+          ],
+        },
+      ],
+      maxTokens: 4000,
+      temperature: 0.1,
+    });
+
+    return parseAIResponse(text, componentName);
+  } catch (error) {
+    console.error("v0 API Error:", error);
+    throw new Error(
+      `Failed to convert image with v0: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
   }
 }
 
@@ -229,6 +295,30 @@ function sanitizeComponentName(fileName: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1) || "GeneratedComponent";
 }
 
+function createV0SystemPrompt(settings: ConversionSettings): string {
+  return `You are v0, an advanced AI specialized in generating modern web UI components. Your expertise is converting visual designs into production-ready React components with Next.js and Vercel best practices.
+
+CRITICAL REQUIREMENTS FOR UI GENERATION:
+1. Generate code in THREE separate sections: REACT, HTML, and CSS
+2. Each section must be clearly marked with headers: "=== REACT ===" "=== HTML ===" "=== CSS ==="
+3. SPECIALIZE in modern web UI patterns and components
+4. ${settings.generateTypeScript ? "Use TypeScript with proper type definitions" : "Use JavaScript"}
+5. ${settings.includeTailwind ? "Prefer Tailwind CSS for rapid UI development" : "Use modern CSS with design tokens"}
+6. ${settings.responsiveDesign ? "Build mobile-first responsive designs" : "Focus on desktop-first design"}
+7. ${settings.accessibilityFeatures ? "Include comprehensive accessibility with ARIA patterns" : "Use semantic HTML"}
+8. Optimize for Vercel deployment and Next.js performance
+9. Use modern React patterns (hooks, functional components, composition)
+
+UI GENERATION EXPERTISE:
+- Pixel-perfect recreation of visual designs
+- Modern component architecture and reusability
+- Optimized for fast loading and great UX
+- Follow design system principles
+- Implement interactive states and animations
+- Use modern CSS features (CSS Grid, Flexbox, Custom Properties)
+- Generate clean, maintainable, scalable code`;
+}
+
 function createSystemPrompt(settings: ConversionSettings): string {
   return `You are an expert frontend developer and UI/UX designer. Your task is to analyze the provided image and generate clean, production-ready code that recreates the design.
 
@@ -334,6 +424,21 @@ export async function validateApiKey(
       const testClient = new Groq({ apiKey });
       await testClient.models.list();
       return true;
+    } else if (provider === "v0") {
+      // Test v0 API key by making a simple request
+      const response = await fetch("https://api.v0.dev/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "v0-1.5-md",
+          messages: [{ role: "user", content: "test" }],
+          max_tokens: 1,
+        }),
+      });
+      return response.status !== 401; // Not unauthorized
     } else if (provider === "openai") {
       const testClient = new OpenAI({ apiKey });
       await testClient.models.list();
