@@ -202,7 +202,7 @@ export default function Index() {
                 className="glass hover:neon-border"
                 asChild
               >
-                <Link to={user.isSignedIn ? "/neon-city" : "/handler/signup"}>
+                <Link to={user.isSignedIn ? "/neon-city" : "/auth"}>
                   {user.isSignedIn ? "Dashboard" : "Get Started"}
                 </Link>
               </Button>
