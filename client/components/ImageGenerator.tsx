@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Image as ImageIcon, Download, RefreshCw } from "lucide-react";
+import FileUpload from "./FileUpload";
 
 interface ImageGeneratorProps {
   prompt: string;
@@ -130,6 +131,28 @@ Example: A futuristic city at sunset with neon lights reflecting on wet streets,
                   <SelectItem value="hd">High Definition</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Image Upload for Reference/Style */}
+            <div className="space-y-2">
+              <Label className="text-white">
+                Upload Reference Image (Optional)
+              </Label>
+              <FileUpload
+                onFileSelect={(files) => {
+                  if (files.length > 0) {
+                    const fileName = files[0].name;
+                    setPrompt(
+                      (prev) =>
+                        prev +
+                        (prev ? "\n\n" : "") +
+                        `[Reference image uploaded: ${fileName}] Use this image as style reference or inspiration for the generation.`,
+                    );
+                  }
+                }}
+                maxFiles={1}
+                isProcessing={false}
+              />
             </div>
 
             <Button
