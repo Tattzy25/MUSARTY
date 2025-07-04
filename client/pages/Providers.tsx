@@ -1,0 +1,621 @@
+import { useState, useEffect } from "react";
+import Navigation from "@/components/Navigation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Trophy,
+  Zap,
+  Brain,
+  Code,
+  Star,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  Crown,
+  Flame,
+  Rocket,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface ProviderStats {
+  totalUses: number;
+  successRate: number;
+  avgResponseTime: string;
+  rank: number;
+}
+
+interface AIProvider {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  features: string[];
+  pricing: string;
+  speed: "Lightning" | "Fast" | "Standard" | "Slow";
+  quality: "Exceptional" | "Excellent" | "Good" | "Basic";
+  placeholder: string;
+  color: string;
+  bgGradient: string;
+  icon: any;
+  models: string[];
+  stats: ProviderStats;
+}
+
+const AI_PROVIDERS: AIProvider[] = [
+  // 🎨 UI/Code Specialists
+  {
+    id: "v0",
+    name: "v0 (Vercel)",
+    category: "UI Specialist",
+    description:
+      "The UI generation master. Specifically designed for React, Next.js, and modern web components. Creates pixel-perfect interfaces.",
+    features: [
+      "UI Generation",
+      "React Components",
+      "Next.js Optimized",
+      "Responsive Design",
+    ],
+    pricing: "$2.00/M tokens",
+    speed: "Fast",
+    quality: "Exceptional",
+    placeholder: "v0_...",
+    color: "from-blue-500 to-cyan-400",
+    bgGradient: "bg-gradient-to-br from-blue-500/10 to-cyan-400/10",
+    icon: Code,
+    models: ["v0-1.5-lg", "v0-1.5-md", "v0-1.0-md"],
+    stats: {
+      totalUses: 1247,
+      successRate: 96,
+      avgResponseTime: "2.3s",
+      rank: 1,
+    },
+  },
+  {
+    id: "groq",
+    name: "Groq",
+    category: "Speed Demon",
+    description:
+      "The granddaddy of AI inference! Lightning-fast processing with custom LPU hardware. Llama Scout is the future of AI.",
+    features: [
+      "Lightning Speed",
+      "Custom Hardware",
+      "Llama Scout",
+      "High Throughput",
+    ],
+    pricing: "$0.30/M tokens",
+    speed: "Lightning",
+    quality: "Excellent",
+    placeholder: "gsk_...",
+    color: "from-orange-500 to-red-500",
+    bgGradient: "bg-gradient-to-br from-orange-500/10 to-red-500/10",
+    icon: Zap,
+    models: [
+      "meta-llama/llama-4-scout-17b-16e-instruct",
+      "llama-3.3-70b-versatile",
+    ],
+    stats: {
+      totalUses: 2841,
+      successRate: 94,
+      avgResponseTime: "0.8s",
+      rank: 2,
+    },
+  },
+  {
+    id: "openai",
+    name: "OpenAI",
+    category: "Industry Standard",
+    description:
+      "The gold standard of AI. GPT-4o delivers consistent, high-quality results for image analysis and code generation.",
+    features: ["Industry Leader", "Reliable", "Multimodal", "Well-documented"],
+    pricing: "$5.00/M tokens",
+    speed: "Standard",
+    quality: "Exceptional",
+    placeholder: "sk-...",
+    color: "from-green-500 to-emerald-400",
+    bgGradient: "bg-gradient-to-br from-green-500/10 to-emerald-400/10",
+    icon: Crown,
+    models: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
+    stats: {
+      totalUses: 3156,
+      successRate: 98,
+      avgResponseTime: "3.2s",
+      rank: 3,
+    },
+  },
+  {
+    id: "xai",
+    name: "xAI Grok",
+    category: "Thinking Machine",
+    description:
+      "Grok 3 Mini thinks before responding. Lightweight but powerful reasoning with transparent thought processes.",
+    features: ["Reasoning", "Thinking Traces", "Logic Tasks", "Transparent"],
+    pricing: "$0.30/M tokens",
+    speed: "Fast",
+    quality: "Excellent",
+    placeholder: "xai_...",
+    color: "from-purple-500 to-pink-500",
+    bgGradient: "bg-gradient-to-br from-purple-500/10 to-pink-500/10",
+    icon: Brain,
+    models: ["grok-3-mini-beta"],
+    stats: {
+      totalUses: 856,
+      successRate: 91,
+      avgResponseTime: "1.9s",
+      rank: 4,
+    },
+  },
+  {
+    id: "gemini",
+    name: "Google Gemini",
+    category: "Rising Star",
+    description:
+      "Gemini 2.0 Flash brings next-gen features with 1M token context and superior multimodal capabilities.",
+    features: ["1M Context", "Multimodal", "Tool Use", "Fast Generation"],
+    pricing: "$0.10/M tokens",
+    speed: "Lightning",
+    quality: "Excellent",
+    placeholder: "AIza...",
+    color: "from-yellow-500 to-amber-400",
+    bgGradient: "bg-gradient-to-br from-yellow-500/10 to-amber-400/10",
+    icon: Star,
+    models: ["gemini-2.0-flash", "gemini-1.5-pro-002"],
+    stats: {
+      totalUses: 1432,
+      successRate: 89,
+      avgResponseTime: "1.5s",
+      rank: 5,
+    },
+  },
+  {
+    id: "mistral",
+    name: "Mistral AI",
+    category: "Code Master",
+    description:
+      "Magistral with complex thinking and transparent reasoning. Codestral excels in 80+ programming languages.",
+    features: ["Code Generation", "80+ Languages", "Reasoning", "Multilingual"],
+    pricing: "$0.30/M tokens",
+    speed: "Fast",
+    quality: "Excellent",
+    placeholder: "mst_...",
+    color: "from-indigo-500 to-blue-500",
+    bgGradient: "bg-gradient-to-br from-indigo-500/10 to-blue-500/10",
+    icon: Code,
+    models: ["magistral-medium-2506", "codestral-25.01"],
+    stats: {
+      totalUses: 967,
+      successRate: 93,
+      avgResponseTime: "2.1s",
+      rank: 6,
+    },
+  },
+  {
+    id: "perplexity",
+    name: "Perplexity",
+    category: "Search Master",
+    description:
+      "Sonar Pro with search grounding provides comprehensive explanations with real-time web knowledge.",
+    features: [
+      "Search Grounding",
+      "Real-time Web",
+      "Chain of Thought",
+      "Research",
+    ],
+    pricing: "$3.00/M tokens",
+    speed: "Standard",
+    quality: "Excellent",
+    placeholder: "pplx_...",
+    color: "from-teal-500 to-cyan-500",
+    bgGradient: "bg-gradient-to-br from-teal-500/10 to-cyan-500/10",
+    icon: Brain,
+    models: ["sonar-pro", "sonar-reasoning-pro"],
+    stats: {
+      totalUses: 634,
+      successRate: 87,
+      avgResponseTime: "4.1s",
+      rank: 7,
+    },
+  },
+  {
+    id: "alibaba",
+    name: "Alibaba Qwen",
+    category: "Dragon Power",
+    description:
+      "Qwen3-32B rivals GPT-4 with exceptional code generation, tool-calling, and advanced reasoning capabilities.",
+    features: [
+      "Code Generation",
+      "Tool Calling",
+      "Advanced Reasoning",
+      "Cost Effective",
+    ],
+    pricing: "$0.40/M tokens",
+    speed: "Fast",
+    quality: "Excellent",
+    placeholder: "qwen_...",
+    color: "from-red-500 to-orange-500",
+    bgGradient: "bg-gradient-to-br from-red-500/10 to-orange-500/10",
+    icon: Flame,
+    models: ["qwen3-32b", "qwen3-14b"],
+    stats: {
+      totalUses: 423,
+      successRate: 85,
+      avgResponseTime: "2.8s",
+      rank: 8,
+    },
+  },
+];
+
+export default function Providers() {
+  const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
+  const [showApiKeys, setShowApiKeys] = useState<Record<string, boolean>>({});
+  const [isTestingApiKey, setIsTestingApiKey] = useState<string | null>(null);
+  const [apiKeyStatuses, setApiKeyStatuses] = useState<
+    Record<string, "valid" | "invalid" | null>
+  >({});
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const categories = [
+    "All",
+    "UI Specialist",
+    "Speed Demon",
+    "Industry Standard",
+    "Code Master",
+    "Rising Star",
+  ];
+
+  const filteredProviders =
+    selectedCategory === "All"
+      ? AI_PROVIDERS
+      : AI_PROVIDERS.filter((p) => p.category === selectedCategory);
+
+  const testApiKey = async (providerId: string, key: string) => {
+    if (!key.trim()) return;
+    setIsTestingApiKey(providerId);
+    // Simulate API test
+    setTimeout(() => {
+      setApiKeyStatuses((prev) => ({ ...prev, [providerId]: "valid" }));
+      setIsTestingApiKey(null);
+    }, 1500);
+  };
+
+  const getSpeedColor = (speed: string) => {
+    switch (speed) {
+      case "Lightning":
+        return "text-fire-orange";
+      case "Fast":
+        return "text-fire-red";
+      case "Standard":
+        return "text-fire-yellow";
+      default:
+        return "text-gray-400";
+    }
+  };
+
+  const getQualityColor = (quality: string) => {
+    switch (quality) {
+      case "Exceptional":
+        return "text-fire-orange";
+      case "Excellent":
+        return "text-fire-red";
+      case "Good":
+        return "text-fire-yellow";
+      default:
+        return "text-gray-400";
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+
+      <div className="max-w-7xl mx-auto p-6 space-y-8">
+        {/* Epic Header */}
+        <div className="text-center space-y-6 py-12">
+          <div className="relative mx-auto w-24 h-24">
+            <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl animate-pulse-glow" />
+            <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
+              <Trophy className="w-12 h-12 text-fire-orange" />
+            </div>
+          </div>
+
+          <div>
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
+              AI Champions Arena
+            </h1>
+            <p className="text-xl text-muted-foreground mt-4 max-w-3xl mx-auto">
+              Choose your AI champion! Each provider brings unique strengths to
+              the battle. Configure your API keys and watch the live contest
+              unfold! 🏆
+            </p>
+          </div>
+
+          {/* Live Leaderboard */}
+          <div className="glass-strong rounded-2xl p-6 max-w-4xl mx-auto">
+            <h3 className="text-xl font-bold text-fire-orange mb-4 flex items-center">
+              <Crown className="w-5 h-5 mr-2" />
+              Live Usage Leaderboard
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {AI_PROVIDERS.slice(0, 4).map((provider, index) => (
+                <div key={provider.id} className="text-center">
+                  <div
+                    className={cn(
+                      "w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-2",
+                      index === 0 && "bg-yellow-500/20 text-yellow-500",
+                      index === 1 && "bg-gray-400/20 text-gray-400",
+                      index === 2 && "bg-amber-600/20 text-amber-600",
+                      index === 3 && "bg-fire-orange/20 text-fire-orange",
+                    )}
+                  >
+                    <provider.icon className="w-6 h-6" />
+                  </div>
+                  <p className="font-semibold text-sm">{provider.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {provider.stats.totalUses} uses
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Category Filter */}
+        <div className="flex justify-center space-x-2 flex-wrap">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              size="sm"
+              variant={selectedCategory === category ? "default" : "outline"}
+              onClick={() => setSelectedCategory(category)}
+              className={cn(
+                "glass hover:neon-border mb-2",
+                selectedCategory === category &&
+                  "bg-fire-orange/20 text-fire-orange neon-border",
+              )}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+
+        {/* AI Provider Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProviders.map((provider) => {
+            const status = apiKeyStatuses[provider.id];
+            const isTesting = isTestingApiKey === provider.id;
+
+            return (
+              <Card
+                key={provider.id}
+                className={cn(
+                  "glass-strong neon-border relative overflow-hidden",
+                  provider.bgGradient,
+                )}
+              >
+                {/* Rank Badge */}
+                <div className="absolute top-4 right-4 z-10">
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      "text-xs",
+                      provider.stats.rank <= 3
+                        ? "text-fire-orange border-fire-orange"
+                        : "text-fire-red border-fire-red",
+                    )}
+                  >
+                    #{provider.stats.rank}
+                  </Badge>
+                </div>
+
+                {/* Holographic Background */}
+                <div className="absolute inset-0 holographic opacity-5 pointer-events-none" />
+
+                <CardHeader className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="relative">
+                      <div
+                        className={cn(
+                          "absolute inset-0 rounded-lg blur-xl opacity-30",
+                          provider.color.replace("from-", "bg-").split(" ")[0],
+                        )}
+                      />
+                      <div className="relative flex items-center justify-center w-12 h-12 glass rounded-lg neon-border">
+                        <provider.icon className="w-6 h-6 text-fire-orange" />
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle
+                        className={cn(
+                          "text-lg bg-gradient-to-r bg-clip-text text-transparent",
+                          provider.color,
+                        )}
+                      >
+                        {provider.name}
+                      </CardTitle>
+                      <CardDescription className="text-sm">
+                        {provider.category}
+                      </CardDescription>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {provider.description}
+                  </p>
+                </CardHeader>
+
+                <CardContent className="space-y-4">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="glass rounded-lg p-2">
+                      <p className="text-xs text-muted-foreground">Success</p>
+                      <p className="font-bold text-fire-orange">
+                        {provider.stats.successRate}%
+                      </p>
+                    </div>
+                    <div className="glass rounded-lg p-2">
+                      <p className="text-xs text-muted-foreground">Speed</p>
+                      <p
+                        className={cn(
+                          "font-bold text-xs",
+                          getSpeedColor(provider.speed),
+                        )}
+                      >
+                        {provider.speed}
+                      </p>
+                    </div>
+                    <div className="glass rounded-lg p-2">
+                      <p className="text-xs text-muted-foreground">Quality</p>
+                      <p
+                        className={cn(
+                          "font-bold text-xs",
+                          getQualityColor(provider.quality),
+                        )}
+                      >
+                        {provider.quality}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  <div className="flex flex-wrap gap-1">
+                    {provider.features.slice(0, 3).map((feature) => (
+                      <Badge
+                        key={feature}
+                        variant="outline"
+                        className="text-xs"
+                      >
+                        {feature}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  {/* API Key Input */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">API Key</label>
+                      <span className="text-xs text-muted-foreground">
+                        {provider.pricing}
+                      </span>
+                    </div>
+
+                    <div className="relative">
+                      <Input
+                        type={showApiKeys[provider.id] ? "text" : "password"}
+                        placeholder={
+                          status === "valid"
+                            ? "Configured ✓"
+                            : provider.placeholder
+                        }
+                        value={apiKeys[provider.id] || ""}
+                        onChange={(e) => {
+                          setApiKeys((prev) => ({
+                            ...prev,
+                            [provider.id]: e.target.value,
+                          }));
+                          setApiKeyStatuses((prev) => ({
+                            ...prev,
+                            [provider.id]: null,
+                          }));
+                        }}
+                        className="glass pr-20 text-sm"
+                        disabled={status === "valid"}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center space-x-1 pr-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() =>
+                            setShowApiKeys((prev) => ({
+                              ...prev,
+                              [provider.id]: !prev[provider.id],
+                            }))
+                          }
+                          className="h-8 w-8 p-0"
+                        >
+                          {showApiKeys[provider.id] ? (
+                            <EyeOff className="w-3 h-3" />
+                          ) : (
+                            <Eye className="w-3 h-3" />
+                          )}
+                        </Button>
+                        {apiKeys[provider.id]?.trim() && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() =>
+                              testApiKey(provider.id, apiKeys[provider.id])
+                            }
+                            disabled={isTesting}
+                            className="h-8 w-8 p-0"
+                          >
+                            {isTesting ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : status === "valid" ? (
+                              <CheckCircle2 className="w-3 h-3 text-fire-orange" />
+                            ) : (
+                              <Rocket className="w-3 h-3" />
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Status */}
+                    <div className="flex justify-between items-center">
+                      <a
+                        href={`https://console.${provider.id}.com/keys`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-fire-orange hover:underline"
+                      >
+                        Get API Key →
+                      </a>
+                      {status === "valid" && (
+                        <span className="text-xs text-fire-orange flex items-center">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Ready to Fight!
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+
+                {/* Usage Animation */}
+                {provider.stats.rank <= 3 && (
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-fire-orange/20 to-fire-red/20">
+                    <div
+                      className="h-full bg-gradient-to-r from-fire-orange to-fire-red animate-pulse"
+                      style={{ width: `${provider.stats.successRate}%` }}
+                    />
+                  </div>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Contest Footer */}
+        <div className="text-center space-y-4 py-8">
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-fire-orange to-fire-red bg-clip-text text-transparent">
+            May the Best AI Win! 🔥
+          </h3>
+          <p className="text-muted-foreground">
+            Configure your champions and watch them battle in real-time. Usage
+            stats update live as developers choose their favorites!
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
