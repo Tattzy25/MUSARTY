@@ -1,92 +1,171 @@
-# Fusion Starter
+# Musarty - AI Creation Hub Architecture
 
-A production-ready full-stack React application template with integrated Express server, featuring React Router 6 SPA mode, TypeScript, Vitest, Zod and modern tooling.
+A production-ready full-stack AI platform with integrated Shot Caller orchestration system, featuring 24+ AI models, secure vault management, and intelligent routing.
 
-While the starter comes with a express server, only create endpoint when strictly neccesary, for example to encapsulate logic that must leave in the server, such as private keys handling, or certain DB operations, db...
+## 🎯 What Musarty Is
 
-## Tech Stack
+**The Universal AI Creation Platform** that unifies text, image, video, and music generation into one seamless experience. Built for creators who want access to the world's best AI models without the complexity.
 
-- **Frontend**: React 18 + React Router 6 (spa) + TypeScript + Vite + TailwindCSS 3
-- **Backend**: Express server integrated with Vite dev server
+## 🏗️ Tech Stack
+
+- **Frontend**: React 18 + React Router 6 (SPA) + TypeScript + Vite + TailwindCSS 3
+- **Backend**: Express server with Shot Caller orchestration system
+- **AI Integration**: 24+ models across 5 providers (OpenAI, Groq, Anthropic, Gemini, Stability)
+- **Security**: AES-256 vault system with automatic key rotation
 - **Testing**: Vitest
 - **UI**: Radix UI + TailwindCSS 3 + Lucide React icons
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 client/                   # React SPA frontend
-├── pages/                # Route components (Index.tsx = home)
+├── pages/                # Route components
+│   ├── Index.tsx         # Image to code converter (legacy)
+│   ├── NeonCity.tsx      # Multi-modal AI generation
+│   ├── Providers.tsx     # AI Arena - model showcase
+│   ├── Pricing.tsx       # Pricing and plans
+│   ├── Checkout.tsx      # Payment processing
+│   └── Settings.tsx      # User configuration
 ├── components/ui/        # Pre-built UI component library
-├── App.tsx                # App entry point and with SPA routing setup
-└── global.css            # TailwindCSS 3 theming and global styles
+├── hooks/                # Custom React hooks
+├── App.tsx               # App entry point with SPA routing
+└── global.css            # TailwindCSS 3 theming (fire orange theme)
 
 server/                   # Express API backend
-├── index.ts              # Main server setup (express config + routes)
-└── routes/               # API handlers
+├── config/               # Configuration files
+│   └── model-groups.ts   # AI model definitions and grouping
+├── services/             # Core business logic
+│   ├── shot-caller.ts    # Main orchestration system
+│   ├── vault_musarty.ts  # Secure API key management
+│   ├── ai-providers.ts   # Provider abstractions
+│   ├── groq-provider.ts  # Groq integration
+│   ├── openai-provider.ts# OpenAI integration
+│   └── settings.ts       # User settings management
+├── routes/               # API handlers
+│   ├── shot-caller.ts    # Main AI generation routes
+│   ├── checkout.ts       # Payment processing
+│   ├── convert.ts        # Image to code (legacy)
+│   └── settings.ts       # Settings API
+└── index.ts              # Main server setup
 
 shared/                   # Types used by both client & server
-└── api.ts                # Example of how to share api interfaces
+└── api.ts                # Shared interfaces and types
 ```
 
-## Key Features
+## 🎯 Key Features
 
-## SPA Routing System
+### 🔥 Shot Caller System
+
+The intelligent request orchestrator that:
+
+- **Analyzes requests** and routes to optimal AI models
+- **Manages billing** (BYOK unlimited vs pay-per-block)
+- **Handles authentication** and rate limiting
+- **Tracks usage** and provides analytics
+- **Encrypts API keys** with military-grade security
+
+### 🔐 Musarty Vault
+
+Secure API key management system:
+
+- **AES-256 encryption** for all stored keys
+- **Automatic rotation** every 1000 characters
+- **Zero logging** of raw API keys
+- **Smart load balancing** across multiple keys
+- **Cooling periods** to prevent API abuse
+
+### 🎮 AI Model Groups
+
+**Group 1: Fast Text & Daily Hustle (10 Models)**
+
+- Unlimited BYOK for text generation
+- Low-cost, high-speed models
+- Perfect for daily workflows
+
+**Group 2: Heavy Compute & Complex Reasoning (9 Models)**
+
+- Always metered (regardless of BYOK)
+- Premium models for complex tasks
+- Advanced reasoning and analysis
+
+**Specialty: Creative & Visual (5 Models)**
+
+- Always metered, no free rides
+- Image, video, and music generation
+- Premium creative AI models
+
+## 🛣️ SPA Routing System
 
 The routing system is powered by React Router 6:
 
-- `client/pages/Index.tsx` represents the home page.
-- Routes are defined in `client/App.tsx` using the `react-router-dom` import
-- Route files are located in the `client/pages/` directory
+- `client/pages/Index.tsx` - Image to code converter (legacy)
+- `client/pages/NeonCity.tsx` - Multi-modal AI generation hub
+- `client/pages/Providers.tsx` - AI Arena showcasing all models
+- `client/pages/Pricing.tsx` - Pricing plans and billing
+- `client/pages/Checkout.tsx` - Payment processing
+- `client/pages/Settings.tsx` - User configuration and API keys
 
-For example, routes can be defined with:
+Routes are defined in `client/App.tsx`:
 
 ```typescript
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 <Routes>
   <Route path="/" element={<Index />} />
-  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+  <Route path="/neon-city" element={<NeonCity />} />
+  <Route path="/providers" element={<Providers />} />
+  <Route path="/pricing" element={<Pricing />} />
+  <Route path="/checkout" element={<Checkout />} />
+  <Route path="/settings" element={<Settings />} />
   <Route path="*" element={<NotFound />} />
-</Routes>;
+</Routes>
 ```
 
-### Styling System
+### 🎨 Styling System
 
-- **Primary**: TailwindCSS 3 utility classes
-- **Theme and design tokens**: Configure in `client/global.css` 
+- **Primary**: TailwindCSS 3 utility classes with custom fire theme
+- **Theme**: Fire orange gradient palette (hsl(25 100% 60%))
 - **UI components**: Pre-built library in `client/components/ui/`
-- **Utility**: `cn()` function combines `clsx` + `tailwind-merge` for conditional classes
+- **Effects**: Glassmorphism, neon glows, and cyber aesthetics
+- **Utility**: `cn()` function combines `clsx` + `tailwind-merge`
 
 ```typescript
-// cn utility usage
-className={cn(
-  "base-classes",
-  { "conditional-class": condition },
-  props.className  // User overrides
-)}
+// Fire theme colors
+--fire-orange: 25 100% 60%;
+--fire-red: 15 100% 50%;
+--fire-yellow: 35 100% 55%;
 ```
 
-### Express Server Integration
+### 🔌 Shot Caller Integration
 
-- **Development**: Single port (8080) for both frontend/backend
-- **Hot reload**: Both client and server code
-- **API endpoints**: Prefixed with `/api/`
+**Development**: Single port (8080) for both frontend/backend with intelligent routing
 
-#### Example API Routes
-- `GET /api/ping` - Simple ping api
-- `GET /api/demo` - Demo endpoint  
+#### Main API Endpoints
 
-### Shared Types
+- `POST /api/shot-caller/generate` - Main AI generation endpoint
+- `GET /api/models` - List all 24 available models
+- `GET /api/users/:id/usage` - User statistics and billing
+- `POST /api/users/initialize` - New user setup
+- `GET /api/vault/stats` - Vault monitoring (admin)
+
+#### Legacy Endpoints (Maintained)
+
+- `POST /api/generate` - Original Neon City generation
+- `POST /api/convert` - Image to code conversion
+- `GET /api/settings` - User settings management
+
+### 📊 Shared Types
+
 Import consistent types in both client and server:
+
 ```typescript
-import { DemoResponse } from '@shared/api';
+import { GenerationRequest, GenerationResponse } from "@shared/api";
 ```
 
 Path aliases:
+
 - `@shared/*` - Shared folder
 - `@/*` - Client folder
 
-## Development Commands
+## 🚀 Development Commands
 
 ```bash
 npm run dev        # Start dev server (client + server)
@@ -96,69 +175,100 @@ npm run typecheck  # TypeScript validation
 npm test          # Run Vitest tests
 ```
 
-## Adding Features
+## 🎯 Adding New Features
 
-### Add new colors to the theme
+### Add New AI Model
 
-Open `client/global.css` and `tailwind.config.ts` and add new tailwind colors.
+1. **Add to model groups** in `server/config/model-groups.ts`:
 
-### New API Route
-1. **Optional**: Create a shared interface in `shared/api.ts`:
 ```typescript
-export interface MyRouteResponse {
-  message: string;
-  // Add other response properties here
+export const GROUP1_MODELS: ModelInfo[] = [
+  {
+    id: "new-model-id",
+    name: "New Model Name",
+    provider: "provider-name",
+    pricing: "$X.XX/M tokens",
+    speed: "Lightning",
+    quality: "Exceptional",
+    category: "Category",
+  },
+  // ... existing models
+];
+```
+
+2. **Implement provider service** in `server/services/new-provider.ts`:
+
+```typescript
+export async function callNewProvider(
+  request: GenerationRequest,
+  apiKey: string,
+): Promise<string> {
+  // Implementation
 }
 ```
 
-2. Create a new route handler in `server/routes/my-route.ts`:
-```typescript
-import { RequestHandler } from "express";
-import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
+3. **Update Shot Caller** routing in `server/services/shot-caller.ts`
 
-export const handleMyRoute: RequestHandler = (req, res) => {
-  const response: MyRouteResponse = {
-    message: 'Hello from my endpoint!'
-  };
-  res.json(response);
-};
+### Add New Generation Type
+
+1. **Update request types** in `shared/api.ts`:
+
+```typescript
+export interface GenerationRequest {
+  content_type?: "text" | "image" | "video" | "music" | "new-type";
+}
 ```
 
-3. Register the route in `server/index.ts`:
-```typescript
-import { handleMyRoute } from "./routes/my-route";
+2. **Add frontend interface** in appropriate page component
+3. **Update billing logic** in Shot Caller
 
-// Add to the createServer function:
-app.get("/api/my-endpoint", handleMyRoute);
-```
+### Add New UI Route
 
-4. Use in React components with type safety:
-```typescript
-import { MyRouteResponse } from '@shared/api'; // Optional: for type safety
-
-const response = await fetch('/api/my-endpoint');
-const data: MyRouteResponse = await response.json();
-```
-
-### New Page Route
-1. Create component in `client/pages/MyPage.tsx`
+1. Create component in `client/pages/NewPage.tsx`
 2. Add route in `client/App.tsx`:
+
 ```typescript
-<Route path="/my-page" element={<MyPage />} />
+<Route path="/new-page" element={<NewPage />} />
 ```
 
-## Production Deployment
+3. Update navigation in `client/components/Navigation.tsx`
+
+## 🔐 Security Architecture
+
+### API Key Management
+
+- **User Keys**: Encrypted with AES-256 before database storage
+- **Vault Keys**: Environment variables only, never in database
+- **Transmission**: HTTPS only, never logged in plain text
+- **Access**: Server-side decryption only
+
+### Usage Tracking
+
+Every generation logs:
+
+- `user_id` - User identifier
+- `model_id` - Model used
+- `chars_used` - Characters processed
+- `blocks_deducted` - Billing blocks consumed
+- `key_source` - BYOK or vault
+- `timestamp` - When it happened
+
+## 🌟 Production Deployment
 
 - **Standard**: `npm run build` + `npm start`
 - **Docker**: Dockerfile included
-- **Binary**: Self-contained executables (Linux, macOS, Windows)
-- Express serves the built React SPA with fallback routing support
+- **Environment**: All secrets in environment variables
+- **Database**: Ready for PostgreSQL/Redis integration
+- **Monitoring**: Vault statistics and usage analytics
 
-## Architecture Notes
+## 📈 Architecture Notes
 
-- Single-port development with Vite + Express integration
-- TypeScript throughout (client, server, shared)
-- Full hot reload for rapid development
-- Production-ready with multiple deployment options
-- Comprehensive UI component library included
-- Type-safe API communication via shared interfaces
+- **Single-port development** with Vite + Express integration
+- **TypeScript throughout** (client, server, shared)
+- **Full hot reload** for rapid development
+- **Production-ready** with comprehensive error handling
+- **Scalable architecture** ready for enterprise features
+- **Security-first** design with encrypted vault system
+- **Multi-provider AI** integration with intelligent routing
+
+The platform is built to scale from individual creators to enterprise teams, with a foundation that supports unlimited AI models and generation types.
