@@ -23,6 +23,10 @@ import {
 export default function Pricing() {
   const [isAnnual, setIsAnnual] = useState(false);
 
+  // Check if user came here after exhausting free generations
+  const searchParams = new URLSearchParams(window.location.search);
+  const isUpgrade = searchParams.get("upgrade") === "true";
+
   const features = {
     free: [
       {
