@@ -117,11 +117,17 @@ export default function Settings() {
     }
   };
 
-  const testApiKey = async (provider: string, key: string) => {
+  const testApiKey = async (keyType: string, key: string) => {
     if (!key.trim()) return;
 
-    setIsTestingApiKey(provider);
+    setIsTestingApiKey(keyType);
     try {
+      // Detect provider based on key format
+      let provider = "openai"; // default
+      if (key.startsWith("gsk-")) provider = "groq";
+      else if (key.startsWith("sk-ant-")) provider = "anthropic";
+      else if (key.startsWith("AIza")) provider = "gemini";
+
       const response = await fetch("/api/settings/test-api-key", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -130,12 +136,12 @@ export default function Settings() {
       const data = await response.json();
       setApiKeyStatuses((prev) => ({
         ...prev,
-        [provider]: data.valid ? "valid" : "invalid",
+        [keyType]: data.valid ? "valid" : "invalid",
       }));
     } catch (error) {
       setApiKeyStatuses((prev) => ({
         ...prev,
-        [provider]: "invalid",
+        [keyType]: "invalid",
       }));
     } finally {
       setIsTestingApiKey(null);
