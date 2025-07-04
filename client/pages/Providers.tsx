@@ -528,8 +528,8 @@ const AI_PROVIDERS: AIProvider[] = [
     speed: "Standard",
     quality: "Exceptional",
     placeholder: "pplx_...",
-    color: "from-cyan-400 to-blue-600",
-    bgGradient: "bg-gradient-to-br from-cyan-400/20 to-blue-600/20",
+    color: "from-orange-400 to-red-600",
+    bgGradient: "bg-gradient-to-br from-orange-400/20 to-red-600/20",
     icon: Crown,
     models: ["sonar-pro", "sonar-reasoning-pro"],
     stats: {
