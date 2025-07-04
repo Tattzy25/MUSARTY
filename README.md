@@ -1,375 +1,279 @@
-# CodeForge AI - Image to Code Converter 🔥
+# Musarty - The Ultimate AI Creation Hub 🔥🎵🎨
 
-A production-ready, futuristic AI-powered tool that converts PNG, JPG, and SVG images into clean, optimized React components, HTML, and CSS code.
+**Music • Art • AI Creation**
 
-![CodeForge AI](https://img.shields.io/badge/AI%20Powered-Groq%20%7C%20Anthropic%20%7C%20Gemini-orange)
+A production-ready, futuristic AI-powered platform that unifies 24+ AI models into one seamless creation hub. Generate text, images, videos, music, and code using the world's most powerful AI models with intelligent routing, usage metering, and secure key management.
+
+![Musarty](https://img.shields.io/badge/24+%20AI%20Models-Unified%20Hub-orange)
 ![Production Ready](https://img.shields.io/badge/Production-Ready-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-Ready-orange)
+![TypeScript](https://img.shields.io/badge/TypeScript-Full%20Stack-orange)
+![Secure](https://img.shields.io/badge/Security-AES%20256%20Vault-red)
 
-## ✨ Features
+## ✨ What Musarty Is
 
-- **🎯 Multi-Provider AI**: Supports Groq, Anthropic Claude, and Google Gemini for maximum flexibility
-- **🔄 Multiple File Support**: Process up to 5 images simultaneously
-- **💎 Production-Ready Code**: Generates clean, optimized, and well-structured code
-- **🔥 Fire Orange UI**: Modern design with glassmorphism effects and vibrant fire-themed colors
-- **⚙️ Customizable Settings**: Full control over AI providers and code generation preferences
-- **📱 Responsive Design**: Works perfectly on all devices
-- **♿ Accessibility**: Includes ARIA labels and semantic HTML
-- **🚀 Performance Optimized**: Fast processing with real-time progress tracking
-- **🔐 Secure API Management**: Compact, secure API key configuration
+**The Universal AI Creation Platform** - One interface, unlimited possibilities:
+
+- **🎵 Music Generation**: Suno AI, Stability AI
+- **🎨 Image Creation**: DALL-E 3, Midjourney, Stability SDXL
+- **🎥 Video Production**: Runway Gen3, AI video tools
+- **📝 Text & Code**: GPT-4o, Claude, Llama, DeepSeek, 20+ models
+- **🔧 Smart Routing**: Shot Caller system intelligently routes to best AI
+- **🔐 Secure Vault**: Military-grade API key encryption & rotation
+- **💰 Flexible Billing**: BYOK unlimited or pay-as-you-go blocks
+
+## 🎯 The AI Arsenal (24 Models)
+
+### ⚡ Group 1: Fast Text & Daily Hustle (10 Models)
+
+_Lightning speed, low cost, unlimited BYOK_
+
+| Model                 | Provider | Speed  | Cost    | Best For           |
+| --------------------- | -------- | ------ | ------- | ------------------ |
+| **Llama 4 Scout**     | Groq     | ⚡⚡⚡ | $0.30/M | Daily text, coding |
+| **Llama 3.3 70B**     | Groq     | ⚡⚡⚡ | $0.30/M | Versatile tasks    |
+| **GPT-4o Mini**       | OpenAI   | ⚡⚡   | $5.00/M | Reliable baseline  |
+| **Gemini 2.0 Flash**  | Google   | ⚡⚡⚡ | $0.10/M | Cheapest option    |
+| **DeepSeek V3**       | DeepSeek | ⚡⚡   | $0.14/M | Reasoning tasks    |
+| **Mistral Codestral** | Mistral  | ⚡⚡⚡ | $0.30/M | 80+ languages      |
+| **Nova Lite**         | Amazon   | ⚡⚡⚡ | $0.06/M | Ultra budget       |
+| **Morph V2**          | Morph    | ⚡⚡⚡ | $0.90/M | 1600 tok/sec       |
+| **Grok 3 Mini**       | xAI      | ⚡⚡   | $0.30/M | Thinking machine   |
+| **Together Llama**    | Together | ⚡⚡⚡ | $0.20/M | Open source        |
+
+### 💪 Group 2: Heavy Compute & Complex Reasoning (9 Models)
+
+_Premium quality, always metered_
+
+| Model                    | Provider   | Quality | Cost    | Best For           |
+| ------------------------ | ---------- | ------- | ------- | ------------------ |
+| **Claude 3.5 Sonnet**    | Anthropic  | 🏆🏆🏆  | $3.00/M | Deep reasoning     |
+| **Claude 3.5 Haiku**     | Anthropic  | 🏆🏆🏆  | $3.00/M | Fast reasoning     |
+| **GPT-4o**               | OpenAI     | 🏆🏆🏆  | $5.00/M | Industry standard  |
+| **GPT-4 Turbo**          | OpenAI     | 🏆🏆🏆  | $5.00/M | Long context       |
+| **Gemini 1.5 Pro**       | Google     | 🏆🏆    | $0.10/M | 1M context         |
+| **Mistral Magistral**    | Mistral    | 🏆🏆🏆  | $2.00/M | Complex thinking   |
+| **Mistral Pixtral**      | Mistral    | 🏆🏆🏆  | $2.00/M | Vision master      |
+| **Perplexity Sonar Pro** | Perplexity | 🏆🏆    | $3.00/M | Search + reasoning |
+| **v0 1.5 Large**         | Vercel     | 🏆🏆🏆  | $2.00/M | UI specialist      |
+
+### 🎨 Specialty: Creative & Visual (5 Models)
+
+_Always metered, premium creative_
+
+| Model              | Provider   | Type  | Cost    | Best For        |
+| ------------------ | ---------- | ----- | ------- | --------------- |
+| **DALL-E 3**       | OpenAI     | Image | $3.00/M | Precision art   |
+| **Midjourney v6**  | Midjourney | Image | $4.00/M | Artistic genius |
+| **Stability SDXL** | Stability  | Image | $1.50/M | Open source     |
+| **Runway Gen3**    | Runway     | Video | $5.00/M | Video wizard    |
+| **Suno v3**        | Suno       | Music | $3.00/M | Music master    |
+
+## 🏗️ Architecture
+
+### 🎯 Shot Caller System
+
+The intelligent request orchestrator that:
+
+- **Routes requests** to optimal AI models
+- **Manages billing** (BYOK vs blocks)
+- **Handles authentication** and rate limiting
+- **Tracks usage** and analytics
+- **Encrypts API keys** with AES-256
+
+### 🔐 Musarty Vault
+
+Military-grade API key management:
+
+- **AES-256 encryption** for all stored keys
+- **Automatic rotation** every 1000 characters
+- **Zero logging** of raw keys
+- **Smart key selection** based on usage
+- **Cooling periods** to prevent overuse
+
+### 📊 Block System
+
+- **Group 1 + BYOK**: Unlimited text generation
+- **Group 1 + Vault**: 1 block per 1000 characters
+- **Group 2**: 2 blocks per request
+- **Specialty**: 1 block per generation
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 
-- **React 18** with TypeScript
-- **Tailwind CSS** with custom futuristic theme
-- **Radix UI** components
+- **React 18** + TypeScript + Vite
+- **TailwindCSS** with futuristic fire theme
+- **Radix UI** components + Lucide icons
 - **React Router 6** (SPA mode)
-- **React Dropzone** for file uploads
-- **React Syntax Highlighter** for code display
+- **React Query** for state management
 
 ### Backend
 
-- **Express.js** server
-- **Multi-Provider AI Integration**: Groq, Anthropic, Google Gemini
-- **Multer** for file handling
-- **Zod** for validation
-- **Secure API Key Management**
+- **Express.js** + TypeScript
+- **Zod** validation + **Multer** uploads
+- **24+ AI Provider SDKs**
+- **Custom encryption** + **Usage tracking**
+
+### Security
+
+- **AES-256** key encryption
+- **JWT** authentication (coming)
+- **Rate limiting** + **CORS**
+- **Environment** variable protection
 
 ## 🚀 Quick Start
 
 ### 1. Installation
 
 ```bash
-# Clone the repository
-git clone <your-repo-url>
-cd codeforge-ai
-
-# Install dependencies
+git clone <repo-url>
+cd musarty
 npm install
 ```
 
-### 2. AI Provider Setup
-
-Choose your preferred AI provider and get an API key:
-
-**Groq (Recommended - Fast & Free Tier)**:
-
-- Go to [Groq Console](https://console.groq.com/keys)
-- Create a new API key
-- Copy the key (starts with `gsk_...`)
-
-**Anthropic Claude**:
-
-- Go to [Anthropic Console](https://console.anthropic.com/)
-- Create a new API key
-- Copy the key (starts with `sk-ant-...`)
-
-**Google Gemini**:
-
-- Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
-- Create a new API key
-- Copy the key (starts with `AIza...`)
-
-**Configure your API key**:
-
-- Start the application: `npm run dev`
-- Go to Settings in the app
-- Select your AI provider
-- Enter your API key in the compact configuration section
-- Test and save your settings
-
-### 3. Start Development
+### 2. Environment Setup
 
 ```bash
-# Start the development server
+cp .env.example .env
+```
+
+**Required Environment Variables:**
+
+```env
+# Master encryption key
+MASTER_ENCRYPTION_KEY=your-super-secure-key
+
+# Musarty's Vault Keys (5+ recommended per provider)
+OPENAI_KEY_1=sk-your-openai-key-1
+OPENAI_KEY_2=sk-your-openai-key-2
+GROQ_KEY_1=gsk-your-groq-key-1
+ANTHROPIC_KEY_1=sk-ant-your-anthropic-key
+GEMINI_KEY_1=AIza-your-gemini-key
+
+# Optional: User fallback
+GROQ_API_KEY=gsk-fallback-key
+```
+
+### 3. Launch
+
+```bash
 npm run dev
-
-# The app will be available at http://localhost:8080
 ```
 
-## 🔧 Configuration
+Open `http://localhost:8080` and start creating!
 
-### AI Model Options
+## 🎮 Usage
 
-**Groq Models** (Recommended):
+### For Users
 
-- **Llama 3.2 90B Vision** - Best quality, excellent for complex designs
-- **Llama 3.2 11B Vision** - Faster processing, good for simple designs
+1. **Sign up** → Get 3 free generations
+2. **Choose tool**: Text, Image, Video, Music
+3. **Pick model** or let Musarty choose optimal
+4. **Generate** with BYOK unlimited or pay blocks
 
-**Anthropic Models**:
+### For Developers
 
-- **Claude 3.5 Sonnet** - Premium quality, excellent reasoning
-- **Claude 3 Haiku** - Fast and efficient
-
-**Google Gemini Models**:
-
-- **Gemini 1.5 Pro** - High quality, good for detailed analysis
-- **Gemini 1.5 Flash** - Fast processing, cost-effective
-
-### Code Generation Settings
-
-- **Code Style**: Modern React, Class Components, Next.js, or Minimal
-- **TypeScript**: Enable/disable TypeScript generation
-- **Tailwind CSS**: Include Tailwind utility classes
-- **Responsive Design**: Generate mobile-friendly code
-- **Accessibility**: Include ARIA labels and semantic HTML
-- **Performance Optimization**: Optimize for loading speed
-- **Comments**: Include explanatory comments
-
-### Quality Settings
-
-- **Quality Level** (50-100%): Higher = more detailed analysis, slower processing
-- **Processing Speed** (30-100%): Balance between speed and thoroughness
-
-## 📋 API Endpoints
-
-### Convert Images
-
-```
-POST /api/convert
-```
-
-**Request Body:**
-
-```json
+```typescript
+// Shot Caller API
+POST /api/shot-caller/generate
 {
-  "files": [
-    {
-      "data": "base64-encoded-image-data",
-      "name": "image.png",
-      "type": "image/png"
-    }
-  ],
-  "settings": {
-    "generateTypeScript": true,
-    "includeTailwind": true,
-    "responsiveDesign": true,
-    "qualityLevel": 85
-  }
+  "user_id": "user123",
+  "model_id": "gpt-4o",
+  "input": "Generate a React component",
+  "byok": true,
+  "user_api_key": "sk-user-key..."
 }
 ```
 
-**Response:**
+## 🔑 API Reference
 
-```json
-{
-  "success": true,
-  "data": {
-    "results": [
-      {
-        "react": "// React component code",
-        "html": "<!-- HTML markup -->",
-        "css": "/* CSS styles */",
-        "fileName": "GeneratedComponent",
-        "originalFileName": "image.png"
-      }
-    ],
-    "processingTime": 5234,
-    "totalFiles": 1
-  }
-}
-```
+### Core Endpoints
 
-### Settings Management
+- `POST /api/shot-caller/generate` - Main AI generation
+- `GET /api/models` - List all 24 models
+- `GET /api/users/:id/usage` - Usage statistics
+- `POST /api/users/initialize` - New user setup
+- `GET /api/vault/stats` - Vault monitoring
 
-```
-GET /api/settings         # Get current settings
-POST /api/settings        # Update settings
-POST /api/settings/test-api-key  # Test API key validity
-```
+### Authentication (Coming Soon)
 
-## 🎨 UI Features
+- **Clerk** integration for user auth
+- **JWT** tokens for API access
+- **Role-based** permissions
 
-### Fire Orange Design Elements
+## 💰 Pricing
 
-- **Glassmorphism Effects**: Translucent components with backdrop blur
-- **Fire Orange Accents**: Dynamic glowing borders with fire-themed colors
-- **Holographic Backgrounds**: Animated gradient backgrounds in orange/red/yellow
-- **Cyber Grid Patterns**: Subtle grid overlays for tech aesthetic
-- **Pulse Animations**: Breathing light effects on interactive elements
-- **Compact UI**: Clean, space-efficient interface design
+### Free Tier
 
-### Interactive Components
+- **3 free generations** of anything
+- No credit card required
+- Access to all tools
 
-- **Drag & Drop Upload**: Smooth file upload with visual feedback
-- **Real-time Progress**: Live processing status with stage indicators
-- **Code Viewer**: Syntax-highlighted code with copy/download buttons
-- **Settings Panel**: Comprehensive configuration interface
+### Pro Unlimited ($4.99)
 
-## 🔒 Security Features
+- **Unlimited text** with your API keys
+- **Access to all 29 models**
+- **Pay-as-you-go** for images/video/music
+- **BYOK support** for cost control
 
-- **API Key Protection**: Keys are never sent to the client
-- **File Type Validation**: Only accepts PNG, JPG, and SVG files
-- **Size Limits**: 10MB maximum file size
-- **Input Sanitization**: All inputs are validated with Zod schemas
+### Block Pricing
 
-## 🚀 Production Deployment
+- **1000 text chars** = 1 block
+- **4 images** = 1 block
+- **1 video** = 1 block
+- **1 music track** = 1 block
 
-### Build for Production
+## 🛣️ Roadmap
 
-```bash
-# Build the application
-npm run build
+### Phase 1: Foundation ✅
 
-# Start production server
-npm start
-```
+- [x] 24 AI models integrated
+- [x] Shot Caller system
+- [x] Vault security system
+- [x] Pricing & billing
+- [x] Basic UI/UX
 
-### Environment Variables
+### Phase 2: User Experience 🚧
 
-For production deployment, you can set environment variables:
+- [ ] **Clerk authentication**
+- [ ] User dashboards & analytics
+- [ ] Advanced model selection
+- [ ] File management system
+- [ ] Mobile app (React Native)
 
-```bash
-# Optional: Set via environment (not recommended for API keys)
-OPENAI_API_KEY=sk-your-api-key-here
-PORT=8080
-```
+### Phase 3: Enterprise 🔮
 
-**Note**: It's more secure to configure the API key through the Settings interface rather than environment variables.
+- [ ] Team collaboration
+- [ ] Custom model training
+- [ ] White-label solutions
+- [ ] Advanced analytics
+- [ ] Enterprise SSO
 
-### Docker Deployment
+### Phase 4: Ecosystem 🌟
 
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 8080
-CMD ["npm", "start"]
-```
+- [ ] Plugin marketplace
+- [ ] Third-party integrations
+- [ ] API marketplace
+- [ ] Developer tools
+- [ ] Community features
 
-## 📝 Usage Guide
+## 🤝 Contributing
 
-### 1. Upload Images
-
-- Drag and drop up to 5 images (PNG, JPG, SVG)
-- Or click to browse and select files
-- Files are processed simultaneously
-
-### 2. Configure Settings (Optional)
-
-- Go to Settings to customize code generation
-- Set your OpenAI API key
-- Adjust quality and speed preferences
-- Choose code style and framework preferences
-
-### 3. Generate Code
-
-- Click "Convert" or drop files to start processing
-- Watch real-time progress through AI stages:
-  - **Analyzing**: AI examines image structure
-  - **Converting**: Generating React/HTML/CSS code
-  - **Optimizing**: Refining code for production
-
-### 4. Download Results
-
-- View generated code with syntax highlighting
-- Copy individual files or download all
-- Each image generates 3 files: .tsx, .html, .css
-
-## 🎯 Code Quality
-
-The generated code includes:
-
-- **Clean Structure**: Well-organized, readable code
-- **Type Safety**: Full TypeScript support with proper interfaces
-- **Modern Patterns**: Uses latest React best practices
-- **Responsive Design**: Mobile-first approach with breakpoints
-- **Accessibility**: ARIA labels, semantic HTML, keyboard navigation
-- **Performance**: Optimized CSS, efficient React patterns
-- **Cross-browser**: Compatible with all modern browsers
-
-## 🛠️ Development
-
-### Project Structure
-
-```
-client/                   # React frontend
-├── components/          # Reusable components
-│   ├── ui/             # Shadcn UI components
-│   ├── FileUpload.tsx  # File upload interface
-│   ├── CodeViewer.tsx  # Code display component
-│   ├── AIProcessor.tsx # Processing status
-│   └── Navigation.tsx  # App navigation
-├─�� pages/              # Route pages
-│   ├── Index.tsx       # Main converter
-│   └── Settings.tsx    # Settings panel
-└── App.tsx             # App router
-
-server/                  # Express backend
-├── services/           # Business logic
-│   ├── openai.ts      # OpenAI integration
-│   └── settings.ts    # Settings management
-├── routes/            # API endpoints
-│   ├── convert.ts     # Conversion API
-│   └── settings.ts    # Settings API
-└── index.ts           # Server setup
-
-shared/                 # Shared types
-└── api.ts             # API interfaces
-```
-
-### Available Scripts
-
-```bash
-npm run dev          # Development server
-npm run build        # Production build
-npm run start        # Production server
-npm run typecheck    # TypeScript validation
-npm test            # Run tests
-npm run format.fix   # Format code
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-1. **"OpenAI API key not configured"**
-
-   - Go to Settings and add your API key
-   - Make sure the key starts with `sk-`
-   - Test the key using the test button
-
-2. **"Invalid file type"**
-
-   - Only PNG, JPG, and SVG files are supported
-   - Check file extensions are correct
-
-3. **"File too large"**
-
-   - Maximum file size is 10MB
-   - Compress images if needed
-
-4. **Processing failures**
-   - Check your OpenAI API key has sufficient credits
-   - Ensure stable internet connection
-   - Try reducing quality level for faster processing
-
-### Getting Help
-
-- Check the console for detailed error messages
-- Verify your OpenAI API key is valid
-- Ensure files meet size and type requirements
-- Try processing one file at a time if batch processing fails
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT License - see [LICENSE](LICENSE) for details.
 
-## 🙋‍♂️ Support
+## 🆘 Support
 
-For issues and questions:
-
-1. Check the troubleshooting section above
-2. Open an issue on GitHub
-3. Contact support with detailed error descriptions
+- **Documentation**: Coming soon
+- **Discord**: [Join our community](https://discord.gg/musarty)
+- **Email**: support@musarty.com
+- **GitHub Issues**: For bugs and feature requests
 
 ---
 
-**Built with 🔥 using Multi-Provider AI (Groq, Anthropic, Gemini)**
+**Built with 🔥 by the Musarty team**
 
-_Transform your designs into code with the power of AI!_
+_The future of AI creation is here. Welcome to Musarty._
