@@ -477,6 +477,111 @@ export default function NeonCity() {
                     />
                   )}
 
+                  {activeMode === "convert" && (
+                    <div className="space-y-8">
+                      {/* File Upload Section */}
+                      {generatedCodes.length === 0 && !error && (
+                        <FileUpload
+                          onFileSelect={handleFileSelect}
+                          isProcessing={isProcessing}
+                          maxFiles={5}
+                        />
+                      )}
+
+                      {/* Processing Section */}
+                      {(isProcessing || stage === "completed") && (
+                        <AIProcessor
+                          isProcessing={isProcessing}
+                          progress={progress}
+                          stage={stage}
+                        />
+                      )}
+
+                      {/* Error Section */}
+                      {error && (
+                        <Card className="glass-strong border-red-500/50">
+                          <CardContent className="p-6 text-center space-y-4">
+                            <div className="relative mx-auto w-16 h-16">
+                              <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl" />
+                              <div className="relative flex items-center justify-center w-full h-full glass rounded-full border-red-500/50">
+                                <FileText className="w-8 h-8 text-red-500" />
+                              </div>
+                            </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-red-500 mb-2">
+                                Conversion Failed
+                              </h3>
+                              <p className="text-muted-foreground">{error}</p>
+                            </div>
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                setError(null);
+                                setSelectedFiles([]);
+                                setGeneratedCodes([]);
+                              }}
+                              className="glass hover:neon-border"
+                            >
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Try Again
+                            </Button>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Results Section */}
+                      {generatedCodes.length > 0 && (
+                        <div className="space-y-6">
+                          {/* Success Header */}
+                          <div className="text-center space-y-4">
+                            <div className="relative mx-auto w-16 h-16">
+                              <div className="absolute inset-0 bg-fire-orange/20 rounded-full blur-xl" />
+                              <div className="relative flex items-center justify-center w-full h-full glass rounded-full neon-border">
+                                <Code className="w-8 h-8 text-fire-orange" />
+                              </div>
+                            </div>
+                            <h2 className="text-2xl font-bold bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow bg-clip-text text-transparent">
+                              Code Generated Successfully!
+                            </h2>
+                          </div>
+
+                          {/* File Navigation (if multiple files) */}
+                          {generatedCodes.length > 1 && (
+                            <div className="flex justify-center space-x-2">
+                              {generatedCodes.map((_, index) => (
+                                <Button
+                                  key={index}
+                                  size="sm"
+                                  variant={
+                                    currentFileIndex === index
+                                      ? "default"
+                                      : "outline"
+                                  }
+                                  onClick={() => setCurrentFileIndex(index)}
+                                  className="glass hover:neon-border"
+                                >
+                                  {index + 1}
+                                </Button>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Generated Code */}
+                          {generatedCodes[currentFileIndex] && (
+                            <CodeViewer
+                              reactCode={generatedCodes[currentFileIndex].react}
+                              htmlCode={generatedCodes[currentFileIndex].html}
+                              cssCode={generatedCodes[currentFileIndex].css}
+                              fileName={
+                                generatedCodes[currentFileIndex].fileName
+                              }
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {(activeMode === "text" || activeMode === "video") && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[400px]">
                       {/* Input Side */}
