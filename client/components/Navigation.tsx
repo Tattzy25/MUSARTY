@@ -33,6 +33,12 @@ export default function Navigation() {
       isActive: location.pathname === "/providers",
     },
     {
+      name: "Pricing",
+      href: "/pricing",
+      icon: Crown,
+      isActive: location.pathname === "/pricing",
+    },
+    {
       name: "Settings",
       href: "/settings",
       icon: Settings,
