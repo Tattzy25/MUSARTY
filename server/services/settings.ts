@@ -1,8 +1,14 @@
 import { z } from "zod";
 
 export const SettingsSchema = z.object({
-  openaiApiKey: z.string().optional(),
-  aiModel: z.string().default("gpt-4-vision-preview"),
+  // API Keys for different providers
+  groqApiKey: z.string().optional(),
+  anthropicApiKey: z.string().optional(),
+  geminiApiKey: z.string().optional(),
+
+  // AI Configuration
+  aiProvider: z.string().default("groq"),
+  aiModel: z.string().default("llama-3.2-90b-vision-preview"),
   codeStyle: z.string().default("modern"),
   optimization: z.string().default("balanced"),
   includeComments: z.boolean().default(true),
@@ -20,7 +26,8 @@ export type AppSettings = z.infer<typeof SettingsSchema>;
 
 // In-memory storage for settings (in production, use a database)
 let appSettings: AppSettings = {
-  aiModel: "gpt-4-vision-preview",
+  aiProvider: "groq",
+  aiModel: "llama-3.2-90b-vision-preview",
   codeStyle: "modern",
   optimization: "balanced",
   includeComments: true,
@@ -43,10 +50,32 @@ export function updateSettings(newSettings: Partial<AppSettings>): AppSettings {
   return { ...appSettings };
 }
 
-export function getApiKey(): string | undefined {
-  return appSettings.openaiApiKey;
+export function getApiKey(provider: string): string | undefined {
+  switch (provider) {
+    case "groq":
+      return appSettings.groqApiKey;
+    case "anthropic":
+      return appSettings.anthropicApiKey;
+    case "gemini":
+      return appSettings.geminiApiKey;
+    default:
+      return undefined;
+  }
 }
 
-export function hasApiKey(): boolean {
-  return !!appSettings.openaiApiKey && appSettings.openaiApiKey.length > 0;
+export function hasApiKey(provider: string): boolean {
+  const key = getApiKey(provider);
+  return !!key && key.length > 0;
+}
+
+export function getCurrentProvider(): string {
+  return appSettings.aiProvider;
+}
+
+export function getAllApiKeys(): Record<string, string | undefined> {
+  return {
+    groq: appSettings.groqApiKey,
+    anthropic: appSettings.anthropicApiKey,
+    gemini: appSettings.geminiApiKey,
+  };
 }
