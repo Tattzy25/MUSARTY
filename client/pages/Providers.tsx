@@ -822,10 +822,16 @@ export default function Providers() {
     "Creative Master",
     "Speed Demon",
     "Reasoning Master",
+    "Reasoning Beast",
     "Vision Master",
     "Search Master",
     "Budget King",
     "Dragon Power",
+    "Video Wizard",
+    "Image Master",
+    "Language Master",
+    "Open Source King",
+    "Model Zoo",
   ];
 
   const filteredProviders =
