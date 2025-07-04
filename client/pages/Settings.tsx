@@ -185,13 +185,11 @@ export default function Settings() {
         setLastSaved(new Date());
         setSettings(data.data);
 
-        // Update statuses and clear entered keys
-        Object.keys(apiKeys).forEach((provider) => {
-          if (apiKeys[provider].trim()) {
-            setApiKeyStatuses((prev) => ({ ...prev, [provider]: "valid" }));
-            setApiKeys((prev) => ({ ...prev, [provider]: "" }));
-          }
-        });
+        // Update status and clear entered key
+        if (apiKeys.primary?.trim()) {
+          setApiKeyStatuses({ primary: "valid" });
+          setApiKeys({ primary: "" });
+        }
       } else {
         throw new Error(data.error || "Failed to save settings");
       }
