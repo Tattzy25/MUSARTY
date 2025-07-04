@@ -48,7 +48,7 @@ export default function Index() {
   const handleFeatureClick = (feature: string) => {
     if (!user.isSignedIn) {
       localStorage.setItem("redirect_after_auth", `/neon-city?mode=${feature}`);
-      window.location.href = "/handler/signup";
+      window.location.href = "/auth";
       return;
     }
     window.location.href = `/neon-city?mode=${feature}`;
