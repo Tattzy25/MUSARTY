@@ -1,5 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
-import { Settings, Zap, Code, FileImage, Trophy, Sparkles } from "lucide-react";
+import {
+  Settings,
+  Zap,
+  Code,
+  FileImage,
+  Trophy,
+  Sparkles,
+  Crown,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Navigation() {
