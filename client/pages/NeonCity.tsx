@@ -97,6 +97,15 @@ export default function NeonCity() {
     setIsGenerating(true);
 
     try {
+      // Route to appropriate provider based on mode
+      let provider = "groq"; // Default to GROQ for speed
+
+      if (activeMode === "music") {
+        provider = "stability"; // Music uses Stability AI
+      } else if (activeMode === "image") {
+        provider = "openai"; // Images use OpenAI DALL-E for actual generation
+      }
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -105,16 +114,18 @@ export default function NeonCity() {
         body: JSON.stringify({
           mode: activeMode,
           prompt,
-          provider: "groq", // Default to GROQ for speed
+          provider,
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setResult(data.data.content);
+        setResult(data.data);
       } else {
-        setResult(`Error: ${data.error || "Generation failed"}`);
+        setResult({
+          content: `❌ Error: ${data.error || "Generation failed"}`,
+        });
       }
     } catch (error) {
       console.error("Generation error:", error);
