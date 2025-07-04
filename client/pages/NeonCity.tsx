@@ -92,11 +92,33 @@ export default function NeonCity() {
     if (!prompt.trim() || !activeMode) return;
 
     setIsGenerating(true);
-    // TODO: Connect to orchestrator APIs
-    setTimeout(() => {
-      setResult(`Generated ${activeMode} content for: ${prompt}`);
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mode: activeMode,
+          prompt,
+          provider: "groq", // Default to GROQ for speed
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult(data.data.content);
+      } else {
+        setResult(`Error: ${data.error || "Generation failed"}`);
+      }
+    } catch (error) {
+      console.error("Generation error:", error);
+      setResult("Error: Failed to connect to AI service");
+    } finally {
       setIsGenerating(false);
-    }, 3000);
+    }
   };
 
   const handleDownload = () => {
