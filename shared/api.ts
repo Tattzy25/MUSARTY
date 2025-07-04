@@ -94,3 +94,59 @@ export interface ApiKeyTestResponse {
   valid?: boolean;
   error?: string;
 }
+
+/**
+ * Pricing and Checkout API types
+ */
+export interface PricingPlan {
+  id: string;
+  name: string;
+  price: number;
+  currency: string;
+  interval?: "month" | "year" | "one-time";
+  features: string[];
+  popular?: boolean;
+}
+
+export interface CheckoutRequest {
+  planId: string;
+  paymentMethod: "card" | "paypal";
+  customerInfo: {
+    email: string;
+    name?: string;
+    country?: string;
+  };
+  paymentInfo?: {
+    cardNumber?: string;
+    expiryMonth?: string;
+    expiryYear?: string;
+    cvc?: string;
+  };
+}
+
+export interface CheckoutResponse {
+  success: boolean;
+  data?: {
+    sessionId: string;
+    paymentUrl?: string;
+    status: "pending" | "processing" | "completed" | "failed";
+    orderId: string;
+  };
+  error?: string;
+}
+
+export interface UserSubscription {
+  id: string;
+  planId: string;
+  status: "active" | "inactive" | "cancelled" | "trial";
+  startDate: string;
+  endDate?: string;
+  remainingGenerations?: number;
+  features: string[];
+  billingHistory?: Array<{
+    date: string;
+    amount: number;
+    status: string;
+    description: string;
+  }>;
+}
