@@ -496,176 +496,64 @@ export default function Settings() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-strong">
-                    {settings.aiProvider === "groq" && (
-                      <>
-                        <SelectItem value="meta-llama/llama-4-scout-17b-16e-instruct">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              🚀 SCOUT
-                            </Badge>
-                            <span>Llama 4 Scout 17B (Recommended)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="llama-3.3-70b-versatile">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Latest
-                            </Badge>
-                            <span>Llama 3.3 70B</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="llama-3.2-90b-vision-preview">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Vision
-                            </Badge>
-                            <span>Llama 3.2 90B Vision</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="llama-3.2-11b-vision-preview">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-ember-red border-ember-red"
-                            >
-                              Fast
-                            </Badge>
-                            <span>Llama 3.2 11B Vision</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                    {settings.aiProvider === "v0" && (
-                      <>
-                        <SelectItem value="v0-1.5-lg">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              🎨 UI Expert
-                            </Badge>
-                            <span>v0 1.5 Large (Recommended)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="v0-1.5-md">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Everyday Tasks
-                            </Badge>
-                            <span>v0 1.5 Medium</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="v0-1.0-md">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Legacy
-                            </Badge>
-                            <span>v0 1.0 Medium</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                    {settings.aiProvider === "openai" && (
-                      <>
-                        <SelectItem value="gpt-4o">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              Latest & Best
-                            </Badge>
-                            <span>GPT-4o</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="gpt-4o-mini">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Fast & Cheap
-                            </Badge>
-                            <span>GPT-4o Mini</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="gpt-4-turbo">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Turbo
-                            </Badge>
-                            <span>GPT-4 Turbo</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="gpt-4-vision-preview">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-ember-red border-ember-red"
-                            >
-                              Vision
-                            </Badge>
-                            <span>GPT-4 Vision</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
-                    {settings.aiProvider === "gemini" && (
-                      <>
-                        <SelectItem value="gemini-2.0-flash-exp">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-orange border-fire-orange"
-                            >
-                              Latest
-                            </Badge>
-                            <span>Gemini 2.0 Flash (New!)</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="gemini-1.5-pro-002">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-red border-fire-red"
-                            >
-                              Premium
-                            </Badge>
-                            <span>Gemini 1.5 Pro</span>
-                          </div>
-                        </SelectItem>
-                        <SelectItem value="gemini-1.5-flash-002">
-                          <div className="flex items-center space-x-2">
-                            <Badge
-                              variant="outline"
-                              className="text-fire-yellow border-fire-yellow"
-                            >
-                              Fast
-                            </Badge>
-                            <span>Gemini 1.5 Flash</span>
-                          </div>
-                        </SelectItem>
-                      </>
-                    )}
+                    {/* Groq Models */}
+                    <SelectItem value="meta-llama/llama-4-scout-17b-16e-instruct">
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="outline"
+                          className="text-fire-orange border-fire-orange"
+                        >
+                          🚀 SCOUT
+                        </Badge>
+                        <span>Llama 4 Scout 17B (Recommended)</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="llama-3.3-70b-versatile">
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="outline"
+                          className="text-fire-red border-fire-red"
+                        >
+                          Latest
+                        </Badge>
+                        <span>Llama 3.3 70B</span>
+                      </div>
+                    </SelectItem>
+                    {/* OpenAI Models */}
+                    <SelectItem value="gpt-4o">
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="outline"
+                          className="text-fire-orange border-fire-orange"
+                        >
+                          Latest & Best
+                        </Badge>
+                        <span>GPT-4o</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="gpt-4o-mini">
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="outline"
+                          className="text-fire-red border-fire-red"
+                        >
+                          Fast & Cheap
+                        </Badge>
+                        <span>GPT-4o Mini</span>
+                      </div>
+                    </SelectItem>
+                    {/* Gemini Models */}
+                    <SelectItem value="gemini-2.0-flash-exp">
+                      <div className="flex items-center space-x-2">
+                        <Badge
+                          variant="outline"
+                          className="text-fire-orange border-fire-orange"
+                        >
+                          Latest
+                        </Badge>
+                        <span>Gemini 2.0 Flash</span>
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
