@@ -99,11 +99,30 @@ const CONTENT_ZONES: ContentZone[] = [
   },
 ];
 
+type ProcessingStage = "analyzing" | "converting" | "optimizing" | "completed";
+
+interface GeneratedCode {
+  react: string;
+  html: string;
+  css: string;
+  fileName: string;
+  originalFileName: string;
+}
+
 export default function NeonCity() {
   const [activeMode, setActiveMode] = useState<ContentMode | null>(null);
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+
+  // Convert mode specific state
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState<ProcessingStage>("analyzing");
+  const [generatedCodes, setGeneratedCodes] = useState<GeneratedCode[]>([]);
+  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
     if (!prompt.trim() || !activeMode) return;
