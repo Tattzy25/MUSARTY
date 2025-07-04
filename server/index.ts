@@ -13,6 +13,16 @@ import {
   handleCheckout,
   handleGetSubscription,
 } from "./routes/checkout";
+import {
+  handleGeneration,
+  handleGetModels,
+  handleGetModel,
+  handleGetUserUsage,
+  handleAddUserBlocks,
+  handleInitializeUser,
+  handleGetVaultStats,
+  handleHealthCheck,
+} from "./routes/shot-caller";
 
 export function createServer() {
   const app = express();
