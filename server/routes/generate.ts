@@ -161,7 +161,7 @@ Return only the enhanced prompt, nothing else.`;
       "Enhanced image prompt not generated"
     );
   } else {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
@@ -209,7 +209,7 @@ Return only the enhanced video prompt.`;
       "Enhanced video prompt not generated"
     );
   } else {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
@@ -257,7 +257,7 @@ Return only the enhanced music prompt.`;
       "Enhanced music prompt not generated"
     );
   } else {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
@@ -298,7 +298,7 @@ Return only the code, properly formatted.`;
 
     return completion.choices[0]?.message?.content || "Code not generated";
   } else {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: systemPrompt },
