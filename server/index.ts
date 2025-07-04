@@ -25,6 +25,9 @@ export function createServer() {
   app.get("/api/demo", handleDemo);
   app.post("/api/convert", uploadMiddleware, handleConvert);
 
+  // Neon City generation route
+  app.post("/api/generate", generateContent);
+
   // Settings routes
   app.get("/api/settings", handleGetSettings);
   app.post("/api/settings", handleUpdateSettings);
