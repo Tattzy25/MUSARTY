@@ -110,7 +110,7 @@ async function generateText(prompt: string, provider: string): Promise<string> {
 
     return completion.choices[0]?.message?.content || "No response generated";
   } else {
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
