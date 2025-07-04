@@ -37,7 +37,7 @@ export default function Index() {
       // Redirect to auth with the prompt stored
       localStorage.setItem("pending_build_prompt", buildPrompt);
       localStorage.setItem("redirect_after_auth", "/neon-city?mode=code");
-      window.location.href = "/handler/signup";
+      window.location.href = "/auth";
       return;
     }
 
