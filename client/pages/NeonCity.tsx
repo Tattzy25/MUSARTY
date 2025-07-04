@@ -83,6 +83,16 @@ const CONTENT_ZONES: ContentZone[] = [
     placeholder: "Describe the landing page you want to build...",
     outputType: "code",
   },
+  {
+    id: "convert",
+    name: "Convert",
+    icon: RefreshCw,
+    color: "from-blue-400 to-cyan-500",
+    bgGradient: "bg-gradient-to-br from-blue-400/20 to-cyan-500/20",
+    description: "Transform images into React, HTML & CSS code",
+    placeholder: "Drop your images to convert to code...",
+    outputType: "code",
+  },
 ];
 
 export default function NeonCity() {
