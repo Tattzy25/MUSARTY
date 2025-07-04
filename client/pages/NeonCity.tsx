@@ -124,6 +124,84 @@ export default function NeonCity() {
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
+  const handleFileSelect = async (files: File[]) => {
+    setSelectedFiles(files);
+    setIsProcessing(true);
+    setProgress(0);
+    setStage("analyzing");
+    setGeneratedCodes([]);
+    setError(null);
+    setCurrentFileIndex(0);
+
+    try {
+      // Convert files to base64
+      const fileData = await Promise.all(
+        files.map(async (file) => {
+          const base64 = await fileToBase64(file);
+          return {
+            data: base64,
+            name: file.name,
+            type: file.type,
+          };
+        }),
+      );
+
+      // Simulate processing stages
+      setStage("analyzing");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setProgress(25);
+
+      setStage("converting");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setProgress(50);
+
+      // Call the convert API
+      const response = await fetch("/api/convert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          files: fileData,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to convert images");
+      }
+
+      setProgress(75);
+      setStage("optimizing");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setProgress(100);
+      setStage("completed");
+      setGeneratedCodes(result.data.results);
+    } catch (error) {
+      console.error("Error converting files:", error);
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
+      setStage("completed");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleGenerate = async () => {
     if (!prompt.trim() || !activeMode) return;
 
