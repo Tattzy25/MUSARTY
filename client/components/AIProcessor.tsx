@@ -91,6 +91,7 @@ export default function AIProcessor({
         </div>
         <div className="h-2 glass rounded-full overflow-hidden">
           <div
+
             className="h-full bg-gradient-to-r from-fire-orange via-fire-red to-fire-yellow transition-all duration-500 ease-out relative"
             style={{ width: `${progress}%` }}
           >

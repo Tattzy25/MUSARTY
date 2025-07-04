@@ -27,70 +27,24 @@ import {
 export const handleGeneration: RequestHandler = async (req, res) => {
   try {
     const request: GenerationRequest = req.body;
-    // User is already declared below, remove duplicate declaration
-
     const user = req.user;
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        error: "Authentication required", 
-      });
-    }
-
-    // Validate required fields
-    if (!request.model_id || !request.input) {
-      return res.status(400).json({
-        success: false,
-        error: "Missing required fields: model_id, input",
-      });
-    }
-
-    // Use authenticated user's ID
-    request.user_id = user.id;
-
-    // Validate required fields
-    if (!request.user_id || !request.model_id || !request.input) {
-      return res.status(400).json({
-        success: false,
-        error: "Missing required fields: user_id, model_id, input",
-      });
-    }
-
-// Remove duplicate validation
-// Remove duplicate user declaration since it's already declared above
-
     if (!user) {
       return res.status(401).json({
         success: false,
         error: "Authentication required",
       });
     }
-
-    // Validate required fields
     if (!request.model_id || !request.input) {
       return res.status(400).json({
         success: false,
         error: "Missing required fields: model_id, input",
       });
     }
-
-    // Use authenticated user's ID
     request.user_id = user.id;
-
-    // Use authenticated user's ID
-    request.user_id = user.id;
-    // Initialize user if first time
     initializeUser(request.user_id);
-
-    // Set defaults
     request.byok = request.byok || false;
-    request.estimated_chars =
-      request.estimated_chars || request.input.toString().length;
-
-    // Process the request through Shot Caller
+    request.estimated_chars = request.estimated_chars || request.input.toString().length;
     const result = await processShotCall(request);
-
-    // Return result with appropriate status code
     if (result.success) {
       res.json(result);
     } else {
@@ -124,8 +78,7 @@ export const handleGetModels: RequestHandler = (req, res) => {
         groups: {
           group1: modelsWithGroups.filter((m) => m.group === "group1").length,
           group2: modelsWithGroups.filter((m) => m.group === "group2").length,
-          specialty: modelsWithGroups.filter((m) => m.group === "specialty")
-            .length,
+          specialty: modelsWithGroups.filter((m) => m.group === "specialty").length,
         },
       },
     });

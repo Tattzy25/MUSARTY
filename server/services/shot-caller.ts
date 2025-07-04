@@ -339,8 +339,6 @@ async function executeAiRequest(
       case "gemini":
         result = await callGemini(request, apiKey);
         break;
-<<<<<<< HEAD
-=======
       case "stability":
         result = await callStability(request, apiKey);
         break;
@@ -350,7 +348,6 @@ async function executeAiRequest(
       case "suno":
         result = await callSuno(request, apiKey);
         break;
->>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
       default:
         throw new Error(`Unsupported provider: ${provider}`);
     }
@@ -462,10 +459,6 @@ export function initializeUser(
 ): void {
   if (!USER_BALANCES.has(userId)) {
     USER_BALANCES.set(userId, startingBlocks);
-<<<<<<< HEAD
-    console.log(`👤 Initialized user ${userId} with ${startingBlocks} blocks`);
-=======
-    console.log(`��� Initialized user ${userId} with ${startingBlocks} blocks`);
     console.log(`👤 Initialized user ${userId} with ${startingBlocks} blocks`);
   }
 }
@@ -497,20 +490,12 @@ function checkRateLimit(userId: string): {
 }
 
 /**
-<<<<<<< HEAD
- * Provider-specific API calls (placeholder implementations)
-=======
  * Provider-specific API calls (REAL IMPLEMENTATIONS)
->>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
  */
 async function callOpenAI(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
-<<<<<<< HEAD
-  // Implement OpenAI API call
-  return `OpenAI response for: ${request.input}`;
-=======
   const OpenAI = (await import("openai")).default;
   const openai = new OpenAI({ apiKey });
 
@@ -549,17 +534,12 @@ async function callOpenAI(
     console.error("OpenAI API error:", error);
     throw new Error(`OpenAI API error: ${error.message}`);
   }
->>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 async function callGroq(
   request: GenerationRequest,
   apiKey: string,
 ): Promise<string> {
-<<<<<<< HEAD
-  // Implement Groq API call
-  return `Groq response for: ${request.input}`;
-=======
   const Groq = (await import("groq-sdk")).default;
   const groq = new Groq({ apiKey });
 
@@ -585,7 +565,6 @@ async function callGroq(
     console.error("Groq API error:", error);
     throw new Error(`Groq API error: ${error.message}`);
   }
->>>>>>> 137b0324b0b9dfacab89742c629e1974076f353a
 }
 
 async function callAnthropic(
